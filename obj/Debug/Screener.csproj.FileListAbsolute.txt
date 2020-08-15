@@ -1,0 +1,14 @@
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.exe.config
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.exe
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.pdb
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.dll
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.xml
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.csprojAssemblyReference.cache
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmPreferences.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.Properties.Resources.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.csproj.GenerateResource.cache
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.csproj.CopyComplete
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.exe
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.pdb
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmSelectBrowser.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmSplash.resources

@@ -259,6 +259,12 @@ namespace Screener
             }
         };
 
+        public string BrowserValue
+        {
+            get { return browser; }
+            set { browser = value; }
+        }
+
         /// <summary>
         /// Calls GetFinvizUrl to create and return the specific URL for each Sector.  Returns the list containing every URL
         /// </summary>
@@ -273,12 +279,6 @@ namespace Screener
             }
 
             return urls;
-        }
-
-        public string BrowserValue
-        {
-            get { return browser; }
-            set { browser = value; }
         }
 
         /// <summary>
@@ -321,7 +321,11 @@ namespace Screener
             return res;
         }
 
-        public void SetSectorMap(Dictionary<string, Dictionary<string, string>> map) { sectorMap = map; }
+        public void SetSectorMap(Dictionary<string, Dictionary<string, string>> map)
+        {
+            sectorMap = map;
+            SavePreferences();
+        }
 
         /// <summary>
         /// Loads the preferences from the specified Directory.  If loaded sets a flag to let the program know if it can begin
@@ -331,7 +335,14 @@ namespace Screener
         {
             if(Directory.Exists(preferencesPath) && File.Exists(Path.Combine(preferencesPath, preferencesFile)))
             {
-                //TODO Load the preferences
+                XmlData xml = new XmlData();
+                for(int i = 0; i < sectorMap.Count; i++)
+                {
+                    string key = sectorMap.ElementAt(i).Key;
+                    sectorMap[key] = xml.LoadPreferences((key.Contains(" ") ? String.Join("_", key.Split(' ')) : key), preferencesPath, preferencesFile);
+                }//end for
+
+                browser = xml.LoadBrowserPreference(preferencesPath, preferencesFile);
                 loaded = true;
             }//end if
         }//end LoadPreferences
@@ -342,7 +353,7 @@ namespace Screener
         public void SavePreferences()
         {
             XmlData xml = new XmlData();
-            xml.SavePreferences(sectorMap, preferencesPath, preferencesFile);
+            xml.SavePreferences(sectorMap, browser, preferencesPath, preferencesFile);
         }//end SavePreferences
     }//Preferences
 }//Screener

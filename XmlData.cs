@@ -13,6 +13,13 @@ namespace Screener
     {
         private XmlWriter writer;
         
+        public string LoadBrowserPreference(string path, string file)
+        {
+            if (!File.Exists(Path.Combine(path, file))) { return null; }
+
+            var doc = XDocument.Load(Path.Combine(path, file));
+            return doc.Descendants("PREFERENCES").Elements("BROWSER").First().Value;
+        }
         /// <summary>
         /// Loads the preferences for the specific Sector from the specified file and path
         /// </summary>
@@ -27,7 +34,7 @@ namespace Screener
 
             var doc = XDocument.Load(Path.Combine(path, file));
 
-            var elements = doc.Element(sector).Elements();
+            var elements = doc.Element("PREFERENCES").Element(sector).Elements();
 
             foreach(var e in elements)
             {
@@ -43,7 +50,7 @@ namespace Screener
         /// <param name="map">The Preferences Dictionary</param>
         /// <param name="path">The directory the file should be saved in</param>
         /// <param name="file">The file name</param>
-        public void SavePreferences(Dictionary<string, Dictionary<string, string>> map, string path, string file)
+        public void SavePreferences(Dictionary<string, Dictionary<string, string>> map, string browser, string path, string file)
         {
             CreateDirectory(path);
 
@@ -53,17 +60,17 @@ namespace Screener
                 writer.WriteStartElement("PREFERENCES");
                 foreach(var key in map.Keys)
                 {
-                    writer.WriteStartElement(key);
+                    string sector = (key.Contains(" ") ? String.Join("_", key.Split(' ')) : key);
+                    writer.WriteStartElement(sector);
                        
                     foreach(var kvp in map[key])
                     {
-                        writer.WriteStartElement(kvp.Key);
                         writer.WriteElementString(kvp.Key, kvp.Value);
-                        writer.WriteEndElement();
                     }//end nested foreach
 
                     writer.WriteEndElement();
                 }//end foreach
+                writer.WriteElementString("BROWSER", browser);
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
             }//end using

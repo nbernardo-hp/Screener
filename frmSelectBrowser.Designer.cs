@@ -87,7 +87,12 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnFirefox);
             this.Controls.Add(this.btnChrome);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmSelectBrowser";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select A Browser";
             this.ResumeLayout(false);
             this.PerformLayout();

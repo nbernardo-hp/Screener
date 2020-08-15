@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreferences));
             this.cmbSector = new System.Windows.Forms.ComboBox();
             this.cmbPE = new System.Windows.Forms.ComboBox();
             this.errPreferences = new System.Windows.Forms.ErrorProvider(this.components);
@@ -281,12 +282,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(91, 19);
+            this.label6.Location = new System.Drawing.Point(19, 18);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(295, 26);
+            this.label6.Size = new System.Drawing.Size(438, 39);
             this.label6.TabIndex = 10;
-            this.label6.Text = "Configure the preferences used for each sector.  Preferences\r\nwill be saved and u" +
-    "sed at the start of loading the application.";
+            this.label6.Text = resources.GetString("label6.Text");
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label7
@@ -307,6 +307,7 @@
             this.btnSaved.TabIndex = 12;
             this.btnSaved.Text = "Save";
             this.btnSaved.UseVisualStyleBackColor = true;
+            this.btnSaved.Click += new System.EventHandler(this.btnSaved_Click);
             // 
             // btnCancel
             // 
@@ -317,6 +318,7 @@
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // frmPreferences
             // 
@@ -338,7 +340,12 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbPE);
             this.Controls.Add(this.cmbSector);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "frmPreferences";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preferences";
             ((System.ComponentModel.ISupportInitialize)(this.errPreferences)).EndInit();
             this.ResumeLayout(false);

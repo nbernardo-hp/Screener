@@ -50,7 +50,6 @@
             // 
             // cmbSector
             // 
-            this.errPreferences.SetError(this.cmbSector, "You must select a valid Sector");
             this.cmbSector.FormattingEnabled = true;
             this.cmbSector.Items.AddRange(new object[] {
             "Any",
@@ -69,10 +68,10 @@
             this.cmbSector.Name = "cmbSector";
             this.cmbSector.Size = new System.Drawing.Size(150, 21);
             this.cmbSector.TabIndex = 0;
+            this.cmbSector.SelectedIndexChanged += new System.EventHandler(this.cmbSector_SelectedIndexChanged);
             // 
             // cmbPE
             // 
-            this.errPreferences.SetError(this.cmbPE, "Select a value for P/E from the dropdown menu!");
             this.cmbPE.FormattingEnabled = true;
             this.cmbPE.Items.AddRange(new object[] {
             "Any",
@@ -103,6 +102,7 @@
             this.cmbPE.Name = "cmbPE";
             this.cmbPE.Size = new System.Drawing.Size(121, 21);
             this.cmbPE.TabIndex = 1;
+            this.cmbPE.SelectedIndexChanged += new System.EventHandler(this.cmbPE_SelectedIndexChanged);
             // 
             // errPreferences
             // 
@@ -128,7 +128,6 @@
             // 
             // cmbPrice
             // 
-            this.errPreferences.SetError(this.cmbPrice, "Select a value for Price from the dropdown menu!");
             this.cmbPrice.FormattingEnabled = true;
             this.cmbPrice.Items.AddRange(new object[] {
             "Any",
@@ -175,10 +174,10 @@
             this.cmbPrice.Name = "cmbPrice";
             this.cmbPrice.Size = new System.Drawing.Size(121, 21);
             this.cmbPrice.TabIndex = 3;
+            this.cmbPrice.SelectedIndexChanged += new System.EventHandler(this.cmbPrice_SelectedIndexChanged);
             // 
             // cmbAverageVolume
             // 
-            this.errPreferences.SetError(this.cmbAverageVolume, "Select a value for Average Volume from the dropdown menu!");
             this.cmbAverageVolume.FormattingEnabled = true;
             this.cmbAverageVolume.Items.AddRange(new object[] {
             "Any",
@@ -204,6 +203,7 @@
             this.cmbAverageVolume.Name = "cmbAverageVolume";
             this.cmbAverageVolume.Size = new System.Drawing.Size(121, 21);
             this.cmbAverageVolume.TabIndex = 4;
+            this.cmbAverageVolume.SelectedIndexChanged += new System.EventHandler(this.cmbAverageVolume_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -216,7 +216,6 @@
             // 
             // cmbRSI
             // 
-            this.errPreferences.SetError(this.cmbRSI, "Select a value for RSI from the dropdown menu!");
             this.cmbRSI.FormattingEnabled = true;
             this.cmbRSI.Items.AddRange(new object[] {
             "Any",
@@ -236,6 +235,7 @@
             this.cmbRSI.Name = "cmbRSI";
             this.cmbRSI.Size = new System.Drawing.Size(121, 21);
             this.cmbRSI.TabIndex = 6;
+            this.cmbRSI.SelectedIndexChanged += new System.EventHandler(this.cmbRSI_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -248,7 +248,6 @@
             // 
             // cmbCurrentRatio
             // 
-            this.errPreferences.SetError(this.cmbCurrentRatio, "Select a value for Current Ratio from the dropdown menu!");
             this.cmbCurrentRatio.FormattingEnabled = true;
             this.cmbCurrentRatio.Items.AddRange(new object[] {
             "Any",
@@ -268,6 +267,7 @@
             this.cmbCurrentRatio.Name = "cmbCurrentRatio";
             this.cmbCurrentRatio.Size = new System.Drawing.Size(121, 21);
             this.cmbCurrentRatio.TabIndex = 8;
+            this.cmbCurrentRatio.SelectedIndexChanged += new System.EventHandler(this.cmbCurrentRatio_SelectedIndexChanged);
             // 
             // label5
             // 

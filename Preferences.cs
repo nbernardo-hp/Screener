@@ -160,6 +160,14 @@ namespace Screener
         /// </summary>
         private Dictionary<string, Dictionary<string, string>> sectorMap = new Dictionary<string, Dictionary<string, string>>()
         {
+            ["Any"] = new Dictionary<string, string>()
+            {
+                ["price"] = "",
+                ["pe"] = "",
+                ["averageVolume"] = "",
+                ["rsi"] = "",
+                ["currentRatio"] = "",
+            },
             ["Basic Materials"] = new Dictionary<string, string>()
             {
                 ["price"] = "",

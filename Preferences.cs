@@ -10,6 +10,7 @@ namespace Screener
     public class Preferences
     {
         private bool loaded = false;
+        private string browser;
         private string finvizStartUrl = "https://www.finviz.com/screener.ashx?v=151&f=an_recom_buybetter,geo_usa";
         private string finvizEndUrl = "&ft=4,1,3,4,7,35,57,59,62,68";
         private string preferencesPath = AppDomain.CurrentDomain.BaseDirectory + @"\preferences";
@@ -88,20 +89,6 @@ namespace Screener
                 ["$20 to $50"] = "sh_price_20to50",
                 ["$50 to $100"] = "sh_price_50to100"
             },
-            ["sector"] = new Dictionary<string, string>()
-            {
-                ["Basic_Materials"] = "sec_basicmaterials",
-                ["Communication_Services"] = "sec_communicationservices",
-                ["Consumer_Cyclical"] = "sec_consumercyclical",
-                ["Consumer_Defensive"] = "sec_consumerdefensive",
-                ["Energy"] = "sec_energy",
-                ["Financial"] = "sec_financial",
-                ["Healthcare"] = "sec_healthcare",
-                ["Industrials"] = "sec_industrials",
-                ["Real_Estate"] = "sec_realestate",
-                ["Technology"] = "sec_technology",
-                ["Utilities"] = "sec_utilities"
-            },
             ["averageVolume"] = new Dictionary<string, string>()
             {
                 ["Under 50K"] = "sh_avgvol_u50",
@@ -152,6 +139,20 @@ namespace Screener
                 ["Over 4"] = "fa_curratio_o4",
                 ["Over 5"] = "fa_curratio_o5",
                 ["Over 10"] = "fa_curratio_o10"
+            },
+            ["sector"] = new Dictionary<string, string>()
+            {
+                ["Basic_Materials"] = "sec_basicmaterials",
+                ["Communication_Services"] = "sec_communicationservices",
+                ["Consumer_Cyclical"] = "sec_consumercyclical",
+                ["Consumer_Defensive"] = "sec_consumerdefensive",
+                ["Energy"] = "sec_energy",
+                ["Financial"] = "sec_financial",
+                ["Healthcare"] = "sec_healthcare",
+                ["Industrials"] = "sec_industrials",
+                ["Real_Estate"] = "sec_realestate",
+                ["Technology"] = "sec_technology",
+                ["Utilities"] = "sec_utilities"
             }
         };
 
@@ -162,104 +163,96 @@ namespace Screener
         {
             ["Any"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
-                ["pe"] = "",
-                ["averageVolume"] = "",
-                ["rsi"] = "",
-                ["currentRatio"] = "",
+                ["pe"] = "Any",
+                ["price"] = "Any",
+                ["averageVolume"] = "Any",
+                ["rsi"] = "Any",
+                ["currentRatio"] = "Any",
             },
             ["Basic Materials"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Communication Services"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Consumer Cyclical"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Consumer Defensive"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Energy"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Financial"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Healthcare"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Industrials"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Real Estate"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Technology"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
             },
             ["Utilities"] = new Dictionary<string, string>()
             {
-                ["price"] = "",
                 ["pe"] = "",
-                ["recom"] = "",
+                ["price"] = "",
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
@@ -282,6 +275,12 @@ namespace Screener
             return urls;
         }
 
+        public string BrowserValue
+        {
+            get { return browser; }
+            set { browser = value; }
+        }
+
         /// <summary>
         /// Creates the individual URL for each sector by accessing the Dictionary with the saved filter strings.
         /// </summary>
@@ -302,6 +301,29 @@ namespace Screener
         }
 
         /// <summary>
+        /// Returns a bool to tell the program if preferences were loaded or no
+        /// </summary>
+        /// <returns>Indicates whether preferences were loaded</returns>
+        public bool GetLoaded() { return loaded; }
+
+        /// <summary>
+        /// Returns the Dictionary containing the preferences for each Sector to the calling function
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, Dictionary<string, string>> GetSectorMap() { return sectorMap; }
+        public Dictionary<string, Dictionary<string, string>> GetSectorMapCopy()
+        {
+            Dictionary<string, Dictionary<string, string>> res = new Dictionary<string, Dictionary<string, string>>();
+            foreach(var sector in sectorMap)
+            {
+                res.Add(sector.Key, sector.Value);
+            }
+            return res;
+        }
+
+        public void SetSectorMap(Dictionary<string, Dictionary<string, string>> map) { sectorMap = map; }
+
+        /// <summary>
         /// Loads the preferences from the specified Directory.  If loaded sets a flag to let the program know if it can begin
         /// scraping or not.
         /// </summary>
@@ -314,6 +336,9 @@ namespace Screener
             }//end if
         }//end LoadPreferences
 
+        /// <summary>
+        /// Saves the preferences for each Sector to an Xml file
+        /// </summary>
         public void SavePreferences()
         {
             XmlData xml = new XmlData();

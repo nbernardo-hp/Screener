@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
-using System.Collections.Generic;
+using OpenQA.Selenium.Support.UI;
 
 namespace Screener
 {
@@ -17,10 +17,12 @@ namespace Screener
         private List<string> symbols = new List<string>();
         private Stack<string> urls = new Stack<string>();
         private Stack<string> proxies = new Stack<string>();
+        private Dictionary<string, Dictionary<string, Stock>> stocks;
         private dynamic driver;
         private dynamic options;
         private string status = "";
         private string[] chartMillUrl = new string[2] { "https://www.chartmill.com/stock/stock-charts?ticker=", "&v=16&s=t&sd=ASC" };
+        private string[] sectorHeaders = { "Basic Materials", "Communication Services", "Consumer Cyclical", "Consumer Defensive", "Energy", "Financial", "Healthcare", "Industrials", "Real Estate", "Technology", "Utilities" };
 
         public WebScraper(string browser)
         {
@@ -39,23 +41,63 @@ namespace Screener
         public void Start(Stack<string> urls)
         {
             this.urls = urls;
+            this.urls.Reverse();
             GetProxies();
             ScrapeFinviz();
 
-            foreach(var f in finvizRows)
+            foreach (var f in finvizRows)
             {
-                Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8} {9}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9]));
+                Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
             }
 
             if(symbols != null && symbols.Count > 0)
             {
+
                 ScrapeChartMill();
             }//end if
+
+            driver.Close();
+            driver.Dispose();
+            driver.Quit();
         }//end Start
+
+        public void ParseInformation()
+        {
+            stocks = new Dictionary<string, Dictionary<string, Stock>>();
+            for(int i = 0; i < chartMillRows.Count; i++)
+            {
+                int fundValue = (int)(double.Parse(chartMillRows[i][1].ToString()) * 2);
+                if(fundValue >= 5)
+                {
+                    if(!stocks.ContainsKey(finvizRows[i][1]))
+                    {
+                        stocks.Add(finvizRows[i][1], new Dictionary<string, Stock>());
+                    }//end if
+
+                    Stock temp = new Stock();
+                    temp.SymbolValue = chartMillRows[i][0].ToString();
+                    temp.FundValue = fundValue;
+                    temp.GrowthValue = (int)(double.Parse(chartMillRows[i][2].ToString()) * 2);
+                    temp.ValuationValue = (int)(double.Parse(chartMillRows[i][3].ToString()) * 2);
+                    temp.IndustryValue = finvizRows[i][2];
+                    temp.CurrentRatioValue = (finvizRows[i][4] != "-" ? double.Parse(finvizRows[i][4]) : 0);
+
+                    var high = finvizRows[i][5].Remove(finvizRows[i][5].IndexOf("%"));
+                    temp.High52WValue = (high != "-" ? double.Parse(high) : 100);
+                    temp.RecomValue = (finvizRows[i][7] != "-" ? double.Parse(finvizRows[i][7]) : 10);
+                    temp.SetEarningsDate(finvizRows[i][8]);
+
+                    stocks[finvizRows[i][1]].Add(temp.SymbolValue, temp);
+                }//end if
+            }//end if
+        }//end ParseInformation
+        public string GetStatus() { return status; }
+
+        public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
 
         private void GetProxies()
         {
-            status = "Getting proxy IP addresses...";
+            
             driver.Url = "https://free-proxy-list.net/";
             driver.Navigate();
             for (int p = 0; p < 10; p++)
@@ -64,6 +106,7 @@ namespace Screener
                 
                 for (int i = 1; i < rows.Count; i++)
                 {
+                    status = String.Format("Getting proxy IP addresses {0}/200...", proxies.Count);
                     var temp = rows[i].Text.Split(' ');
                     proxies.Push(temp[0]);
                 }//end for
@@ -74,10 +117,10 @@ namespace Screener
 
         private void SetProxy()
         {
-            status = "Setting proxy IP address...";
             Proxy proxy = new Proxy();
             if (proxies.Count() > 0)
             {
+                status = String.Format("Setting proxy IP address {0}...", proxies.Peek());
                 proxy.HttpProxy = proxies.Pop();
                 options.Proxy = proxy;
             } else
@@ -87,11 +130,12 @@ namespace Screener
         }//end SetProxy
         private void ScrapeFinviz()
         {
+            int sect = 0;
             while(urls.Count > 0)
             {
+                status = String.Format("Scraping Finviz - {0}", sectorHeaders[sect]);
                 int i = 0;
                 int pages = 0;
-
                 driver.Url = urls.Pop();
                 driver.Navigate();
 
@@ -107,7 +151,12 @@ namespace Screener
                     var rows = table.FindElements(By.TagName("tr"));
                     for (int j = 1; j < rows.Count; j++)
                     {
-                        finvizRows.Add(rows.ElementAt(j).Text.Split(new char[] { '\r', '\n' }));
+                        var split = rows.ElementAt(j).Text.Split(new char[] { '\r', '\n' });
+                        var temp = from s in split
+                                   where s != ""
+                                   select s;
+                        status = String.Format("Scraping Finviz - {0} - {1}\t{2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j, rows.Count - 1);
+                        finvizRows.Add(temp.ToArray());
                     }//end for
 
                     SetProxy();
@@ -118,8 +167,10 @@ namespace Screener
                     }
                     i++;
                 } while (i < pages);//end do while
+                sect++;
             }//end while
 
+            finvizRows.Sort((a, b) => a[0].CompareTo(b[0]));
             symbols = (from f in finvizRows select f.ElementAt(0)).ToList();
         }//end ScrapeFinviz
 
@@ -127,37 +178,52 @@ namespace Screener
         {
             symbols.Sort();
             int numSymbols = 20;
+            int currentStock = 0;
             int symbolsCount = symbols.Count;
-            int currentSymbol = 0;
             for (int i = 0; i < symbolsCount; i += numSymbols)
             {
-                if(numSymbols > symbolsCount)
+                status = "Loading ChartMill page...";
+                if (numSymbols > symbolsCount)
                 {
-                    numSymbols = symbolsCount;
+                    numSymbols = symbolsCount - 1;
                 } else if(i + numSymbols > symbolsCount)
                 {
-                    numSymbols = (i + numSymbols) - symbolsCount;
+                    numSymbols = symbolsCount - i;
                 }
                 
                 string url = GetChartMillUrl(symbols.GetRange(i, numSymbols));
                 driver.Url = url;
                 driver.Navigate();
 
-                IWebElement table = driver.FindElement(By.CssSelector(".mat-table > tbody:nth-child(2)"));
-                var sym = table.FindElements(By.ClassName("text-primary"));
-                var fund = table.FindElements(By.ClassName("cdk-column-fa"));
-                var growth = table.FindElements(By.ClassName("cdk-column-gr"));
-                var val = table.FindElements(By.ClassName("cdk-column-val"));
+                var table = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(By.XPath("/html/body/app-root/app-menu/div/mat-sidenav-container/mat-sidenav-content/app-stockcharts/app-results/div[2]/div/div/app-property-display/div/div/div/mat-card/mat-card-content/div/table/tbody")));
+                var rows = table.FindElements(By.TagName("tr"));
+                foreach(IWebElement r in rows)
+                {
+                    var sym = r.FindElement(By.ClassName("text-primary")).Text;
+                    var fund = r.FindElements(By.ClassName("cdk-column-fa"));
+                    var growth = r.FindElements(By.ClassName("cdk-column-gr"));
+                    var val = r.FindElements(By.ClassName("cdk-column-val"));
 
-                if(sym.Count == 3)
+                    status = String.Format("Scraping ChartMill - {0}\t{1}{2}", sym, currentStock + 1, finvizRows.Count);
+
+                    chartMillRows.Add(new object[4]);
+                    chartMillRows[currentStock][0] = sym;
+                    for (int k = 1; k < 4; k++)
+                    {
+                        var stars = (k == 1 ? fund : k == 2 ? growth : val);
+                        var full = stars.ElementAt(0).FindElements(By.CssSelector("svg[data-icon=\"star\"]")).Select(f => f).Where(f => f.GetAttribute("data-prefix") == "fas");
+                        var half = stars.ElementAt(0).FindElements(By.ClassName("fa-star-half-alt"));
+                        double fullCount = full.Count();
+                        double halfCount = (half != null ? (half.Count * 0.5) : 0);
+                        chartMillRows[currentStock][k] = fullCount + halfCount;
+                    }//end nested for
+                    Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
+                    currentStock++;
+                }
+                if(rows != null && rows.Count == 3)
                 {
                     numSymbols = 3;
                 }//end if
-
-                for(int j = 0; j < sym.Count; j++)
-                {
-                    //sym = 0   fund = 4, growth = 5, val = 7
-                }
             }//end for
         }//end ScrapeChartMill
 

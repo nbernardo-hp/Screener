@@ -12,7 +12,7 @@ namespace Screener
         private bool loaded = false;
         private string browser;
         private string finvizStartUrl = "https://www.finviz.com/screener.ashx?v=151&f=an_recom_buybetter,geo_usa";
-        private string finvizEndUrl = "&ft=4&c=1,3,4,7,35,57,59,62,63,68";
+        private string finvizEndUrl = "&ft=4&c=1,3,4,7,35,57,59,62,68";
         private string preferencesPath = AppDomain.CurrentDomain.BaseDirectory + @"\preferences";
         private string preferencesFile = "preferences.xml";
 

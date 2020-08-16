@@ -12,3 +12,6 @@ C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.exe
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.pdb
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmSelectBrowser.resources
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmSplash.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\SeleniumExtras.WaitHelpers.dll
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.Support.dll
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.Support.xml

@@ -42,9 +42,9 @@ namespace Screener
                         }//end 2x nested if
                     }//end nested if
                 }//end if-else
-            } catch
+            } catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace);
             }//end try-catch
         }//end Main
     }//end class Program

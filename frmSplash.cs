@@ -48,6 +48,9 @@ namespace Screener
             }
             WebScraper scraper = new WebScraper(splashPref.BrowserValue);
             scraper.Start(urls);
+            scraper.ParseInformation();
+            pnlProgress.Visible = true;
+            pnlStart.Visible = false;
         }//end btnScrape_Click
 
         private void btnCancel_Click(object sender, EventArgs e)

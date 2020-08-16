@@ -12,7 +12,7 @@ namespace Screener
         private bool loaded = false;
         private string browser;
         private string finvizStartUrl = "https://www.finviz.com/screener.ashx?v=151&f=an_recom_buybetter,geo_usa";
-        private string finvizEndUrl = "&ft=4,1,3,4,7,35,57,59,62,68";
+        private string finvizEndUrl = "&ft=4&c=1,3,4,7,35,57,59,62,63,68";
         private string preferencesPath = AppDomain.CurrentDomain.BaseDirectory + @"\preferences";
         private string preferencesFile = "preferences.xml";
 
@@ -142,15 +142,15 @@ namespace Screener
             },
             ["sector"] = new Dictionary<string, string>()
             {
-                ["Basic_Materials"] = "sec_basicmaterials",
-                ["Communication_Services"] = "sec_communicationservices",
-                ["Consumer_Cyclical"] = "sec_consumercyclical",
-                ["Consumer_Defensive"] = "sec_consumerdefensive",
+                ["Basic Materials"] = "sec_basicmaterials",
+                ["Communication Services"] = "sec_communicationservices",
+                ["Consumer Cyclical"] = "sec_consumercyclical",
+                ["Consumer Defensive"] = "sec_consumerdefensive",
                 ["Energy"] = "sec_energy",
                 ["Financial"] = "sec_financial",
                 ["Healthcare"] = "sec_healthcare",
                 ["Industrials"] = "sec_industrials",
-                ["Real_Estate"] = "sec_realestate",
+                ["Real Estate"] = "sec_realestate",
                 ["Technology"] = "sec_technology",
                 ["Utilities"] = "sec_utilities"
             }
@@ -269,13 +269,13 @@ namespace Screener
         /// Calls GetFinvizUrl to create and return the specific URL for each Sector.  Returns the list containing every URL
         /// </summary>
         /// <returns>The list of URLs to be used in webscraping</returns>
-        public List<string> GetFinvizUrls()
+        public Stack<string> GetFinvizUrls()
         {
-            List<string> urls = new List<string>();
+            Stack<string> urls = new Stack<string>();
 
-            foreach(var key in sectorMap.Keys)
+            foreach(var key in sectorMap.Keys.Where(s => s != "Any"))
             {
-                urls.Add(GetFinvizUrl(key));
+                urls.Push(GetFinvizUrl(key));
             }
 
             return urls;
@@ -297,7 +297,7 @@ namespace Screener
                 url.Append("," + finvizMap[kvp.Key][kvp.Value]);
             }
 
-            return url.Append(finvizEndUrl).ToString();
+            return url.Append(","+finvizMap["sector"][sector]+ finvizEndUrl).ToString();
         }
 
         /// <summary>

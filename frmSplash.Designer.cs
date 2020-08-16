@@ -36,6 +36,7 @@
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblProgress = new System.Windows.Forms.Label();
+            this.bgwScrape = new System.ComponentModel.BackgroundWorker();
             this.pnlStart.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             this.SuspendLayout();
@@ -55,6 +56,7 @@
             this.btnSettings.TabIndex = 0;
             this.btnSettings.Text = "Change Scrape Settings";
             this.btnSettings.UseVisualStyleBackColor = false;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
             // btnScrape
             // 
@@ -71,6 +73,7 @@
             this.btnScrape.TabIndex = 1;
             this.btnScrape.Text = "Scrape";
             this.btnScrape.UseVisualStyleBackColor = false;
+            this.btnScrape.Click += new System.EventHandler(this.btnScrape_Click);
             // 
             // btnCancel
             // 
@@ -87,6 +90,7 @@
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // progressBar1
             // 
@@ -138,6 +142,11 @@
             this.lblProgress.TabIndex = 5;
             this.lblProgress.Text = "label1";
             // 
+            // bgwScrape
+            // 
+            this.bgwScrape.WorkerReportsProgress = true;
+            this.bgwScrape.WorkerSupportsCancellation = true;
+            // 
             // frmSplash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -152,6 +161,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmSplash";
+            this.Load += new System.EventHandler(this.frmSplash_Load);
             this.pnlStart.ResumeLayout(false);
             this.pnlProgress.ResumeLayout(false);
             this.pnlProgress.PerformLayout();
@@ -169,5 +179,6 @@
         private System.Windows.Forms.Panel pnlProgress;
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.Label lblStatus;
+        private System.ComponentModel.BackgroundWorker bgwScrape;
     }
 }

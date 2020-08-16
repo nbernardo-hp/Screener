@@ -24,8 +24,8 @@ namespace Screener
                 pref.LoadPreferences();
                 if(pref.GetLoaded())
                 {
-                    //TODO load the splash screen
-                    MessageBox.Show("In if");
+                    frmSplash splash = new frmSplash(pref);
+                    Application.Run(splash);
                 } else
                 {
                     frmSelectBrowser frmSelect = new frmSelectBrowser();

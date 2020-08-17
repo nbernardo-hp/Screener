@@ -16,7 +16,7 @@ namespace Screener
         public frmSelectBrowser()
         {
             InitializeComponent();
-            this.Icon = Screener.Properties.Resources.screenerIcon;
+            this.Icon = Properties.Resources.screenerIcon;
         }
 
         public string GetBrowserString() { return browser; }

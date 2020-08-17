@@ -19,14 +19,14 @@ namespace Screener
         public frmPreferences()
         {
             InitializeComponent();
-            this.Icon = Screener.Properties.Resources.screenerIcon;
+            this.Icon = Properties.Resources.screenerIcon;
             cmbSector.SelectedIndex = 0;
         }//end default constructor
 
         public frmPreferences(Dictionary<string, Dictionary<string, string>> pref)
         {
             InitializeComponent();
-            this.Icon = Screener.Properties.Resources.screenerIcon;
+            this.Icon = Properties.Resources.screenerIcon;
             preferences = pref;
             cmbSector.SelectedIndex = 0;
         }//end one argument constructor

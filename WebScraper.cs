@@ -12,6 +12,8 @@ namespace Screener
 {
     class WebScraper
     {
+        public delegate void ProgressUpdate(int i);
+        public event ProgressUpdate OnProgressUpdate;
         private List<string[]> finvizRows = new List<string[]>();
         private List<object[]> chartMillRows = new List<object[]>();
         private List<string> symbols = new List<string>();
@@ -55,6 +57,7 @@ namespace Screener
 
                 ScrapeChartMill();
             }//end if
+            ChangeProgress(0, "Closing driver...");
 
             driver.Close();
             driver.Dispose();
@@ -66,6 +69,8 @@ namespace Screener
             stocks = new Dictionary<string, Dictionary<string, Stock>>();
             for(int i = 0; i < chartMillRows.Count; i++)
             {
+                string symbol = chartMillRows[i][0].ToString();
+                ChangeProgress(1, String.Format("Parsing Stock information - {0}  {1}/{2}", symbol, i + 1, finvizRows.Count));
                 int fundValue = (int)(double.Parse(chartMillRows[i][1].ToString()) * 2);
                 if(fundValue >= 5)
                 {
@@ -75,7 +80,7 @@ namespace Screener
                     }//end if
 
                     Stock temp = new Stock();
-                    temp.SymbolValue = chartMillRows[i][0].ToString();
+                    temp.SymbolValue = symbol;
                     temp.FundValue = fundValue;
                     temp.GrowthValue = (int)(double.Parse(chartMillRows[i][2].ToString()) * 2);
                     temp.ValuationValue = (int)(double.Parse(chartMillRows[i][3].ToString()) * 2);
@@ -89,10 +94,21 @@ namespace Screener
 
                     stocks[finvizRows[i][1]].Add(temp.SymbolValue, temp);
                 }//end if
-            }//end if
+            }//end for
+
+            ChangeProgress(1, "Finalizing...");
         }//end ParseInformation
+
+        /// <summary>
+        /// Returns the status string to the calling function
+        /// </summary>
+        /// <returns>The status string</returns>
         public string GetStatus() { return status; }
 
+        /// <summary>
+        /// Returns the Dictionary containing all the Stock information to the calling program
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
 
         private void GetProxies()
@@ -106,7 +122,7 @@ namespace Screener
                 
                 for (int i = 1; i < rows.Count; i++)
                 {
-                    status = String.Format("Getting proxy IP addresses {0}/200...", proxies.Count);
+                    ChangeProgress(0, String.Format("Getting proxy IP addresses {0}/200...", proxies.Count + 1));
                     var temp = rows[i].Text.Split(' ');
                     proxies.Push(temp[0]);
                 }//end for
@@ -120,7 +136,7 @@ namespace Screener
             Proxy proxy = new Proxy();
             if (proxies.Count() > 0)
             {
-                status = String.Format("Setting proxy IP address {0}...", proxies.Peek());
+                ChangeProgress(0, String.Format("Setting proxy IP address {0}...", proxies.Peek()));
                 proxy.HttpProxy = proxies.Pop();
                 options.Proxy = proxy;
             } else
@@ -133,7 +149,7 @@ namespace Screener
             int sect = 0;
             while(urls.Count > 0)
             {
-                status = String.Format("Scraping Finviz - {0}", sectorHeaders[sect]);
+                ChangeProgress(1, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
                 int i = 0;
                 int pages = 0;
                 driver.Url = urls.Pop();
@@ -147,6 +163,7 @@ namespace Screener
 
                 do
                 {
+                    ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
                     IWebElement table = driver.FindElement(By.CssSelector("#screener-content > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)"));
                     var rows = table.FindElements(By.TagName("tr"));
                     for (int j = 1; j < rows.Count; j++)
@@ -155,7 +172,7 @@ namespace Screener
                         var temp = from s in split
                                    where s != ""
                                    select s;
-                        status = String.Format("Scraping Finviz - {0} - {1}\t{2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j, rows.Count - 1);
+                        ChangeProgress(1, String.Format("Scraping Finviz - {0} - {1} {2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j+1, rows.Count - 1));
                         finvizRows.Add(temp.ToArray());
                     }//end for
 
@@ -182,7 +199,7 @@ namespace Screener
             int symbolsCount = symbols.Count;
             for (int i = 0; i < symbolsCount; i += numSymbols)
             {
-                status = "Loading ChartMill page...";
+                ChangeProgress(0, "Loading ChartMill page...");
                 if (numSymbols > symbolsCount)
                 {
                     numSymbols = symbolsCount - 1;
@@ -204,7 +221,7 @@ namespace Screener
                     var growth = r.FindElements(By.ClassName("cdk-column-gr"));
                     var val = r.FindElements(By.ClassName("cdk-column-val"));
 
-                    status = String.Format("Scraping ChartMill - {0}\t{1}{2}", sym, currentStock + 1, finvizRows.Count);
+                    ChangeProgress(1, String.Format("Scraping ChartMill - {0} {1}/{2}", sym, currentStock + 1, finvizRows.Count));
 
                     chartMillRows.Add(new object[4]);
                     chartMillRows[currentStock][0] = sym;
@@ -228,5 +245,16 @@ namespace Screener
         }//end ScrapeChartMill
 
         private string GetChartMillUrl(List<string> s) { return chartMillUrl[0] + String.Join(" ", s) + chartMillUrl[1]; }
+
+        private int ChangeProgress(int val, string update)
+        {
+            status = update;
+            if (OnProgressUpdate != null)
+            {
+                OnProgressUpdate(val);
+            }//end if
+
+            return val;
+        }//end changeProgress
     }//end class
 }//end namespace

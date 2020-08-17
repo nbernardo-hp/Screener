@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Screener
 {
-    class Stock
+    public class Stock
     {
         private string symbol;
         private string industry;

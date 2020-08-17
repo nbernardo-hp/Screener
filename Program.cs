@@ -37,7 +37,6 @@ namespace Screener
                         Application.Run(frmPref);
                         if (frmPref.DialogResult == DialogResult.OK)
                         {
-                            var x = 4;
                             pref.SetSectorMap(frmPref.GetPreferences());
                         }//end 2x nested if
                     }//end nested if

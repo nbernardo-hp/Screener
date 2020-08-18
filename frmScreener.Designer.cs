@@ -45,10 +45,10 @@
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.lstvStocks = new System.Windows.Forms.ListView();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAttribution = new System.Windows.Forms.ToolStripMenuItem();
+            this.lstvStocks = new System.Windows.Forms.ListView();
             this.Symbol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Industry = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Fund = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -60,6 +60,19 @@
             this.EarningsDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TotalScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ttpColumns = new System.Windows.Forms.ToolTip(this.components);
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmAny = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmBasicMaterials = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmCommunicationServices = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmConsumerCyclical = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmConsumerDefensive = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmEnergy = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmFinancial = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmHealthcare = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmIndustrials = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmRealEstate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmTechnology = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmUtilities = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,6 +80,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -89,22 +103,46 @@
             this.tsmSave.Name = "tsmSave";
             this.tsmSave.Size = new System.Drawing.Size(180, 22);
             this.tsmSave.Text = "Save";
+            this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
             // tsmPrint
             // 
             this.tsmPrint.Name = "tsmPrint";
             this.tsmPrint.Size = new System.Drawing.Size(180, 22);
             this.tsmPrint.Text = "Print";
+            this.tsmPrint.Click += new System.EventHandler(this.tsmPrint_Click);
             // 
             // tsmExit
             // 
             this.tsmExit.Name = "tsmExit";
             this.tsmExit.Size = new System.Drawing.Size(180, 22);
             this.tsmExit.Text = "Exit";
+            this.tsmExit.Click += new System.EventHandler(this.tsmExit_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmAbout,
+            this.tsmAttribution});
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.aboutToolStripMenuItem.Text = "Info";
+            // 
+            // tsmAbout
+            // 
+            this.tsmAbout.Name = "tsmAbout";
+            this.tsmAbout.Size = new System.Drawing.Size(132, 22);
+            this.tsmAbout.Text = "About";
+            // 
+            // tsmAttribution
+            // 
+            this.tsmAttribution.Name = "tsmAttribution";
+            this.tsmAttribution.Size = new System.Drawing.Size(132, 22);
+            this.tsmAttribution.Text = "Attribution";
             // 
             // lstvStocks
             // 
-            this.lstvStocks.BackColor = System.Drawing.SystemColors.Control;
+            this.lstvStocks.BackColor = System.Drawing.SystemColors.Window;
             this.lstvStocks.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Symbol,
             this.Industry,
@@ -160,27 +198,6 @@
             this.lstvStocks.TabIndex = 1;
             this.lstvStocks.UseCompatibleStateImageBehavior = false;
             this.lstvStocks.View = System.Windows.Forms.View.Details;
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmAbout,
-            this.tsmAttribution});
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
-            this.aboutToolStripMenuItem.Text = "Info";
-            // 
-            // tsmAbout
-            // 
-            this.tsmAbout.Name = "tsmAbout";
-            this.tsmAbout.Size = new System.Drawing.Size(180, 22);
-            this.tsmAbout.Text = "About";
-            // 
-            // tsmAttribution
-            // 
-            this.tsmAttribution.Name = "tsmAttribution";
-            this.tsmAttribution.Size = new System.Drawing.Size(180, 22);
-            this.tsmAttribution.Text = "Attribution";
             // 
             // Symbol
             // 
@@ -241,6 +258,109 @@
             this.TotalScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TotalScore.Width = 83;
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmAny,
+            this.tsmBasicMaterials,
+            this.tsmCommunicationServices,
+            this.tsmConsumerCyclical,
+            this.tsmConsumerDefensive,
+            this.tsmEnergy,
+            this.tsmFinancial,
+            this.tsmHealthcare,
+            this.tsmIndustrials,
+            this.tsmRealEstate,
+            this.tsmTechnology,
+            this.tsmUtilities});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // tsmAny
+            // 
+            this.tsmAny.Name = "tsmAny";
+            this.tsmAny.Size = new System.Drawing.Size(206, 22);
+            this.tsmAny.Text = "Any";
+            this.tsmAny.Click += new System.EventHandler(this.tsmAny_Click);
+            // 
+            // tsmBasicMaterials
+            // 
+            this.tsmBasicMaterials.Name = "tsmBasicMaterials";
+            this.tsmBasicMaterials.Size = new System.Drawing.Size(206, 22);
+            this.tsmBasicMaterials.Text = "Basic Materials";
+            this.tsmBasicMaterials.Click += new System.EventHandler(this.tsmBasicMaterials_Click);
+            // 
+            // tsmCommunicationServices
+            // 
+            this.tsmCommunicationServices.Name = "tsmCommunicationServices";
+            this.tsmCommunicationServices.Size = new System.Drawing.Size(206, 22);
+            this.tsmCommunicationServices.Text = "Communication Services";
+            this.tsmCommunicationServices.Click += new System.EventHandler(this.tsmCommunicationServices_Click);
+            // 
+            // tsmConsumerCyclical
+            // 
+            this.tsmConsumerCyclical.Name = "tsmConsumerCyclical";
+            this.tsmConsumerCyclical.Size = new System.Drawing.Size(206, 22);
+            this.tsmConsumerCyclical.Text = "Consumer Cyclical";
+            this.tsmConsumerCyclical.Click += new System.EventHandler(this.tsmConsumerCyclical_Click);
+            // 
+            // tsmConsumerDefensive
+            // 
+            this.tsmConsumerDefensive.Name = "tsmConsumerDefensive";
+            this.tsmConsumerDefensive.Size = new System.Drawing.Size(206, 22);
+            this.tsmConsumerDefensive.Text = "Consumer Defensive";
+            this.tsmConsumerDefensive.Click += new System.EventHandler(this.tsmConsumerDefensive_Click);
+            // 
+            // tsmEnergy
+            // 
+            this.tsmEnergy.Name = "tsmEnergy";
+            this.tsmEnergy.Size = new System.Drawing.Size(206, 22);
+            this.tsmEnergy.Text = "Energy";
+            this.tsmEnergy.Click += new System.EventHandler(this.tsmEnergy_Click);
+            // 
+            // tsmFinancial
+            // 
+            this.tsmFinancial.Name = "tsmFinancial";
+            this.tsmFinancial.Size = new System.Drawing.Size(206, 22);
+            this.tsmFinancial.Text = "Financial";
+            this.tsmFinancial.Click += new System.EventHandler(this.tsmFinancial_Click);
+            // 
+            // tsmHealthcare
+            // 
+            this.tsmHealthcare.Name = "tsmHealthcare";
+            this.tsmHealthcare.Size = new System.Drawing.Size(206, 22);
+            this.tsmHealthcare.Text = "Healthcare";
+            this.tsmHealthcare.Click += new System.EventHandler(this.tsmHealthcare_Click);
+            // 
+            // tsmIndustrials
+            // 
+            this.tsmIndustrials.Name = "tsmIndustrials";
+            this.tsmIndustrials.Size = new System.Drawing.Size(206, 22);
+            this.tsmIndustrials.Text = "Industrials";
+            this.tsmIndustrials.Click += new System.EventHandler(this.tsmIndustrials_Click);
+            // 
+            // tsmRealEstate
+            // 
+            this.tsmRealEstate.Name = "tsmRealEstate";
+            this.tsmRealEstate.Size = new System.Drawing.Size(206, 22);
+            this.tsmRealEstate.Text = "Real Estate";
+            this.tsmRealEstate.Click += new System.EventHandler(this.tsmRealEstate_Click);
+            // 
+            // tsmTechnology
+            // 
+            this.tsmTechnology.Name = "tsmTechnology";
+            this.tsmTechnology.Size = new System.Drawing.Size(206, 22);
+            this.tsmTechnology.Text = "Technology";
+            this.tsmTechnology.Click += new System.EventHandler(this.tsmTechnology_Click);
+            // 
+            // tsmUtilities
+            // 
+            this.tsmUtilities.Name = "tsmUtilities";
+            this.tsmUtilities.Size = new System.Drawing.Size(206, 22);
+            this.tsmUtilities.Text = "Utilities";
+            this.tsmUtilities.Click += new System.EventHandler(this.tsmUtilities_Click);
+            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -281,5 +401,18 @@
         private System.Windows.Forms.ColumnHeader EarningsDate;
         private System.Windows.Forms.ColumnHeader TotalScore;
         private System.Windows.Forms.ToolTip ttpColumns;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmAny;
+        private System.Windows.Forms.ToolStripMenuItem tsmBasicMaterials;
+        private System.Windows.Forms.ToolStripMenuItem tsmCommunicationServices;
+        private System.Windows.Forms.ToolStripMenuItem tsmConsumerCyclical;
+        private System.Windows.Forms.ToolStripMenuItem tsmConsumerDefensive;
+        private System.Windows.Forms.ToolStripMenuItem tsmEnergy;
+        private System.Windows.Forms.ToolStripMenuItem tsmFinancial;
+        private System.Windows.Forms.ToolStripMenuItem tsmHealthcare;
+        private System.Windows.Forms.ToolStripMenuItem tsmIndustrials;
+        private System.Windows.Forms.ToolStripMenuItem tsmRealEstate;
+        private System.Windows.Forms.ToolStripMenuItem tsmTechnology;
+        private System.Windows.Forms.ToolStripMenuItem tsmUtilities;
     }
 }

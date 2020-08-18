@@ -67,6 +67,10 @@ namespace Screener
             {
                 bgwScrape.CancelAsync();
             }
+            if (bgwScrape.IsBusy == false)
+            {
+                Application.Exit();
+            }
         }//end btnCancel_Click
 
         private void bgwScrape_DoWork(object sender, DoWorkEventArgs e)
@@ -89,6 +93,13 @@ namespace Screener
         private void bgwScrape_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             stocks = scraper.GetStocks();
+            foreach(var sector in stocks.Values)
+            {
+                foreach(var stock in sector.Values)
+                {
+                    stock.CalculateTotalScore();
+                }//end nested foreach
+            }//end foreach
             this.Close();
         }//end bgwScrape_RunWorkerCompleted
 

@@ -31,11 +31,11 @@
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnScrape = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.pgbProgress = new System.Windows.Forms.ProgressBar();
             this.pnlStart = new System.Windows.Forms.Panel();
             this.pnlProgress = new System.Windows.Forms.Panel();
-            this.lblStatus = new System.Windows.Forms.Label();
             this.lblProgress = new System.Windows.Forms.Label();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.bgwScrape = new System.ComponentModel.BackgroundWorker();
             this.pnlStart.SuspendLayout();
             this.pnlProgress.SuspendLayout();
@@ -92,12 +92,12 @@
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // progressBar1
+            // pgbProgress
             // 
-            this.progressBar1.Location = new System.Drawing.Point(26, 39);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(399, 23);
-            this.progressBar1.TabIndex = 3;
+            this.pgbProgress.Location = new System.Drawing.Point(26, 39);
+            this.pgbProgress.Name = "pgbProgress";
+            this.pgbProgress.Size = new System.Drawing.Size(399, 23);
+            this.pgbProgress.TabIndex = 3;
             // 
             // pnlStart
             // 
@@ -114,7 +114,7 @@
             this.pnlProgress.BackColor = System.Drawing.Color.Transparent;
             this.pnlProgress.Controls.Add(this.lblProgress);
             this.pnlProgress.Controls.Add(this.lblStatus);
-            this.pnlProgress.Controls.Add(this.progressBar1);
+            this.pnlProgress.Controls.Add(this.pgbProgress);
             this.pnlProgress.Controls.Add(this.btnCancel);
             this.pnlProgress.Location = new System.Drawing.Point(87, 134);
             this.pnlProgress.Name = "pnlProgress";
@@ -122,30 +122,34 @@
             this.pnlProgress.TabIndex = 5;
             this.pnlProgress.Visible = false;
             // 
-            // lblStatus
-            // 
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblStatus.Location = new System.Drawing.Point(24, 23);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(35, 13);
-            this.lblStatus.TabIndex = 4;
-            this.lblStatus.Text = "label1";
-            // 
             // lblProgress
             // 
             this.lblProgress.AutoSize = true;
+            this.lblProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProgress.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblProgress.Location = new System.Drawing.Point(391, 23);
+            this.lblProgress.Location = new System.Drawing.Point(402, 23);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(35, 13);
+            this.lblProgress.Size = new System.Drawing.Size(23, 13);
             this.lblProgress.TabIndex = 5;
-            this.lblProgress.Text = "label1";
+            this.lblProgress.Text = "0%";
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblStatus.Location = new System.Drawing.Point(26, 23);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(41, 13);
+            this.lblStatus.TabIndex = 4;
+            this.lblStatus.Text = "label1";
             // 
             // bgwScrape
             // 
             this.bgwScrape.WorkerReportsProgress = true;
             this.bgwScrape.WorkerSupportsCancellation = true;
+            this.bgwScrape.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwScrape_DoWork);
+            this.bgwScrape.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwScrape_RunWorkerCompleted);
             // 
             // frmSplash
             // 
@@ -162,6 +166,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmSplash";
             this.Load += new System.EventHandler(this.frmSplash_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseUp);
             this.pnlStart.ResumeLayout(false);
             this.pnlProgress.ResumeLayout(false);
             this.pnlProgress.PerformLayout();
@@ -174,7 +181,7 @@
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnScrape;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar pgbProgress;
         private System.Windows.Forms.Panel pnlStart;
         private System.Windows.Forms.Panel pnlProgress;
         private System.Windows.Forms.Label lblProgress;

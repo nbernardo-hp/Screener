@@ -79,7 +79,11 @@ namespace Screener
             set { totalScore = value; }
         }
         public DateTime GetEarningsDate() { return earningsDate; }
-        public string GetEarningsDateString() { return earningsDate.ToShortDateString(); }
+        public string GetEarningsDateString()
+        {
+            if (earningsDate != new DateTime(0)) { return earningsDate.ToShortDateString(); }
+            return "NA";
+        }
 
         public void SetEarningsDate(string value)
         {
@@ -107,6 +111,15 @@ namespace Screener
             totalScore += (RecomValue <= 2 ? 4 : RecomValue <= 3 ? 2 : -2);
             totalScore += (CurrentRatioValue >= 3 ? 4 : CurrentRatioValue >= 1 ? 2 : -2);
             totalScore += GetEarningsDateScore();
+        }
+
+        /// <summary>
+        /// Gets the attributes of the Stock object in an enumerable object
+        /// </summary>
+        /// <returns>The attributes of the Stock object</returns>
+        public IEnumerable<object> GetAttributesEnumerable()
+        {
+            return new List<object>() { symbol, industry, fund, growth, valuation, high52W, recom, currentRatio, GetEarningsDateString(), totalScore };
         }
 
         /// <summary>

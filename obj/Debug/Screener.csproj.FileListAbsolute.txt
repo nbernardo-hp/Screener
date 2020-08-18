@@ -16,3 +16,4 @@ C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\SeleniumExtras.WaitHe
 C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.Support.dll
 C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.Support.xml
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmScreener.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.csproj.ResolveComReference.cache

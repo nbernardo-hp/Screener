@@ -274,7 +274,7 @@ namespace Screener
         {
             Stack<string> urls = new Stack<string>();
 
-            foreach(var key in sectorMap.Keys.Where(s => s != "Any"))
+            foreach(var key in sectorMap.Keys.Where(s => s != "Any").Reverse())
             {
                 urls.Push(CreateFinvizUrl(key));
             }
@@ -316,7 +316,10 @@ namespace Screener
              *to get the appropriate attribute and the value selects the proper filter string*/
             foreach(var kvp in sectorMap[sector])
             {
-                url.Append("," + finvizMap[kvp.Key][kvp.Value]);
+                if(kvp.Value != "Any")
+                {
+                    url.Append("," + finvizMap[kvp.Key][kvp.Value]);
+                }
             }
 
             return url.Append(","+finvizMap["sector"][sector]+ finvizEndUrl).ToString();

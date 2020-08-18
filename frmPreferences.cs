@@ -31,6 +31,14 @@ namespace Screener
             cmbSector.SelectedIndex = 0;
         }//end one argument constructor
 
+        public frmPreferences(Dictionary<string, Dictionary<string, string>> pref, string sector)
+        {
+            InitializeComponent();
+            this.Icon = Properties.Resources.screenerIcon;
+            preferences = pref;
+            cmbSector.SelectedItem = sector;
+        }//end two argument constructor
+
         public Dictionary<string, Dictionary<string, string>> GetPreferences() { return preferences; }
 
         /// <summary>

@@ -161,7 +161,7 @@ namespace Screener
                 do
                 {
                     ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
-                    IWebElement table = driver.FindElement(By.CssSelector("#screener-content > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)"));
+                    var table = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("#screener-content > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")));
                     var rows = table.FindElements(By.TagName("tr"));
                     for (int j = 1; j < rows.Count; j++)
                     {
@@ -176,7 +176,8 @@ namespace Screener
                     SetProxy();
                     if (i < pages)
                     {
-                        var tabLink = driver.FindElements(By.ClassName("tab-link"));
+                        //var tabLink = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.Elem)
+                        System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> tabLink = driver.FindElements(By.ClassName("tab-link"));
                         tabLink.Last().Click();
                     }
                     i++;

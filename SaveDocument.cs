@@ -10,8 +10,10 @@ using System.Drawing;
 
 namespace Screener
 {
-    class SaveDocument
+    public class SaveDocument
     {
+        public delegate void ProgressUpdate(object[] update);
+        public event ProgressUpdate OnProgressUpdate;
         string filePath;
         string fileName;
 
@@ -29,6 +31,7 @@ namespace Screener
 
         public void SaveExcelDocument(Dictionary<string, Dictionary<string, Stock>> map)
         {
+            ChangeProgress(0, "Initializing...");
             Excel.Application app = new Excel.Application();
 
             if(app == null)
@@ -36,7 +39,10 @@ namespace Screener
                 throw new Exception("Excel is not properly installed!");
             }
 
+            ChangeProgress(1, "Creating Workbook...");
             Excel.Workbook workbook = app.Workbooks.Add();
+
+            ChangeProgress(1, "Creating Worksheet...");
             Excel.Worksheet worksheet = worksheet = (Excel.Worksheet)workbook.Worksheets[1];
 
             Excel.Style style = workbook.Styles.Add("style");
@@ -44,6 +50,7 @@ namespace Screener
             style.Font.Size = 9;
 
             //Sets the column width of each column and the header text for each column
+            ChangeProgress(1, "Writing header rows...");
             Excel.Range formatRange = GetRange(worksheet, 1, 1, 1, 10);
             formatRange.EntireRow.RowHeight = 60.00;
             SetColumnWidth(ref worksheet, 1, 1, 1, 1, 5.14);
@@ -76,6 +83,7 @@ namespace Screener
             int i = 2;//indicates the current row to begin on.  Excel starts indexing at 1
             foreach (var sector in frmScreener.SortSectorKeys(map.Keys))
             {
+                ChangeProgress(1, String.Format("Writing and formatting {0} header", sector));
                 /*Sets the background color and text alignment of the Sector header row.  Merges the first two columns
                  *together and the last 8 together.  Sets the header text for the Sector and increments the current row*/
                 formatRange = GetRange(worksheet, i, 1, i, 10);
@@ -93,6 +101,7 @@ namespace Screener
                 int k = 0;
                 foreach (var s in stocks)
                 {
+                    ChangeProgress(1, String.Format("Writing {0} information", s.SymbolValue));
                     if (k % 2 != 0)
                     {
                         formatRange = GetRange(worksheet, i, 1, i, 10);
@@ -108,19 +117,23 @@ namespace Screener
                     i++;
                 }//end nested foreach
             }//end foreach
-            
+
+            ChangeProgress(1, "Formatting borders...");
             //Add a border around every cell on in the table
             formatRange = worksheet.UsedRange;
             formatRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
             formatRange.Borders.Weight = 2d;
 
+            ChangeProgress(1, "Adding Earnings Date score explaination...");
             //Merge two cells at the botom of the document and add the earnings date explanation
             MergeCells(ref worksheet, i, 1, i, 10);
             MergeCells(ref worksheet, i+1, 1, i+1, 10);
             worksheet.Cells[i, 1] = GetEarningsDateText(1);
             worksheet.Cells[i+1, 1] = GetEarningsDateText(2);
 
+            ChangeProgress(1, "Finializing...");
             //Save the document and close the workbook and application
+            File.Delete(Path.Combine(filePath, fileName));
             workbook.SaveAs(Path.Combine(filePath, fileName));
             workbook.Close();
             app.Quit();
@@ -192,6 +205,7 @@ namespace Screener
         {
             /*starts a new instance of Word and checks to verify that the instance is created.  Sets the visibility and animation to false.
              *Creates a new Word document, adjusts the orientation, and creates a new paragraph*/
+            ChangeProgress(0, "Initializing...");
             Word.Application app = new Word.Application();
             if(app == null)
             {
@@ -201,6 +215,7 @@ namespace Screener
             app.ShowAnimation = false;
             app.Visible = false;
 
+            ChangeProgress(1, "Creating Word document...");
             Word.Document document = app.Documents.Add();
 
             document.PageSetup.Orientation = WdOrientation.wdOrientLandscape;
@@ -210,9 +225,10 @@ namespace Screener
             Table table = document.Tables.Add(paragraph.Range, numRows, 10);
             table.Borders.Enable = 1;
 
+            ChangeProgress(1, "Writing header rows...");
             /*Loops through the first row and sets the text to the string returned from GetHeaderText.  Aligns the
              *paragraph text and merges the first 2 cells of the table*/
-            for(int i = 3; i < 11; i++)
+            for (int i = 3; i < 11; i++)
             {
                 table.Cell(1, i).Range.Text = GetHeaderText(i);
             }//end for
@@ -225,6 +241,7 @@ namespace Screener
              *in the table.  Merges the last rows and then the first 2, sets the background color, aligment, and text.*/
              foreach(var sector in frmScreener.SortSectorKeys(map.Keys))
             {
+                ChangeProgress(1, String.Format("Writing and formatting {0} header", sector));
                 MergeCells(ref table, row, 3, row, 10);
                 MergeCells(ref table, row, 1, row, 2);
                 table.Rows[row].Range.Shading.BackgroundPatternColor = WdColor.wdColorGray15;
@@ -240,7 +257,8 @@ namespace Screener
                 int j = 0;
                 foreach (var s in stocks)
                 {
-                    if(j%2 != 0)
+                    ChangeProgress(1, String.Format("Writing {0} information", s.SymbolValue));
+                    if (j%2 != 0)
                     {
                         table.Rows[row].Range.Shading.BackgroundPatternColor = WdColor.wdColorGray05;
                     }
@@ -254,13 +272,16 @@ namespace Screener
                 }//end nested foreach
             }//end foreach
 
+            ChangeProgress(1, "Adding Earnings Date score explaination...");
             /*Adds a new paragraph containing the explanation for the earningsDate scoring*/
             Word.Paragraph earningsDate = document.Content.Paragraphs.Add();
             earningsDate.Range.Text = String.Format("{0}\n{1}", GetEarningsDateText(1), GetEarningsDateText(2));
             earningsDate.Range.InsertParagraphAfter();
 
+            ChangeProgress(1, "Finializing...");
             //Saves the document to the path provided when instantiating the SaveDocument object and closes the Word instance
             object file = Path.Combine(filePath, fileName);
+            File.Delete(Path.Combine(filePath, fileName));
             document.SaveAs2(ref file);
             document.Close();
             app.Quit();
@@ -271,6 +292,17 @@ namespace Screener
             XmlData xml = new XmlData();
             xml.SaveStocks(stocks, filePath, fileName);
         }//end SaveXmlDocument
+
+        private object[] ChangeProgress(int val, string update)
+        {
+            object[] change = { val, update };
+            if (OnProgressUpdate != null)
+            {
+                OnProgressUpdate(change);
+            }//end if
+
+            return change;
+        }//end changeProgress
 
         private void MergeCells(ref Table table, int row1, int cell1, int row2, int cell2)
         {

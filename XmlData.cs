@@ -77,6 +77,49 @@ namespace Screener
         }//end SavePreferences
 
         /// <summary>
+        /// Saves the stocks at the user specified path from the SaveFileDialog
+        /// </summary>
+        /// <param name="stocks">Dictionary containing the Stock objects</param>
+        /// <param name="filePath">The folder path to save the file</param>
+        /// <param name="fileName">The file name containing the extension to use</param>
+        public void SaveStocks(Dictionary<string, Dictionary<string, Stock>> map, string filePath, string fileName)
+        {
+            string combinedPath = Path.Combine(filePath, fileName);
+            if (File.Exists(combinedPath)) { File.Delete(combinedPath); }
+            using (writer = XmlWriter.Create(combinedPath))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("STOCKS");
+                foreach(var sector in frmScreener.SortSectorKeys(map.Keys))
+                {
+                    writer.WriteStartElement("SECTOR");
+
+                    IOrderedEnumerable<Stock> stocks = frmScreener.SortSectorDictionary(map[sector]);
+                    foreach(var s in stocks)
+                    {
+                        writer.WriteStartElement("STOCK");
+                        writer.WriteElementString("SYMBOL", s.SymbolValue);
+                        writer.WriteElementString("INDUSTRY", s.IndustryValue);
+                        writer.WriteElementString("FUND", s.FundValue.ToString());
+                        writer.WriteElementString("GROWTH", s.GrowthValue.ToString());
+                        writer.WriteElementString("VALUATION", s.ValuationValue.ToString());
+                        writer.WriteElementString("HIGH_52W", s.High52WValue.ToString());
+                        writer.WriteElementString("RECOM", s.RecomValue.ToString());
+                        writer.WriteElementString("CURRENT_RATIO", s.CurrentRatioValue.ToString());
+                        writer.WriteElementString("EARNINGS_DATE", s.GetEarningsDateString());
+                        writer.WriteElementString("TOTAL_SCORE", s.TotalScoreValue.ToString());
+                        writer.WriteEndElement();
+                    }//end nest foreach
+
+                    writer.WriteEndElement();
+                }//end foreach
+                
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+            }//end using
+        }//end SaveStocks
+
+        /// <summary>
         /// Creates the specified directory if it doesn't exist
         /// </summary>
         /// <param name="path">The path of the directory</param>

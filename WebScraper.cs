@@ -57,8 +57,7 @@ namespace Screener
 
                 ScrapeChartMill();
             }//end if
-            ChangeProgress(0, "Closing driver...");
-
+            ChangeProgress(1, "Finalizing...");
             driver.Close();
             driver.Dispose();
             driver.Quit();
@@ -95,8 +94,6 @@ namespace Screener
                     stocks[finvizRows[i][1]].Add(temp.SymbolValue, temp);
                 }//end if
             }//end for
-
-            ChangeProgress(1, "Finalizing...");
         }//end ParseInformation
 
         /// <summary>

@@ -110,26 +110,20 @@ namespace Screener
                 SaveFileDialog save = new SaveFileDialog();
                 save.AddExtension = true;
                 save.Filter = "Excel files (*xlsx)|*.xlsx|Word files (*.docx)|*docx|Xml files (*.xml)|*.xml|Html files (*.html)|*.html";
-
                 if (save.ShowDialog() == DialogResult.OK)
                 {
                     string path = save.FileName;
                     string extension = path.Remove(0, path.LastIndexOf('.') + 1);
+                    save.DefaultExt = extension;
 
                     document = new SaveDocument(path.Remove(path.LastIndexOf('\\')), path.Remove(0, path.LastIndexOf('\\') + 1));
-
                     if (extension == "xlsx")
                     {
-                        document.SaveExcelDocument(stocks);
+                        OfficeDocumentProgressForm(document, extension);
                     }
                     else if (extension == "docx")
                     {
-                        int rows = stocks.Keys.Count() + 1;
-                        foreach(var kvp in stocks.Values)
-                        {
-                            rows += kvp.Values.Count();
-                        }
-                        document.SaveWordDocument(stocks, rows);
+                        OfficeDocumentProgressForm(document, extension);
                     }
                     else if (extension == "xml")
                     {
@@ -147,6 +141,23 @@ namespace Screener
             }
         }//end tsmSave_Click
 
+        private void OfficeDocumentProgressForm(SaveDocument doc, string extension)
+        {
+            frmOfficeDocumentProgress frm;
+            if(extension == "xlsx")
+            {
+                frm = new frmOfficeDocumentProgress(doc, stocks);
+            } else
+            {
+                int rows = stocks.Keys.Count() + 1;
+                foreach (var kvp in stocks.Values)
+                {
+                    rows += kvp.Values.Count();
+                }
+                frm = new frmOfficeDocumentProgress(doc, stocks, rows);
+            }//end if-else
+            frm.ShowDialog();
+        }//end OfficeDocumentProgressForm
         private void tsmPrint_Click(object sender, EventArgs e)
         {
             //TODO
@@ -194,10 +205,10 @@ namespace Screener
             int i = 0;
             foreach (var stock in stocks)
             {
-                var row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), stock.High52WValue.ToString() + "%", stock.RecomValue.ToString(), stock.CurrentRatioValue.ToString(), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.TotalScoreValue.ToString() });
+                ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), stock.High52WValue.ToString() + "%", stock.RecomValue.ToString(), stock.CurrentRatioValue.ToString(), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.TotalScoreValue.ToString() });
+                //row.UseItemStyleForSubItems = false;
                 if (i % 2 != 0)
                 {
-                    row.UseItemStyleForSubItems = false;
                     row.BackColor = SystemColors.Control;
                 }
                 lstvStocks.Groups[sector].Items.Add(row);
@@ -242,7 +253,13 @@ namespace Screener
                     throw;
                 }//end if-else if-else if-else
             }//end try-catch
-        }
+        }//end LoadFinvizWithStocks
+
+        /// <summary>
+        /// Sorts and returns the Stock objects in the provided Sector by multiple different criteria.
+        /// </summary>
+        /// <param name="sector"></param>
+        /// <returns>The ordered Stock objects from the Sector</returns>
         public static IOrderedEnumerable<Stock> SortSectorDictionary(Dictionary<string, Stock> sector)
         {
             return sector.Values.OrderByDescending(s => s.TotalScoreValue).ThenByDescending(s => s.FundValue)
@@ -250,6 +267,11 @@ namespace Screener
                 .ThenBy(s => s.RecomValue).ThenByDescending(s => s.CurrentRatioValue).ThenByDescending(s => s.GetEarningsDate());
         }//end SortStockDictionary
 
+        /// <summary>
+        /// Returns an ordered object of the Sectors from the Dictionary
+        /// </summary>
+        /// <param name="sectors"></param>
+        /// <returns>Ordered Sectors</returns>
         public static IOrderedEnumerable<string> SortSectorKeys(IEnumerable<string> sectors)
         {
             return sectors.OrderBy(s => s);

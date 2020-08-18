@@ -202,6 +202,7 @@ namespace Screener
                 }
                 lstvStocks.Groups[sector].Items.Add(row);
                 lstvStocks.Items.Add(row);
+                i++;
             }//end foreach
         }//end AddListViewItem
 

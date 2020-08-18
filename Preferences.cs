@@ -13,6 +13,7 @@ namespace Screener
         private string browser;
         private string finvizStartUrl = "https://www.finviz.com/screener.ashx?v=151&f=an_recom_buybetter,geo_usa";
         private string finvizEndUrl = "&ft=4&c=1,3,4,7,35,57,59,62,68";
+        private string finvizURLAfterScraping = "https://www.finviz.com/screener.ashx?v=111&t=";
         private string preferencesPath = AppDomain.CurrentDomain.BaseDirectory + @"\preferences";
         private string preferencesFile = "preferences.xml";
 
@@ -275,10 +276,31 @@ namespace Screener
 
             foreach(var key in sectorMap.Keys.Where(s => s != "Any"))
             {
-                urls.Push(GetFinvizUrl(key));
+                urls.Push(CreateFinvizUrl(key));
             }
 
             return urls;
+        }
+
+        /// <summary>
+        /// Returns the url to be used in Finviz so that the charts can be viewed on the website.
+        /// </summary>
+        /// <param name="symbols"></param>
+        /// <returns></returns>
+        public string GetFinvizURLAfterScraping(IEnumerable<string> symbols)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(finvizURLAfterScraping);
+            int symbolsCount = symbols.Count();
+            foreach(string s in symbols)
+            {
+                sb.Append(s);
+                if(symbolsCount > 1) { sb.Append(","); }
+                symbolsCount--;
+            }//end foreach
+
+            return sb.ToString();
         }
 
         /// <summary>
@@ -286,7 +308,7 @@ namespace Screener
         /// </summary>
         /// <param name="sector">The Sector to scrape</param>
         /// <returns>The URL for the specific Sector</returns>
-        public string GetFinvizUrl(string sector)
+        public string CreateFinvizUrl(string sector)
         {
             StringBuilder url = new StringBuilder().Append(finvizStartUrl);
 
@@ -316,10 +338,14 @@ namespace Screener
             Dictionary<string, Dictionary<string, string>> res = new Dictionary<string, Dictionary<string, string>>();
             foreach(var sector in sectorMap)
             {
-                res.Add(sector.Key, sector.Value);
-            }
+                res.Add(sector.Key, new Dictionary<string, string>());
+                foreach(var s in sector.Value)
+                {
+                    res[sector.Key].Add(s.Key, s.Value);
+                }//end nested foreach
+            }//end foreach
             return res;
-        }
+        }//end GetSectorMapCopy
 
         public void SetSectorMap(Dictionary<string, Dictionary<string, string>> map)
         {

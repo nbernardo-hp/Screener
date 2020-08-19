@@ -18,3 +18,4 @@ C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\WebDriver.Support.xml
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmScreener.resources
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.csproj.ResolveComReference.cache
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmOfficeDocumentProgress.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmAttribution.resources

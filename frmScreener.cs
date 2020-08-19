@@ -307,7 +307,6 @@ namespace Screener
                 int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 74 };
                 int fullRowWidth = 41 + 237 + 69 + 69 + 82 + 106 + 82 + 73 + 85 + 74;
                 int currentSector = 0;
-                int currentStock = 0;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
                 int y = e.MarginBounds.Top;
@@ -355,6 +354,7 @@ namespace Screener
                     int cell = 0;
                     float stringWidth = 0;
                     float stringHeight = 0;
+                    int currentStock = 0;
 
                     if (y < e.MarginBounds.Bottom && y + bodyCellHeight < e.MarginBounds.Bottom)
                     {
@@ -369,7 +369,7 @@ namespace Screener
                     {
                         e.HasMorePages = true;
                         pages++;
-                        continue;
+                        break;
                     }//end if-else
 
                     var sorted = frmScreener.SortSectorDictionary(stocks[sectors.ElementAt(currentSector)]);
@@ -404,7 +404,7 @@ namespace Screener
                         {
                             e.HasMorePages = true;
                             pages++;
-                            continue;
+                            break;
                         }//end if-else
                     }//end foreach
 
@@ -455,10 +455,22 @@ namespace Screener
                 string message = String.Format("A stock screening application used for selecting stocks.\nThe application scrapes two websites, Finviz and ChartMill.\n" +
                     "Then evaluates the stocks to determine if they should be included in the table.\n\nProgrammer: Nicholas Bernardo\nVersion: {0}",
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+                MessageBox.Show(message);
             } catch
             {
 
             }
         }//end tsmAbout_Click
+
+        private void tsmAttribution_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new frmAttribution().ShowDialog();
+            } catch
+            {
+
+            }
+        }//end tsmAttribution_Click
     }//end class
 }//end namespace

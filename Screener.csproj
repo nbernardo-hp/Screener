@@ -57,6 +57,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmAttribution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAttribution.Designer.cs">
+      <DependentUpon>frmAttribution.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmOfficeDocumentProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +100,9 @@
     <Compile Include="Stock.cs" />
     <Compile Include="WebScraper.cs" />
     <Compile Include="XmlData.cs" />
+    <EmbeddedResource Include="frmAttribution.resx">
+      <DependentUpon>frmAttribution.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmOfficeDocumentProgress.resx">
       <DependentUpon>frmOfficeDocumentProgress.cs</DependentUpon>
     </EmbeddedResource>

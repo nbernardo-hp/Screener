@@ -287,7 +287,7 @@ namespace Screener
         /// </summary>
         /// <param name="symbols"></param>
         /// <returns></returns>
-        public string GetFinvizURLAfterScraping(IEnumerable<string> symbols)
+        public string GetFinvizUrlAfterScraping(IEnumerable<string> symbols)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -316,7 +316,7 @@ namespace Screener
              *to get the appropriate attribute and the value selects the proper filter string*/
             foreach(var kvp in sectorMap[sector])
             {
-                if(kvp.Value != "Any")
+                if(kvp.Value != "Any" && !kvp.Value.Contains("/"))
                 {
                     url.Append("," + finvizMap[kvp.Key][kvp.Value]);
                 }
@@ -350,6 +350,8 @@ namespace Screener
             return res;
         }//end GetSectorMapCopy
 
+        public string[] GetPEArray() { return (from f in sectorMap.Values select f["pe"]).ToArray(); }
+        public string[] GetRSIArray() { return (from f in sectorMap.Values select f["rsi"]).ToArray(); }
         public void SetSectorMap(Dictionary<string, Dictionary<string, string>> map)
         {
             sectorMap = map;

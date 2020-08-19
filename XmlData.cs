@@ -93,7 +93,7 @@ namespace Screener
                 foreach(var sector in frmScreener.SortSectorKeys(map.Keys))
                 {
                     writer.WriteStartElement("SECTOR");
-
+                    writer.WriteAttributeString("NAME", sector);
                     IOrderedEnumerable<Stock> stocks = frmScreener.SortSectorDictionary(map[sector]);
                     foreach(var s in stocks)
                     {

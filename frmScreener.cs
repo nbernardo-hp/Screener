@@ -227,7 +227,7 @@ namespace Screener
                     symbols.Add(stock);
                 }//end nested foreach
             }//end foreach
-            var url = preferences.GetFinvizURLAfterScraping(symbols.AsEnumerable());
+            var url = preferences.GetFinvizUrlAfterScraping(symbols.AsEnumerable());
             try
             {
 

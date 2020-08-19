@@ -51,9 +51,26 @@ namespace Screener
             cmbAverageVolume.SelectedItem = (preferences[sector]["averageVolume"] != "" ? preferences[sector]["averageVolume"] : "Any");
             cmbRSI.SelectedItem = (preferences[sector]["rsi"] != "" ? preferences[sector]["rsi"] : "Any");
             cmbCurrentRatio.SelectedItem = (preferences[sector]["currentRatio"] != "" ? preferences[sector]["currentRatio"] : "Any");
+            SetPEOrRSIInitialSelection(cmbPE, chkCustomPE, pnlCustomPE, preferences[sector]["pe"]);
+            SetPEOrRSIInitialSelection(cmbRSI, chkCustomRSI, pnlCustomRSI, preferences[sector]["rsi"]);
             loadingSector = false;
         }//end SetInitialSelection
 
+        private void SetPEOrRSIInitialSelection(ComboBox cmb, CheckBox chk, Panel panel, string pref)
+        {
+            if(pref.Contains("/"))
+            {
+                var temp = pref.Split('/');
+                panel.Controls.OfType<NumericUpDown>().Select(x => x).Where(x => x.Name.Contains("Min")).First().Value = int.Parse(temp[0]);
+                panel.Controls.OfType<NumericUpDown>().Select(x => x).Where(x => x.Name.Contains("Max")).First().Value = int.Parse(temp[1]);
+                chk.Checked = true;
+            } else
+            {
+                cmb.SelectedItem = (pref != "" ? pref : "Any");
+                chk.Checked = false;
+            }
+            
+        }//end SetPEOrRSIInitialSelection
         private void cmbSector_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(cmbSector.SelectedIndex < 0)
@@ -154,6 +171,69 @@ namespace Screener
             } else
             {
                 preferences[currentSector][name] = box.SelectedItem.ToString();
+            }//end if-else
+        }//end SetFilterValue
+
+        private void chkCustomPE_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckChangePEOrRSI(cmbPE, chkCustomPE, pnlCustomPE, preferences[currentSector]["pe"]);
+        }//end chkCustomPE_CheckedChanged
+
+        private void chkCustomRSI_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckChangePEOrRSI(cmbRSI, chkCustomRSI, pnlCustomRSI, preferences[currentSector]["rsi"]);
+        }//end chkCustomRSI_CheckedChanged
+
+        private void CheckChangePEOrRSI(ComboBox cmb, CheckBox chk, Panel pnl, string pref)
+        {
+            if(chk.Checked)
+            {
+                pnl.Visible = true;
+            } else
+            {
+                pnl.Visible = false;
+                if(pref.Contains("/")) { cmb.SelectedIndex = 0; }
+            }//end if-else
+        }//end CheckChangePEOrRSI
+
+        private void nudPEMin_ValueChanged(object sender, EventArgs e)
+        {
+            SetFilterValue(nudPEMin, nudPEMax, "pe");
+        }//end nudPEMin_ValueChanged
+
+        private void nudPEMax_ValueChanged(object sender, EventArgs e)
+        {
+            SetFilterValue(nudPEMin, nudPEMax, "pe");
+        }//end nudPEMax_ValueChanged
+
+        private void nudRSIMin_ValueChanged(object sender, EventArgs e)
+        {
+            SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+        }//end nudRSIMin_ValueChanged
+
+        private void nudRSIMax_ValueChanged(object sender, EventArgs e)
+        {
+            SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+        }//end nudRSIMax_ValueChanged
+
+        /// <summary>
+        /// Sets the filter value in the Dictionary local to the form
+        /// </summary>
+        /// <param name="min">Minimum value of the filter</param>
+        /// <param name="max">Maximum value of the filter</param>
+        /// <param name="filter">The name of the filter</param>
+        private void SetFilterValue(NumericUpDown min, NumericUpDown max, string filter)
+        {
+            if (currentSector == "Any")
+            {
+                for (int i = 0; i < preferences.Count(); i++)
+                {
+                    preferences[preferences.ElementAt(i).Key][filter] = String.Format("{0}/{1}", min.Value, max.Value);
+                }//end for
+            }
+            else
+            {
+                preferences[currentSector][filter] = String.Format("{0}/{1}", min.Value, max.Value);
             }//end if-else
         }//end SetFilterValue
     }//end frmPreferences

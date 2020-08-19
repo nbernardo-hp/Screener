@@ -82,7 +82,7 @@ namespace Screener
 
             if(scraper == null)
             {
-                scraper = new WebScraper(splashPref.BrowserValue);
+                scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
                 scraper.OnProgressUpdate += scraper_OnProgressUpdate;
             }
 

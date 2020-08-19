@@ -46,7 +46,25 @@
             this.label7 = new System.Windows.Forms.Label();
             this.btnSaved = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.chkCustomPE = new System.Windows.Forms.CheckBox();
+            this.chkCustomRSI = new System.Windows.Forms.CheckBox();
+            this.pnlCustomPE = new System.Windows.Forms.Panel();
+            this.nudPEMin = new System.Windows.Forms.NumericUpDown();
+            this.nudPEMax = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.pnlCustomRSI = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudRSIMax = new System.Windows.Forms.NumericUpDown();
+            this.nudRSIMin = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.errPreferences)).BeginInit();
+            this.pnlCustomPE.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPEMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPEMax)).BeginInit();
+            this.pnlCustomRSI.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRSIMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRSIMin)).BeginInit();
             this.SuspendLayout();
             // 
             // cmbSector
@@ -121,7 +139,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 183);
+            this.label2.Location = new System.Drawing.Point(12, 190);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 2;
@@ -171,7 +189,7 @@
             "$10 to $50",
             "$20 to $50",
             "$50 to $100"});
-            this.cmbPrice.Location = new System.Drawing.Point(52, 179);
+            this.cmbPrice.Location = new System.Drawing.Point(52, 186);
             this.cmbPrice.Name = "cmbPrice";
             this.cmbPrice.Size = new System.Drawing.Size(121, 21);
             this.cmbPrice.TabIndex = 3;
@@ -200,7 +218,7 @@
             "100K to 1M",
             "500K to 1M",
             "500K to 10M"});
-            this.cmbAverageVolume.Location = new System.Drawing.Point(325, 180);
+            this.cmbAverageVolume.Location = new System.Drawing.Point(325, 187);
             this.cmbAverageVolume.Name = "cmbAverageVolume";
             this.cmbAverageVolume.Size = new System.Drawing.Size(121, 21);
             this.cmbAverageVolume.TabIndex = 4;
@@ -209,7 +227,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(231, 184);
+            this.label3.Location = new System.Drawing.Point(231, 191);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(88, 13);
             this.label3.TabIndex = 5;
@@ -232,16 +250,16 @@
             "Not Overbought (<50)",
             "Not Oversold (>50)",
             "Not Oversold (>40)"});
-            this.cmbRSI.Location = new System.Drawing.Point(186, 241);
+            this.cmbRSI.Location = new System.Drawing.Point(191, 241);
             this.cmbRSI.Name = "cmbRSI";
-            this.cmbRSI.Size = new System.Drawing.Size(121, 21);
+            this.cmbRSI.Size = new System.Drawing.Size(133, 21);
             this.cmbRSI.TabIndex = 6;
             this.cmbRSI.SelectedIndexChanged += new System.EventHandler(this.cmbRSI_SelectedIndexChanged);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(148, 245);
+            this.label4.Location = new System.Drawing.Point(153, 245);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 13);
             this.label4.TabIndex = 7;
@@ -320,11 +338,134 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkCustomPE
+            // 
+            this.chkCustomPE.AutoSize = true;
+            this.chkCustomPE.Location = new System.Drawing.Point(52, 156);
+            this.chkCustomPE.Name = "chkCustomPE";
+            this.chkCustomPE.Size = new System.Drawing.Size(61, 17);
+            this.chkCustomPE.TabIndex = 14;
+            this.chkCustomPE.Text = "Custom";
+            this.chkCustomPE.UseVisualStyleBackColor = true;
+            this.chkCustomPE.CheckedChanged += new System.EventHandler(this.chkCustomPE_CheckedChanged);
+            // 
+            // chkCustomRSI
+            // 
+            this.chkCustomRSI.AutoSize = true;
+            this.chkCustomRSI.Location = new System.Drawing.Point(186, 268);
+            this.chkCustomRSI.Name = "chkCustomRSI";
+            this.chkCustomRSI.Size = new System.Drawing.Size(61, 17);
+            this.chkCustomRSI.TabIndex = 14;
+            this.chkCustomRSI.Text = "Custom";
+            this.chkCustomRSI.UseVisualStyleBackColor = true;
+            this.chkCustomRSI.CheckedChanged += new System.EventHandler(this.chkCustomRSI_CheckedChanged);
+            // 
+            // pnlCustomPE
+            // 
+            this.pnlCustomPE.Controls.Add(this.label9);
+            this.pnlCustomPE.Controls.Add(this.label8);
+            this.pnlCustomPE.Controls.Add(this.nudPEMax);
+            this.pnlCustomPE.Controls.Add(this.nudPEMin);
+            this.pnlCustomPE.Location = new System.Drawing.Point(47, 129);
+            this.pnlCustomPE.Name = "pnlCustomPE";
+            this.pnlCustomPE.Size = new System.Drawing.Size(197, 24);
+            this.pnlCustomPE.TabIndex = 15;
+            this.pnlCustomPE.Visible = false;
+            // 
+            // nudPEMin
+            // 
+            this.nudPEMin.Location = new System.Drawing.Point(33, 2);
+            this.nudPEMin.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.nudPEMin.Name = "nudPEMin";
+            this.nudPEMin.Size = new System.Drawing.Size(59, 20);
+            this.nudPEMin.TabIndex = 0;
+            this.nudPEMin.ValueChanged += new System.EventHandler(this.nudPEMin_ValueChanged);
+            // 
+            // nudPEMax
+            // 
+            this.nudPEMax.Location = new System.Drawing.Point(132, 2);
+            this.nudPEMax.Name = "nudPEMax";
+            this.nudPEMax.Size = new System.Drawing.Size(59, 20);
+            this.nudPEMax.TabIndex = 1;
+            this.nudPEMax.ValueChanged += new System.EventHandler(this.nudPEMax_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 5);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(27, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Min:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(102, 5);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(30, 13);
+            this.label9.TabIndex = 2;
+            this.label9.Text = "Max:";
+            // 
+            // pnlCustomRSI
+            // 
+            this.pnlCustomRSI.Controls.Add(this.label10);
+            this.pnlCustomRSI.Controls.Add(this.label11);
+            this.pnlCustomRSI.Controls.Add(this.nudRSIMax);
+            this.pnlCustomRSI.Controls.Add(this.nudRSIMin);
+            this.pnlCustomRSI.Location = new System.Drawing.Point(187, 239);
+            this.pnlCustomRSI.Name = "pnlCustomRSI";
+            this.pnlCustomRSI.Size = new System.Drawing.Size(197, 24);
+            this.pnlCustomRSI.TabIndex = 15;
+            this.pnlCustomRSI.Visible = false;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(102, 5);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(30, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Max:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 5);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(27, 13);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Min:";
+            // 
+            // nudRSIMax
+            // 
+            this.nudRSIMax.Location = new System.Drawing.Point(132, 2);
+            this.nudRSIMax.Name = "nudRSIMax";
+            this.nudRSIMax.Size = new System.Drawing.Size(59, 20);
+            this.nudRSIMax.TabIndex = 1;
+            this.nudRSIMax.ValueChanged += new System.EventHandler(this.nudRSIMax_ValueChanged);
+            // 
+            // nudRSIMin
+            // 
+            this.nudRSIMin.Location = new System.Drawing.Point(33, 2);
+            this.nudRSIMin.Name = "nudRSIMin";
+            this.nudRSIMin.Size = new System.Drawing.Size(59, 20);
+            this.nudRSIMin.TabIndex = 0;
+            this.nudRSIMin.ValueChanged += new System.EventHandler(this.nudRSIMin_ValueChanged);
+            // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 336);
+            this.Controls.Add(this.pnlCustomRSI);
+            this.Controls.Add(this.pnlCustomPE);
+            this.Controls.Add(this.chkCustomRSI);
+            this.Controls.Add(this.chkCustomPE);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSaved);
             this.Controls.Add(this.label7);
@@ -348,6 +489,14 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Preferences";
             ((System.ComponentModel.ISupportInitialize)(this.errPreferences)).EndInit();
+            this.pnlCustomPE.ResumeLayout(false);
+            this.pnlCustomPE.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPEMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPEMax)).EndInit();
+            this.pnlCustomRSI.ResumeLayout(false);
+            this.pnlCustomRSI.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRSIMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRSIMin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -371,6 +520,18 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSaved;
+        private System.Windows.Forms.Panel pnlCustomRSI;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown nudRSIMax;
+        private System.Windows.Forms.NumericUpDown nudRSIMin;
+        private System.Windows.Forms.Panel pnlCustomPE;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown nudPEMax;
+        private System.Windows.Forms.NumericUpDown nudPEMin;
+        private System.Windows.Forms.CheckBox chkCustomRSI;
+        private System.Windows.Forms.CheckBox chkCustomPE;
     }
 }
 

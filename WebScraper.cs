@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +28,9 @@ namespace Screener
         private string status = "";
         private string[] chartMillUrl = new string[2] { "https://www.chartmill.com/stock/stock-charts?ticker=", "&v=16&s=t&sd=ASC" };
         private string[] sectorHeaders = { "Basic Materials", "Communication Services", "Consumer Cyclical", "Consumer Defensive", "Energy", "Financial", "Healthcare", "Industrials", "Real Estate", "Technology", "Utilities" };
-
-        public WebScraper(string browser)
+        private string[] pe;
+        private string[] rsi;
+        public WebScraper(string browser, string[] pe, string[] rsi)
         {
             if(browser == "c")
             {
@@ -38,15 +42,15 @@ namespace Screener
                 options.AddArgument("-private");
                 driver = new FirefoxDriver(options);
             }//end if-else
+            this.pe = pe;
+            this.rsi = rsi;
         }//end one argument constructor
 
         public void Start(Stack<string> urls)
         {
             this.urls = urls;
-            this.urls.Reverse();
             GetProxies();
             ScrapeFinviz();
-
             foreach (var f in finvizRows)
             {
                 Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
@@ -108,6 +112,72 @@ namespace Screener
         /// <returns></returns>
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
 
+        /// <summary>
+        /// Loops through the items after scraping Finviz to determine if they should be scraped on ChartMill or removed
+        /// </summary>
+        private void FilterFinvizStocks()
+        {
+            int[] peIndexes = GetCustomIndexes(pe);
+            int[] rsiIndexes = GetCustomIndexes(rsi);
+            for(int i = 0; i < sectorHeaders.Length; i++)
+            {
+                //start at i+1 because GetCustomIndexes will include the Any Sector as an option at index 0.  Always want to exclude
+                if(peIndexes.Contains(i+1) || rsiIndexes.Contains(i+1))
+                {
+                    var check = finvizRows.Select(s => s).Where(s => s[1].Equals(sectorHeaders[i])).ToList();
+                    for(int j = 0; j < check.Count; j++)
+                    {
+                        bool[] isValid = new bool[] { true, true };
+
+                        //Check the PE value of all Stocks in the current Sector if the index is in the array
+                        if (peIndexes.Contains(i + 1))
+                        {
+                            isValid[0] = (check[j][3] != "-" ? CheckPEOrRSI(double.Parse(check[j][3]), pe[i+1]) : false);
+                        }//end if
+
+                        //Check the RSI value of all Stocks in the current Sector if the index is in the array
+                        if (rsiIndexes.Contains(i + 1))
+                        {
+                            isValid[1] = (check[j][3] != "-" ? CheckPEOrRSI(double.Parse(check[j][6]), rsi[i+1]) : false);
+                        }//end if
+
+                        Console.WriteLine(String.Format("pe filter={0}  rsi filter={1} - pe={2} rsi={3} - isValid[0]={4} isValid[1]={5}", pe[i+1], rsi[i+1], check[j][3], check[j][6], isValid[0], isValid[1]));
+                        //Remove the Stock from finvizRows if either of comes back false
+                        if(!isValid[0] || !isValid[1])
+                        {
+                            finvizRows.Remove(finvizRows.Find(s => s[0].Equals(check[j][0])));
+                            Console.WriteLine(check[j][0] + " removed");
+                        }
+                    }//end nested for
+                }//end if
+            }//end for
+        }//end FilterFinvizStocks
+
+        private int[] GetCustomIndexes(string[] filter)
+        {
+            var temp = Array.FindAll(filter, s => s.Contains("/"));
+            int[] res = new int[temp.Length];
+            int i = 0;
+            foreach (var t in temp)
+            {
+                res[i] = Array.FindIndex(filter, x => x.Equals(t));
+                i++;
+            }
+            return res;
+        }//end GetIndexes
+
+        private bool CheckPEOrRSI(double value, string filter)
+        {
+            var temp = filter.Split('/');
+            //Holds the min and max values, min index 0   max index 1
+            double[] minMax = new double[] { double.Parse(temp[0]), double.Parse(temp[1]) };
+            if(value < minMax[0] || minMax[1] < value)
+            {
+                return false;
+            }
+            return true;
+        }//end CheckPEOrRSI
+
         private void GetProxies()
         {
             
@@ -158,6 +228,8 @@ namespace Screener
                     pages = int.Parse(sectorPages.Last().Text);
                 }//end if
 
+                //TakeScreenshot().Save(Path.Combine("C:\\Users\\N\\Pictures\\Run2", String.Format("{0}Page{1}.png", sectorHeaders[sect], i + 1)), ImageFormat.Png);
+
                 do
                 {
                     ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
@@ -176,7 +248,6 @@ namespace Screener
                     SetProxy();
                     if (i < pages)
                     {
-                        //var tabLink = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.Elem)
                         System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> tabLink = driver.FindElements(By.ClassName("tab-link"));
                         tabLink.Last().Click();
                     }
@@ -184,14 +255,13 @@ namespace Screener
                 } while (i < pages);//end do while
                 sect++;
             }//end while
-
-            finvizRows.Sort((a, b) => a[0].CompareTo(b[0]));
+            FilterFinvizStocks();
             symbols = (from f in finvizRows select f.ElementAt(0)).ToList();
+            symbols.Sort();
         }//end ScrapeFinviz
 
         private void ScrapeChartMill()
         {
-            symbols.Sort();
             int numSymbols = 20;
             int currentStock = 0;
             int symbolsCount = symbols.Count;
@@ -239,6 +309,7 @@ namespace Screener
                 {
                     numSymbols = 3;
                 }//end if
+                SetProxy();
             }//end for
         }//end ScrapeChartMill
 
@@ -254,5 +325,86 @@ namespace Screener
 
             return val;
         }//end changeProgress
+
+        private Bitmap TakeScreenshot()
+        {
+            // Get the total size of the page
+            var totalWidth = (int)(long)((IJavaScriptExecutor)driver).ExecuteScript("return document.body.offsetWidth"); //documentElement.scrollWidth");
+            var totalHeight = (int)(long)((IJavaScriptExecutor)driver).ExecuteScript("return  document.body.parentNode.scrollHeight");
+            // Get the size of the viewport
+            var viewportWidth = (int)(long)((IJavaScriptExecutor)driver).ExecuteScript("return document.body.clientWidth"); //documentElement.scrollWidth");
+            var viewportHeight = (int)(long)((IJavaScriptExecutor)driver).ExecuteScript("return window.innerHeight"); //documentElement.scrollWidth");
+
+            // We only care about taking multiple images together if it doesn't already fit
+            if (totalWidth <= viewportWidth && totalHeight <= viewportHeight)
+            {
+                var screenshot = driver.GetScreenshot();
+                return ScreenshotToImage(screenshot);
+            }
+            // Split the screen in multiple Rectangles
+            var rectangles = new List<Rectangle>();
+            // Loop until the totalHeight is reached
+            for (var y = 0; y < totalHeight; y += viewportHeight)
+            {
+                var newHeight = viewportHeight;
+                // Fix if the height of the element is too big
+                if (y + viewportHeight > totalHeight)
+                {
+                    newHeight = totalHeight - y;
+                }
+                // Loop until the totalWidth is reached
+                for (var x = 0; x < totalWidth; x += viewportWidth)
+                {
+                    var newWidth = viewportWidth;
+                    // Fix if the Width of the Element is too big
+                    if (x + viewportWidth > totalWidth)
+                    {
+                        newWidth = totalWidth - x;
+                    }
+                    // Create and add the Rectangle
+                    var currRect = new Rectangle(x, y, newWidth, newHeight);
+                    rectangles.Add(currRect);
+                }
+            }
+            // Build the Image
+            var stitchedImage = new Bitmap(totalWidth, totalHeight);
+            // Get all Screenshots and stitch them together
+            var previous = Rectangle.Empty;
+            foreach (var rectangle in rectangles)
+            {
+                // Calculate the scrolling (if needed)
+                if (previous != Rectangle.Empty)
+                {
+                    var xDiff = rectangle.Right - previous.Right;
+                    var yDiff = rectangle.Bottom - previous.Bottom;
+                    // Scroll
+                    ((IJavaScriptExecutor)driver).ExecuteScript(String.Format("window.scrollBy({0}, {1})", xDiff, yDiff));
+                }
+                // Take Screenshot
+                var screenshot = driver.GetScreenshot();
+                // Build an Image out of the Screenshot
+                var screenshotImage = ScreenshotToImage(screenshot);
+                // Calculate the source Rectangle
+                var sourceRectangle = new Rectangle(viewportWidth - rectangle.Width, viewportHeight - rectangle.Height, rectangle.Width, rectangle.Height);
+                // Copy the Image
+                using (var graphics = Graphics.FromImage(stitchedImage))
+                {
+                    graphics.DrawImage(screenshotImage, rectangle, sourceRectangle, GraphicsUnit.Pixel);
+                }
+                // Set the Previous Rectangle
+                previous = rectangle;
+            }
+            return stitchedImage;
+        }
+
+        private static Image ScreenshotToImage(Screenshot screenshot)
+        {
+            Image screenshotImage;
+            using (var memStream = new MemoryStream(screenshot.AsByteArray))
+            {
+                screenshotImage = Image.FromStream(memStream);
+            }
+            return screenshotImage;
+        }
     }//end class
 }//end namespace

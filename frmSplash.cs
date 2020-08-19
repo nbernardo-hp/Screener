@@ -242,7 +242,7 @@ namespace Screener
                 }//end foreach
             } catch
             {
-
+                
             }
         }//end SetMoustControlEvents
     }//end frmSplash

@@ -29,17 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Basic Materials", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Communication Services", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Consumer Cyclical", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Consumer Defensive", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Energy", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Financial", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("Healthcare", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("Industrials", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Real Estate", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup10 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup11 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup12 = new System.Windows.Forms.ListViewGroup("Basic Materials", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup13 = new System.Windows.Forms.ListViewGroup("Communication Services", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup14 = new System.Windows.Forms.ListViewGroup("Consumer Cyclical", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup15 = new System.Windows.Forms.ListViewGroup("Consumer Defensive", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup16 = new System.Windows.Forms.ListViewGroup("Energy", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup17 = new System.Windows.Forms.ListViewGroup("Financial", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup18 = new System.Windows.Forms.ListViewGroup("Healthcare", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup19 = new System.Windows.Forms.ListViewGroup("Industrials", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup20 = new System.Windows.Forms.ListViewGroup("Real Estate", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup21 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup22 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScreener));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +74,12 @@
             this.EarningsDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TotalScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ttpColumns = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmPrintPreview = new System.Windows.Forms.ToolStripMenuItem();
+            this.pdlogStocks = new System.Windows.Forms.PrintDialog();
+            this.pdocStocks = new System.Drawing.Printing.PrintDocument();
+            this.pprevStocks = new System.Windows.Forms.PrintPreviewDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,7 +99,10 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmSave,
+            this.toolStripSeparator1,
+            this.tsmPrintPreview,
             this.tsmPrint,
+            this.toolStripSeparator2,
             this.tsmExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -101,21 +111,21 @@
             // tsmSave
             // 
             this.tsmSave.Name = "tsmSave";
-            this.tsmSave.Size = new System.Drawing.Size(99, 22);
+            this.tsmSave.Size = new System.Drawing.Size(180, 22);
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
             // tsmPrint
             // 
             this.tsmPrint.Name = "tsmPrint";
-            this.tsmPrint.Size = new System.Drawing.Size(99, 22);
+            this.tsmPrint.Size = new System.Drawing.Size(180, 22);
             this.tsmPrint.Text = "Print";
             this.tsmPrint.Click += new System.EventHandler(this.tsmPrint_Click);
             // 
             // tsmExit
             // 
             this.tsmExit.Name = "tsmExit";
-            this.tsmExit.Size = new System.Drawing.Size(99, 22);
+            this.tsmExit.Size = new System.Drawing.Size(180, 22);
             this.tsmExit.Text = "Exit";
             this.tsmExit.Click += new System.EventHandler(this.tsmExit_Click);
             // 
@@ -234,8 +244,9 @@
             // tsmAbout
             // 
             this.tsmAbout.Name = "tsmAbout";
-            this.tsmAbout.Size = new System.Drawing.Size(132, 22);
+            this.tsmAbout.Size = new System.Drawing.Size(180, 22);
             this.tsmAbout.Text = "About";
+            this.tsmAbout.Click += new System.EventHandler(this.tsmAbout_Click);
             // 
             // tsmAttribution
             // 
@@ -259,40 +270,40 @@
             this.TotalScore});
             this.lstvStocks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstvStocks.FullRowSelect = true;
-            listViewGroup1.Header = "Basic Materials";
-            listViewGroup1.Name = "Basic Materials";
-            listViewGroup2.Header = "Communication Services";
-            listViewGroup2.Name = "Communication Services";
-            listViewGroup3.Header = "Consumer Cyclical";
-            listViewGroup3.Name = "Consumer Cyclical";
-            listViewGroup4.Header = "Consumer Defensive";
-            listViewGroup4.Name = "Consumer Defensive";
-            listViewGroup5.Header = "Energy";
-            listViewGroup5.Name = "Energy";
-            listViewGroup6.Header = "Financial";
-            listViewGroup6.Name = "Financial";
-            listViewGroup7.Header = "Healthcare";
-            listViewGroup7.Name = "Healthcare";
-            listViewGroup8.Header = "Industrials";
-            listViewGroup8.Name = "Industrials";
-            listViewGroup9.Header = "Real Estate";
-            listViewGroup9.Name = "Real Estate";
-            listViewGroup10.Header = "Technology";
-            listViewGroup10.Name = "Technology";
-            listViewGroup11.Header = "Utilities";
-            listViewGroup11.Name = "Utilities";
+            listViewGroup12.Header = "Basic Materials";
+            listViewGroup12.Name = "Basic Materials";
+            listViewGroup13.Header = "Communication Services";
+            listViewGroup13.Name = "Communication Services";
+            listViewGroup14.Header = "Consumer Cyclical";
+            listViewGroup14.Name = "Consumer Cyclical";
+            listViewGroup15.Header = "Consumer Defensive";
+            listViewGroup15.Name = "Consumer Defensive";
+            listViewGroup16.Header = "Energy";
+            listViewGroup16.Name = "Energy";
+            listViewGroup17.Header = "Financial";
+            listViewGroup17.Name = "Financial";
+            listViewGroup18.Header = "Healthcare";
+            listViewGroup18.Name = "Healthcare";
+            listViewGroup19.Header = "Industrials";
+            listViewGroup19.Name = "Industrials";
+            listViewGroup20.Header = "Real Estate";
+            listViewGroup20.Name = "Real Estate";
+            listViewGroup21.Header = "Technology";
+            listViewGroup21.Name = "Technology";
+            listViewGroup22.Header = "Utilities";
+            listViewGroup22.Name = "Utilities";
             this.lstvStocks.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3,
-            listViewGroup4,
-            listViewGroup5,
-            listViewGroup6,
-            listViewGroup7,
-            listViewGroup8,
-            listViewGroup9,
-            listViewGroup10,
-            listViewGroup11});
+            listViewGroup12,
+            listViewGroup13,
+            listViewGroup14,
+            listViewGroup15,
+            listViewGroup16,
+            listViewGroup17,
+            listViewGroup18,
+            listViewGroup19,
+            listViewGroup20,
+            listViewGroup21,
+            listViewGroup22});
             this.lstvStocks.HideSelection = false;
             this.lstvStocks.Location = new System.Drawing.Point(0, 24);
             this.lstvStocks.Name = "lstvStocks";
@@ -361,6 +372,42 @@
             this.TotalScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.TotalScore.Width = 83;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // tsmPrintPreview
+            // 
+            this.tsmPrintPreview.Name = "tsmPrintPreview";
+            this.tsmPrintPreview.Size = new System.Drawing.Size(180, 22);
+            this.tsmPrintPreview.Text = "Print Preview";
+            this.tsmPrintPreview.Click += new System.EventHandler(this.tsmPrintPreview_Click);
+            // 
+            // pdlogStocks
+            // 
+            this.pdlogStocks.UseEXDialog = true;
+            // 
+            // pdocStocks
+            // 
+            this.pdocStocks.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.pdocStocks_PrintPage);
+            // 
+            // pprevStocks
+            // 
+            this.pprevStocks.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.pprevStocks.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.pprevStocks.ClientSize = new System.Drawing.Size(400, 300);
+            this.pprevStocks.Document = this.pdocStocks;
+            this.pprevStocks.Enabled = true;
+            this.pprevStocks.Icon = ((System.Drawing.Icon)(resources.GetObject("pprevStocks.Icon")));
+            this.pprevStocks.Name = "pprevStocks";
+            this.pprevStocks.Visible = false;
+            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,5 +461,11 @@
         private System.Windows.Forms.ToolStripMenuItem tsmRealEstate;
         private System.Windows.Forms.ToolStripMenuItem tsmTechnology;
         private System.Windows.Forms.ToolStripMenuItem tsmUtilities;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tsmPrintPreview;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.PrintDialog pdlogStocks;
+        private System.Drawing.Printing.PrintDocument pdocStocks;
+        private System.Windows.Forms.PrintPreviewDialog pprevStocks;
     }
 }

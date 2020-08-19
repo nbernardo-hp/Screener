@@ -30,12 +30,36 @@ namespace Screener
             preferences = pref;
         }//end two argument constructor
 
+        /// <summary>
+        /// Sorts and returns the Stock objects in the provided Sector by multiple different criteria.
+        /// </summary>
+        /// <param name="sector"></param>
+        /// <returns>The ordered Stock objects from the Sector</returns>
+        public static IOrderedEnumerable<Stock> SortSectorDictionary(Dictionary<string, Stock> sector)
+        {
+            return sector.Values.OrderByDescending(s => s.TotalScoreValue).ThenByDescending(s => s.FundValue)
+                .ThenByDescending(s => s.GrowthValue).ThenByDescending(s => s.ValuationValue).ThenBy(s => s.High52WValue)
+                .ThenBy(s => s.RecomValue).ThenByDescending(s => s.CurrentRatioValue).ThenByDescending(s => s.GetEarningsDate());
+        }//end SortStockDictionary
+
+        /// <summary>
+        /// Returns an ordered object of the Sectors from the Dictionary
+        /// </summary>
+        /// <param name="sectors"></param>
+        /// <returns>Ordered Sectors</returns>
+        public static IOrderedEnumerable<string> SortSectorKeys(IEnumerable<string> sectors)
+        {
+            return sectors.OrderBy(s => s);
+        }//end SortSectorKeys
         private void frmScreener_Load(object sender, EventArgs e)
         {
             try
             {
                 PopulateListView();
                 LoadFinvizWithStocks();
+                pdocStocks.DefaultPageSettings.Landscape = true;
+                pdocStocks.DefaultPageSettings.Margins.Left = 85;
+                pdocStocks.DefaultPageSettings.Margins.Right = 75;
             } catch
             {
 
@@ -160,7 +184,25 @@ namespace Screener
         }//end OfficeDocumentProgressForm
         private void tsmPrint_Click(object sender, EventArgs e)
         {
-            //TODO
+            try
+            {
+                pdlogStocks.Document = pdocStocks;
+                pdlogStocks.AllowSelection = false;
+                if (pdlogStocks.ShowDialog() == DialogResult.OK)
+                {
+                    if(!pdlogStocks.PrinterSettings.DefaultPageSettings.Landscape)
+                    {
+                        MessageBox.Show("Portrait layout printing not supported.");
+                    } else
+                    {
+                        pdocStocks.Print();
+                    }
+                    //TODO call the print event for the document
+                }//end if
+            } catch
+            {
+
+            }//end try-catch
         }//end tsmPrint_Click
 
         private void tsmExit_Click(object sender, EventArgs e)
@@ -255,26 +297,168 @@ namespace Screener
             }//end try-catch
         }//end LoadFinvizWithStocks
 
-        /// <summary>
-        /// Sorts and returns the Stock objects in the provided Sector by multiple different criteria.
-        /// </summary>
-        /// <param name="sector"></param>
-        /// <returns>The ordered Stock objects from the Sector</returns>
-        public static IOrderedEnumerable<Stock> SortSectorDictionary(Dictionary<string, Stock> sector)
+        private void pdocStocks_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
-            return sector.Values.OrderByDescending(s => s.TotalScoreValue).ThenByDescending(s => s.FundValue)
-                .ThenByDescending(s => s.GrowthValue).ThenByDescending(s => s.ValuationValue).ThenBy(s => s.High52WValue)
-                .ThenBy(s => s.RecomValue).ThenByDescending(s => s.CurrentRatioValue).ThenByDescending(s => s.GetEarningsDate());
-        }//end SortStockDictionary
+            try
+            {
+                Font font = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Pixel);
+                int headerHeight = 80;
+                int bodyCellHeight = 16;
+                int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 74 };
+                int fullRowWidth = 41 + 237 + 69 + 69 + 82 + 106 + 82 + 73 + 85 + 74;
+                int currentSector = 0;
+                int currentStock = 0;
+                int pages = 0;
+                int x = e.MarginBounds.Left;
+                int y = e.MarginBounds.Top;
+                int width = 0;
 
-        /// <summary>
-        /// Returns an ordered object of the Sectors from the Dictionary
-        /// </summary>
-        /// <param name="sectors"></param>
-        /// <returns>Ordered Sectors</returns>
-        public static IOrderedEnumerable<string> SortSectorKeys(IEnumerable<string> sectors)
+                string[] headerText = new string[] { "CM Fund\n7-10 = +4\n4-6 = +2\n0-3 = -2", "CM Growth\n7-10 = +4\n4-6 = +2\n0-3 = -2",
+                "CM Valuation\n5-10 = +4\n3-4 = +2\n0-2 = -2", "52W High\n-90 to -10 = +4\n-29 to -10 = +2\n-9 to + = -2", "Finviz Recom\n1-2 = +4\n2.1-3.0 = +2\n3.1-5 = -2",
+                "Curr_Ratio\n>3.0 = +4\n1-3 = +2\n0-.9 = -2", "Earnings Date\n**See end of\ndocument", "Total\nThe sum of the\nscorig of all\nStock fields" };
+
+                for (int j = 0; j < 10; j++)
+                {
+                    if (j < 2)
+                    {
+                        width += cellWidths[j];
+                    }
+
+                    if (j >= 2)
+                    {
+                        var l = e.PageBounds.Width;
+                        var q = (x + cellWidths[j]) + 100;
+                        if (e.PageBounds.Width > (x + cellWidths[j]) + 75)
+                        {
+                            var stringSize = e.Graphics.MeasureString(headerText[j - 2], font);
+                            float w = stringSize.Width;
+                            float height = stringSize.Height;
+                            e.Graphics.DrawRectangle(Pens.Black, new Rectangle(x, y, cellWidths[j], headerHeight));
+                            e.Graphics.DrawString(headerText[j - 2], font, Brushes.Black, x + (cellWidths[j] / 2) - (w / 2), y + (height / 2));
+                            x += cellWidths[j];
+                        }
+                    }
+                    else if (j == 1)
+                    {
+                        e.Graphics.DrawRectangle(Pens.Black, new Rectangle(x, y, width, headerHeight));
+                        x += width;
+                    }
+                }//end for
+                y += headerHeight;
+                var halfHeight = bodyCellHeight / 2;
+
+                var sectors = frmScreener.SortSectorKeys(stocks.Keys);
+
+                while(currentSector < sectors.Count())
+                {
+                    x = e.MarginBounds.Left;
+                    int cell = 0;
+                    float stringWidth = 0;
+                    float stringHeight = 0;
+
+                    if (y < e.MarginBounds.Bottom && y + bodyCellHeight < e.MarginBounds.Bottom)
+                    {
+                        string header = String.Format("{0} {1}", DateTime.Today.ToShortDateString(), sectors.ElementAt(currentSector));
+
+                        e.Graphics.FillRectangle(Brushes.Silver, x, y, fullRowWidth, bodyCellHeight);
+                        e.Graphics.DrawRectangle(Pens.Black, x, y, cellWidths[0] + cellWidths[1], bodyCellHeight);
+                        e.Graphics.DrawString(header, font, Brushes.Black, (x + cellWidths[0] + cellWidths[1] - 10) - getStringDimension('w', header, font, e), y + ((bodyCellHeight / 2) - (getStringDimension('h', header, font, e) / 2)));
+                        y += bodyCellHeight;
+                    }
+                    else
+                    {
+                        e.HasMorePages = true;
+                        pages++;
+                        continue;
+                    }//end if-else
+
+                    var sorted = frmScreener.SortSectorDictionary(stocks[sectors.ElementAt(currentSector)]);
+                    while (currentStock < sorted.Count())
+                    {
+                        x = e.MarginBounds.Left;
+                        cell = 0;
+                        if (y < e.MarginBounds.Bottom)
+                        {
+                            var attributes = sorted.ElementAt(currentStock).GetAttributesEnumerable();
+
+                            foreach (var a in attributes)
+                            {
+                                var val = a.ToString();
+                                stringWidth = getStringDimension('w', val, font, e);
+                                stringHeight = getStringDimension('h', val, font, e);
+
+                                if(currentStock % 2 != 0)
+                                {
+                                    e.Graphics.FillRectangle(Brushes.Gainsboro, x, y, fullRowWidth, bodyCellHeight);
+                                }
+                                e.Graphics.DrawRectangle(Pens.Black, x, y, cellWidths[cell], bodyCellHeight);
+                                e.Graphics.DrawString(val, font, Brushes.Black, (x + (cellWidths[cell] / 2)) - (stringWidth / 2), (y + halfHeight) - (stringHeight / 2));
+
+                                x += cellWidths[cell];
+                                cell++;
+                            }//end 2x nested foreach
+                            y += bodyCellHeight;
+                            currentStock++;
+                        }
+                        else
+                        {
+                            e.HasMorePages = true;
+                            pages++;
+                            continue;
+                        }//end if-else
+                    }//end foreach
+
+                    currentSector++;
+                }//end while
+            }
+            catch
+            {
+
+            }//end try-catch
+        }//end pdocStocks_PrintPage
+
+        private float getStringDimension(char dimension, string val, Font font, System.Drawing.Printing.PrintPageEventArgs e)
         {
-            return sectors.OrderBy(s => s);
-        }//end SortSectorKeys
+            try
+            {
+                var size = e.Graphics.MeasureString(val, font);
+                if (dimension == 'w')
+                {
+                    return size.Width;
+                }
+                else
+                {
+                    return size.Height;
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }//end getStringDimension
+
+        private void tsmPrintPreview_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                pprevStocks.ShowDialog();
+            } catch
+            {
+
+            }
+        }//end tsmPrintPreview_Click
+
+        private void tsmAbout_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string message = String.Format("A stock screening application used for selecting stocks.\nThe application scrapes two websites, Finviz and ChartMill.\n" +
+                    "Then evaluates the stocks to determine if they should be included in the table.\n\nProgrammer: Nicholas Bernardo\nVersion: {0}",
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            } catch
+            {
+
+            }
+        }//end tsmAbout_Click
     }//end class
 }//end namespace

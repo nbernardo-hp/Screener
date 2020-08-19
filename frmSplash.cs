@@ -21,108 +21,176 @@ namespace Screener
         private static Dictionary<string, Dictionary<string, Stock>> stocks;
         public frmSplash()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+                this.Icon = Properties.Resources.screenerIcon;
+            } catch
+            {
+
+            }
         }//end default constructor
 
         public frmSplash(Preferences pref)
         {
-            InitializeComponent();
-            splashPref = pref;
+            try
+            {
+                InitializeComponent();
+                this.Icon = Properties.Resources.screenerIcon;
+                splashPref = pref;
+            } catch
+            {
+
+            }
         }//end one argument constructor
 
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
         private void frmSplash_Load(object sender, EventArgs e)
         {
-            SetControlMouseEvents(this.Controls);
-            formLocation = this.Location;
-            if (!splashPref.GetLoaded())
+            try
             {
-                StartWork();
-            }//end if
+                SetControlMouseEvents(this.Controls);
+                formLocation = this.Location;
+                if (!splashPref.GetLoaded())
+                {
+                    StartWork();
+                }//end if
+            } catch
+            {
+
+            }
         }//end frmSplash_Load
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            if (formLocation == this.Location)
+            try
             {
-                frmPreferences frmPref = new frmPreferences(splashPref.GetSectorMapCopy());
-                if (frmPref.ShowDialog() == DialogResult.OK)
+                if (formLocation == this.Location)
                 {
-                    splashPref.SetSectorMap(frmPref.GetPreferences());
-                }//end 2x nested if
-            }//end if
+                    frmPreferences frmPref = new frmPreferences(splashPref.GetSectorMapCopy());
+                    if (frmPref.ShowDialog() == DialogResult.OK)
+                    {
+                        splashPref.SetSectorMap(frmPref.GetPreferences());
+                    }//end 2x nested if
+                }//end if
+            } catch
+            {
+
+            }
         }//end btnSettings_Click
 
         private void btnScrape_Click(object sender, EventArgs e)
         {
-            if(formLocation == this.Location)
+            try
             {
-                StartWork();
+                if (formLocation == this.Location)
+                {
+                    StartWork();
+                }
+            } catch
+            {
+
             }
         }//end btnScrape_Click
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            if (formLocation == this.Location)
+            try
             {
-                bgwScrape.CancelAsync();
-            }
-            if (bgwScrape.IsBusy == false)
+                if (formLocation == this.Location)
+                {
+                    bgwScrape.CancelAsync();
+                }
+                if (bgwScrape.IsBusy == false)
+                {
+                    Application.Exit();
+                }
+            } catch
             {
-                Application.Exit();
+
             }
         }//end btnCancel_Click
 
         private void bgwScrape_DoWork(object sender, DoWorkEventArgs e)
         {
-            foreach (var u in urls)
+            try
             {
-                Console.WriteLine(u);
-            }
+                foreach (var u in urls)
+                {
+                    Console.WriteLine(u);
+                }
 
-            if(scraper == null)
+                if (scraper == null)
+                {
+                    scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
+                    scraper.OnProgressUpdate += scraper_OnProgressUpdate;
+                }
+
+                scraper.Start(urls);
+                scraper.ParseInformation();
+            } catch
             {
-                scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
-                scraper.OnProgressUpdate += scraper_OnProgressUpdate;
-            }
 
-            scraper.Start(urls);
-            scraper.ParseInformation();
+            }
         }//end bgwScrape_DoWork
 
         private void bgwScrape_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            stocks = scraper.GetStocks();
-            foreach(var sector in stocks.Values)
+            try
             {
-                foreach(var stock in sector.Values)
+                stocks = scraper.GetStocks();
+                foreach (var sector in stocks.Values)
                 {
-                    stock.CalculateTotalScore();
-                }//end nested foreach
-            }//end foreach
-            this.Close();
+                    foreach (var stock in sector.Values)
+                    {
+                        stock.CalculateTotalScore();
+                    }//end nested foreach
+                }//end foreach
+                this.Close();
+            } catch
+            {
+
+            }
         }//end bgwScrape_RunWorkerCompleted
 
         private void frmSplash_MouseDown(object sender, MouseEventArgs e)
         {
-            mouseDown = true;
-            lastLocation = e.Location;
+            try
+            {
+                mouseDown = true;
+                lastLocation = e.Location;
+            } catch
+            {
+
+            }
         }//end frmSplash_MouseDown
 
         private void frmSplash_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseDown)
+            try
             {
-                this.Location = new Point(
-                    (this.Location.X - lastLocation.X) + e.X, (this.Location.Y - lastLocation.Y) + e.Y);
-                this.Update();
+                if (mouseDown)
+                {
+                    this.Location = new Point(
+                        (this.Location.X - lastLocation.X) + e.X, (this.Location.Y - lastLocation.Y) + e.Y);
+                    this.Update();
+                }
+            } catch
+            {
+
             }
         }//end frmSplash_MouseMove
 
         private void frmSplash_MouseUp(object sender, MouseEventArgs e)
         {
-            mouseDown = false;
-            formLocation = this.Location;
+            try
+            {
+                mouseDown = false;
+                formLocation = this.Location;
+            } catch
+            {
+
+            }
         }//end frmSplash_MouseUp
 
         private void scraper_OnProgressUpdate(int val)
@@ -144,26 +212,38 @@ namespace Screener
 
         private void StartWork()
         {
-            pnlProgress.Visible = true;
-            pnlStart.Visible = false;
-            lblStatus.Text = "Initializing...";
-            urls = splashPref.GetFinvizUrls();
-            bgwScrape.RunWorkerAsync();
+            try
+            {
+                pnlProgress.Visible = true;
+                pnlStart.Visible = false;
+                lblStatus.Text = "Initializing...";
+                urls = splashPref.GetFinvizUrls();
+                bgwScrape.RunWorkerAsync();
+            } catch
+            {
+
+            }
         }//end StartWork
 
         private void SetControlMouseEvents(Control.ControlCollection controls)
         {
-            foreach (Control control in controls)
+            try
             {
-                Console.WriteLine(control.Name + "\t" + control.GetType().ToString());
-                control.MouseDown += this.frmSplash_MouseDown;
-                control.MouseUp += this.frmSplash_MouseUp;
-                control.MouseMove += this.frmSplash_MouseMove;
-                if(control.GetType().Name == "Panel")
+                foreach (Control control in controls)
                 {
-                    SetControlMouseEvents(control.Controls);
-                }
-            }//end foreach
+                    Console.WriteLine(control.Name + "\t" + control.GetType().ToString());
+                    control.MouseDown += this.frmSplash_MouseDown;
+                    control.MouseUp += this.frmSplash_MouseUp;
+                    control.MouseMove += this.frmSplash_MouseMove;
+                    if (control.GetType().Name == "Panel")
+                    {
+                        SetControlMouseEvents(control.Controls);
+                    }
+                }//end foreach
+            } catch
+            {
+                
+            }
         }//end SetMoustControlEvents
     }//end frmSplash
 }//end namespace

@@ -46,10 +46,10 @@ namespace Screener
         /// </summary>
         private void SetInitialSelection(string sector)
         {
-            cmbPE.SelectedItem = (preferences[sector]["pe"] != "" ? preferences[sector]["pe"] : "Any");
+            //cmbPE.SelectedItem = (preferences[sector]["pe"] != "" ? preferences[sector]["pe"] : "Any");
             cmbPrice.SelectedItem = (preferences[sector]["price"] != "" ? preferences[sector]["price"] : "Any");
             cmbAverageVolume.SelectedItem = (preferences[sector]["averageVolume"] != "" ? preferences[sector]["averageVolume"] : "Any");
-            cmbRSI.SelectedItem = (preferences[sector]["rsi"] != "" ? preferences[sector]["rsi"] : "Any");
+            //cmbRSI.SelectedItem = (preferences[sector]["rsi"] != "" ? preferences[sector]["rsi"] : "Any");
             cmbCurrentRatio.SelectedItem = (preferences[sector]["currentRatio"] != "" ? preferences[sector]["currentRatio"] : "Any");
             SetPEOrRSIInitialSelection(cmbPE, chkCustomPE, pnlCustomPE, preferences[sector]["pe"]);
             SetPEOrRSIInitialSelection(cmbRSI, chkCustomRSI, pnlCustomRSI, preferences[sector]["rsi"]);
@@ -203,22 +203,34 @@ namespace Screener
 
         private void nudPEMin_ValueChanged(object sender, EventArgs e)
         {
-            SetFilterValue(nudPEMin, nudPEMax, "pe");
+            if (!loadingSector)
+            {
+                SetFilterValue(nudPEMin, nudPEMax, "pe");
+            }
         }//end nudPEMin_ValueChanged
 
         private void nudPEMax_ValueChanged(object sender, EventArgs e)
         {
-            SetFilterValue(nudPEMin, nudPEMax, "pe");
+            if(!loadingSector)
+            {
+                SetFilterValue(nudPEMin, nudPEMax, "pe");
+            }
         }//end nudPEMax_ValueChanged
 
         private void nudRSIMin_ValueChanged(object sender, EventArgs e)
         {
-            SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+            if (!loadingSector)
+            {
+                SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+            }
         }//end nudRSIMin_ValueChanged
 
         private void nudRSIMax_ValueChanged(object sender, EventArgs e)
         {
-            SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+            if (!loadingSector)
+            {
+                SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+            }
         }//end nudRSIMax_ValueChanged
 
         /// <summary>

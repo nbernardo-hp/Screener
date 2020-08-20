@@ -70,7 +70,20 @@ namespace Screener
 
         public void ParseInformation()
         {
-            stocks = new Dictionary<string, Dictionary<string, Stock>>();
+            stocks = new Dictionary<string, Dictionary<string, Stock>>()
+            {
+                ["Basic Materials"] = new Dictionary<string, Stock>(),
+                ["Communication Services"] = new Dictionary<string, Stock>(),
+                ["Consumer Cyclical"] = new Dictionary<string, Stock>(),
+                ["Consumer Defensive"] = new Dictionary<string, Stock>(),
+                ["Energy"] = new Dictionary<string, Stock>(),
+                ["Financial"] = new Dictionary<string, Stock>(),
+                ["Healthcare"] = new Dictionary<string, Stock>(),
+                ["Industrials"] = new Dictionary<string, Stock>(),
+                ["Real Estate"] = new Dictionary<string, Stock>(),
+                ["Technology"] = new Dictionary<string, Stock>(),
+                ["Utilities"] = new Dictionary<string, Stock>()
+            };
             for (int i = 0; i < chartMillRows.Count; i++)
             {
                 string symbol = chartMillRows[i][0].ToString();
@@ -78,25 +91,27 @@ namespace Screener
                 int fundValue = (int)(double.Parse(chartMillRows[i][1].ToString()) * 2);
                 if (fundValue >= 5)
                 {
-                    if (!stocks.ContainsKey(finvizRows[i][1]))
+                    /*string sector = finvizRows.Select(x => x).Where(x => x[0].Equals(symbol)).First()[1];
+                    if (!stocks.ContainsKey(sector))
                     {
-                        stocks.Add(finvizRows[i][1], new Dictionary<string, Stock>());
-                    }//end if
+                        stocks.Add(symbol, new Dictionary<string, Stock>());
+                    }//end if*/
 
+                    var finvizRow = finvizRows.Select(x => x).Where(x => x[0].Equals(symbol)).First();
                     Stock temp = new Stock();
                     temp.SymbolValue = symbol;
                     temp.FundValue = fundValue;
                     temp.GrowthValue = (int)(double.Parse(chartMillRows[i][2].ToString()) * 2);
                     temp.ValuationValue = (int)(double.Parse(chartMillRows[i][3].ToString()) * 2);
-                    temp.IndustryValue = finvizRows[i][2];
-                    temp.CurrentRatioValue = (finvizRows[i][4] != "-" ? double.Parse(finvizRows[i][4]) : 0);
+                    temp.IndustryValue = finvizRow[2];
+                    temp.CurrentRatioValue = (finvizRow[4] != "-" ? double.Parse(finvizRow[4]) : 0);
 
-                    var high = finvizRows[i][5].Remove(finvizRows[i][5].IndexOf("%"));
+                    var high = finvizRow[5].Remove(finvizRow[5].IndexOf("%"));
                     temp.High52WValue = (high != "-" ? double.Parse(high) : 100);
-                    temp.RecomValue = (finvizRows[i][7] != "-" ? double.Parse(finvizRows[i][7]) : 10);
-                    temp.SetEarningsDate(finvizRows[i][8]);
+                    temp.RecomValue = (finvizRow[7] != "-" ? double.Parse(finvizRow[7]) : 10);
+                    temp.SetEarningsDate(finvizRow[8]);
 
-                    stocks[finvizRows[i][1]].Add(temp.SymbolValue, temp);
+                    stocks[finvizRow[1]].Add(temp.SymbolValue, temp);
                 }//end if
             }//end for
         }//end ParseInformation
@@ -230,7 +245,7 @@ namespace Screener
                     pages = int.Parse(sectorPages.Last().Text);
                 }//end if
 
-                //TakeScreenshot().Save(Path.Combine("C:\\Users\\N\\Pictures\\Run2", String.Format("{0}Page{1}.png", sectorHeaders[sect], i + 1)), ImageFormat.Png);
+                //TakeScreenshot().Save(Path.Combine("C:\\Users\\N\\Pictures\\Run3", String.Format("{0}Page{1}.png", sectorHeaders[sect], i + 1)), ImageFormat.Png);
 
                 do
                 {
@@ -247,6 +262,11 @@ namespace Screener
                         finvizRows.Add(temp.ToArray());
                     }//end for
 
+                    if(IsElementPresent(By.ClassName("modal-elite-ad_content")))
+                    {
+                        driver.FindElement(By.ClassName("modal-elite-ad_close")).Click();
+                    }//end if
+
                     SetProxy();
                     if (i < pages)
                     {
@@ -262,6 +282,17 @@ namespace Screener
             symbols.Sort();
         }//end ScrapeFinviz
 
+        private bool IsElementPresent(By by)
+        {
+            try
+            {
+                return driver.FindElement(by).Displayed;
+            } catch (NoSuchElementException)
+            {
+                return false;
+            }//end try-catch
+
+        }//end IsElementPresent
         private void ScrapeChartMill()
         {
             int numSymbols = 20;

@@ -16,6 +16,7 @@ namespace Screener
     {
         private Dictionary<string, Dictionary<string, Stock>> stocks;
         Preferences preferences;
+        int currentSector = 0;
         public frmScreener()
         {
             InitializeComponent();
@@ -306,7 +307,6 @@ namespace Screener
                 int bodyCellHeight = 16;
                 int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 74 };
                 int fullRowWidth = 41 + 237 + 69 + 69 + 82 + 106 + 82 + 73 + 85 + 74;
-                int currentSector = 0;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
                 int y = e.MarginBounds.Top;
@@ -442,6 +442,7 @@ namespace Screener
             try
             {
                 pprevStocks.ShowDialog();
+                currentSector = 0;//reset the sector flag for the PrintDocument object so the print document can be generated again
             } catch
             {
 

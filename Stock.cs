@@ -104,12 +104,12 @@ namespace Screener
         /// </summary>
         public void CalculateTotalScore()
         {
-            totalScore += (GrowthValue >= 7 ? 4 : GrowthValue >= 4 ? 2 : -2);
-            totalScore += (FundValue >= 7 ? 4 : FundValue >= 4 ? 2 : -2);
-            totalScore += (ValuationValue >= 5 ? 4 : ValuationValue >= 3 ? 2 : -2);
-            totalScore += (High52WValue <= -30 ? 4 : High52WValue <= -10 ? 2 : -2);
-            totalScore += (RecomValue <= 2 ? 4 : RecomValue <= 3 ? 2 : -2);
-            totalScore += (CurrentRatioValue >= 3 ? 4 : CurrentRatioValue >= 1 ? 2 : -2);
+            totalScore += GetFundOrGrowthScore(FundValue);
+            totalScore += GetFundOrGrowthScore(GrowthValue);
+            totalScore += GetValuationScore();
+            totalScore += GetHigh52WScore();
+            totalScore += GetRecomScore();
+            totalScore += GetCurrentRatioScore();
             totalScore += GetEarningsDateScore();
         }
 
@@ -121,6 +121,37 @@ namespace Screener
         {
             return new List<object>() { symbol, industry, fund, growth, valuation, high52W, recom, currentRatio, GetEarningsDateString(), totalScore };
         }
+
+        /// <summary>
+        /// Returns the score of the Fund or Value attribute depending on which value is sent to the function
+        /// </summary>
+        /// <param name="val">The value to be evaluated</param>
+        /// <returns></returns>
+        public int GetFundOrGrowthScore(int val) { return (val >= 7 ? 4 : val >= 4 ? 2 : -2); }
+
+        /// <summary>
+        /// Determines the score of the Valuation attribute and returns it to the calling program
+        /// </summary>
+        /// <returns></returns>
+        public int GetValuationScore() { return (ValuationValue >= 5 ? 4 : ValuationValue >= 3 ? 2 : -2); }
+
+        /// <summary>
+        /// Determines the score of the High52W attribute and returns it to the calling program
+        /// </summary>
+        /// <returns></returns>
+        public int GetHigh52WScore() { return (High52WValue <= -30 ? 4 : High52WValue <= -10 ? 2 : -2); }
+
+        /// <summary>
+        /// Determines the score of the Recom attribute and returns it to the calling program
+        /// </summary>
+        /// <returns></returns>
+        public int GetRecomScore() { return (RecomValue <= 2 ? 4 : RecomValue <= 3 ? 2 : -2); }
+
+        /// <summary>
+        /// Determines the score of the Current Ratio attribute and returns it to the calling program
+        /// </summary>
+        /// <returns></returns>
+        public int GetCurrentRatioScore() { return (CurrentRatioValue >= 3 ? 4 : CurrentRatioValue >= 1 ? 2 : -2); }
 
         /// <summary>
         /// Returns the score for the earningsDate attribute.

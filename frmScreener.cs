@@ -248,12 +248,23 @@ namespace Screener
             int i = 0;
             foreach (var stock in stocks)
             {
-                ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), stock.High52WValue.ToString() + "%", stock.RecomValue.ToString(), stock.CurrentRatioValue.ToString(), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.TotalScoreValue.ToString() });
-                //row.UseItemStyleForSubItems = false;
+                ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), stock.High52WValue.ToString() + "%", stock.RecomValue.ToString(), stock.CurrentRatioValue.ToString(), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue, stock.TotalScoreValue.ToString() });
+                row.UseItemStyleForSubItems = false;
                 if (i % 2 != 0)
                 {
-                    row.BackColor = SystemColors.Control;
+                    row.SubItems[0].BackColor = SystemColors.Control;
+                    row.SubItems[1].BackColor = SystemColors.Control;
+                    row.SubItems[10].BackColor = SystemColors.Control;
                 }
+                if(stock.TotalScoreValue >= 18)
+                {
+                    var colors = stock.GetFormattingColors();
+                    int j = 2;
+                    foreach(var c in colors)
+                    {
+                        row.SubItems[j].BackColor = c;
+                    }//end foreach
+                }//end if
                 lstvStocks.Groups[sector].Items.Add(row);
                 lstvStocks.Items.Add(row);
                 i++;
@@ -385,7 +396,7 @@ namespace Screener
                                 var val = a.ToString();
                                 stringWidth = getStringDimension('w', val, font, e);
                                 stringHeight = getStringDimension('h', val, font, e);
-                                var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormatingColors() : null);
+                                var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormattingColors() : null);
                                 if(currentStock % 2 != 0)
                                 {
                                     e.Graphics.FillRectangle(Brushes.Gainsboro, x, y, fullRowWidth, bodyCellHeight);

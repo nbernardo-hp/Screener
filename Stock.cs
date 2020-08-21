@@ -177,7 +177,7 @@ namespace Screener
         /// Determines the color of the attribute to be used in document saving and printing
         /// </summary>
         /// <returns></returns>
-        public System.Drawing.Color[] GetFormatingColors()
+        public System.Drawing.Color[] GetFormattingColors()
         {
             return new System.Drawing.Color[] { GetAttributeColor(GetFundOrGrowthScore(FundValue)), GetAttributeColor(GetFundOrGrowthScore(GrowthValue)), GetAttributeColor(GetValuationScore()), GetAttributeColor(GetHigh52WScore()), GetAttributeColor(GetRecomScore()), GetAttributeColor(GetCurrentRatioScore()), GetAttributeColor(GetEarningsDateScore()), GetAttributeColor(GetZacksRankScore(), true) };
         }

@@ -263,6 +263,7 @@ namespace Screener
                     foreach(var c in colors)
                     {
                         row.SubItems[j].BackColor = c;
+                        j++;
                     }//end foreach
                 }//end if
                 lstvStocks.Groups[sector].Items.Add(row);

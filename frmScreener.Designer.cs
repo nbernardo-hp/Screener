@@ -80,6 +80,7 @@
             this.pdlogStocks = new System.Windows.Forms.PrintDialog();
             this.pdocStocks = new System.Drawing.Printing.PrintDocument();
             this.pprevStocks = new System.Windows.Forms.PrintPreviewDialog();
+            this.ZacksRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,7 +92,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(893, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(964, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -111,38 +112,38 @@
             // tsmSave
             // 
             this.tsmSave.Name = "tsmSave";
-            this.tsmSave.Size = new System.Drawing.Size(180, 22);
+            this.tsmSave.Size = new System.Drawing.Size(143, 22);
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(140, 6);
             // 
             // tsmPrintPreview
             // 
             this.tsmPrintPreview.Name = "tsmPrintPreview";
-            this.tsmPrintPreview.Size = new System.Drawing.Size(180, 22);
+            this.tsmPrintPreview.Size = new System.Drawing.Size(143, 22);
             this.tsmPrintPreview.Text = "Print Preview";
             this.tsmPrintPreview.Click += new System.EventHandler(this.tsmPrintPreview_Click);
             // 
             // tsmPrint
             // 
             this.tsmPrint.Name = "tsmPrint";
-            this.tsmPrint.Size = new System.Drawing.Size(180, 22);
+            this.tsmPrint.Size = new System.Drawing.Size(143, 22);
             this.tsmPrint.Text = "Print";
             this.tsmPrint.Click += new System.EventHandler(this.tsmPrint_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(140, 6);
             // 
             // tsmExit
             // 
             this.tsmExit.Name = "tsmExit";
-            this.tsmExit.Size = new System.Drawing.Size(180, 22);
+            this.tsmExit.Size = new System.Drawing.Size(143, 22);
             this.tsmExit.Text = "Exit";
             this.tsmExit.Click += new System.EventHandler(this.tsmExit_Click);
             // 
@@ -261,14 +262,14 @@
             // tsmAbout
             // 
             this.tsmAbout.Name = "tsmAbout";
-            this.tsmAbout.Size = new System.Drawing.Size(180, 22);
+            this.tsmAbout.Size = new System.Drawing.Size(132, 22);
             this.tsmAbout.Text = "About";
             this.tsmAbout.Click += new System.EventHandler(this.tsmAbout_Click);
             // 
             // tsmAttribution
             // 
             this.tsmAttribution.Name = "tsmAttribution";
-            this.tsmAttribution.Size = new System.Drawing.Size(180, 22);
+            this.tsmAttribution.Size = new System.Drawing.Size(132, 22);
             this.tsmAttribution.Text = "Attribution";
             this.tsmAttribution.Click += new System.EventHandler(this.tsmAttribution_Click);
             // 
@@ -285,6 +286,7 @@
             this.Recom,
             this.CurrentRatio,
             this.EarningsDate,
+            this.ZacksRank,
             this.TotalScore});
             this.lstvStocks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstvStocks.FullRowSelect = true;
@@ -326,7 +328,7 @@
             this.lstvStocks.Location = new System.Drawing.Point(0, 24);
             this.lstvStocks.Name = "lstvStocks";
             this.lstvStocks.ShowItemToolTips = true;
-            this.lstvStocks.Size = new System.Drawing.Size(893, 373);
+            this.lstvStocks.Size = new System.Drawing.Size(964, 373);
             this.lstvStocks.TabIndex = 1;
             this.lstvStocks.UseCompatibleStateImageBehavior = false;
             this.lstvStocks.View = System.Windows.Forms.View.Details;
@@ -409,11 +411,17 @@
             this.pprevStocks.Name = "pprevStocks";
             this.pprevStocks.Visible = false;
             // 
+            // ZacksRank
+            // 
+            this.ZacksRank.Text = "Zacks Rank";
+            this.ZacksRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ZacksRank.Width = 92;
+            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(893, 397);
+            this.ClientSize = new System.Drawing.Size(964, 397);
             this.Controls.Add(this.lstvStocks);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -468,5 +476,6 @@
         private System.Windows.Forms.PrintDialog pdlogStocks;
         private System.Drawing.Printing.PrintDocument pdocStocks;
         private System.Windows.Forms.PrintPreviewDialog pprevStocks;
+        private System.Windows.Forms.ColumnHeader ZacksRank;
     }
 }

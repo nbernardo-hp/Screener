@@ -65,7 +65,7 @@ namespace Screener
                 ScrapeChartMill();
             }//end if
 
-            if(chartMillRows.Count > 0)
+            if(chartMillRows != null && chartMillRows.Count > 0)
             {
                 ScrapeZacks();
             }//end if
@@ -143,7 +143,7 @@ namespace Screener
             int i = 0;
             while(i < chartMillRows.Count)
             {
-                if(int.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5)
+                if(double.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5)
                 {
                     chartMillRows.RemoveAt(i);
                 } else
@@ -400,7 +400,7 @@ namespace Screener
                 ChangeProgress(0, String.Format("Scraping Zacks - {0}", s));
                 driver.Url = url;
                 driver.Navigate();
-                zacksText.Add(driver.FindElement(By.XPath("/html/body/div[6]/div[3]/section/div[2]/div[1]/p")).Text.Split('-'));
+                zacksText.Add(driver.FindElement(By.ClassName("rank_view")).Text.Split(new char[] { '-', '\r', '\n' }));
             }//end foreach
         }//end ScrapeZacks
 

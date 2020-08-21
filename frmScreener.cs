@@ -302,7 +302,7 @@ namespace Screener
         {
             try
             {
-                Font font = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Pixel);
+                Font font = new Font("Arial", 11, FontStyle.Regular, GraphicsUnit.Pixel);
                 int headerHeight = 80;
                 int bodyCellHeight = 16;
                 int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 74 };
@@ -312,9 +312,9 @@ namespace Screener
                 int y = e.MarginBounds.Top;
                 int width = 0;
 
-                string[] headerText = new string[] { "CM Fund\n7-10 = +4\n4-6 = +2\n0-3 = -2", "CM Growth\n7-10 = +4\n4-6 = +2\n0-3 = -2",
-                "CM Valuation\n5-10 = +4\n3-4 = +2\n0-2 = -2", "52W High\n-90 to -10 = +4\n-29 to -10 = +2\n-9 to + = -2", "Finviz Recom\n1-2 = +4\n2.1-3.0 = +2\n3.1-5 = -2",
-                "Curr_Ratio\n>3.0 = +4\n1-3 = +2\n0-.9 = -2", "Earnings Date\n**See end of\ndocument", "Total\nThe sum of the\nscorig of all\nStock fields" };
+                string[] headerText = new string[] { "CM Fund\n7-10 = Green\n4-6 = Yellow\n0-3 = Red", "CM Growth\n7-10 = Green\n4-6 = Yellow\n0-3 = Red",
+                "CM Valuation\n5-10 = Green\n3-4 = Yellow\n0-2 = Red", "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red", "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red",
+                "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red", "Earnings Date\n*See end of\ndocument", "Zacks Rank\n Stong Buy = Green\nBuy = Blue\nHold = Yellow\nSell = Orange\nStrong Sell = Red", "Total\n**See end of\ndocument" };
 
                 for (int j = 0; j < 10; j++)
                 {
@@ -380,16 +380,20 @@ namespace Screener
                         if (y < e.MarginBounds.Bottom)
                         {
                             var attributes = sorted.ElementAt(currentStock).GetAttributesEnumerable();
-
                             foreach (var a in attributes)
                             {
                                 var val = a.ToString();
                                 stringWidth = getStringDimension('w', val, font, e);
                                 stringHeight = getStringDimension('h', val, font, e);
-
+                                var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormatingColors() : null);
                                 if(currentStock % 2 != 0)
                                 {
                                     e.Graphics.FillRectangle(Brushes.Gainsboro, x, y, fullRowWidth, bodyCellHeight);
+                                }
+                                if(colors != null && (2 <= cell && cell <= 9))
+                                {
+                                    Brush attributeBG = (colors[cell - 2].Name == "Green" ? Brushes.Green : colors[cell - 2].Name == "Yellow" ? Brushes.Yellow : colors[cell - 2].Name == "Red" ? Brushes.Red : colors[cell - 2].Name == "Blue" ? Brushes.Blue : Brushes.Orange);
+                                    e.Graphics.FillRectangle(attributeBG, (x + (cellWidths[cell] / 2)) - (stringWidth / 2), (y + halfHeight) - (stringHeight / 2), stringWidth, stringHeight);
                                 }
                                 e.Graphics.DrawRectangle(Pens.Black, x, y, cellWidths[cell], bodyCellHeight);
                                 e.Graphics.DrawString(val, font, Brushes.Black, (x + (cellWidths[cell] / 2)) - (stringWidth / 2), (y + halfHeight) - (stringHeight / 2));
@@ -410,6 +414,24 @@ namespace Screener
 
                     currentSector++;
                 }//end while
+
+                int i = 0;
+                x = e.MarginBounds.Left;
+                string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.", "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.", "**Total score is calculated using a weight for each color.", "**Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4." };
+                while(i < scoreExplanations.Length)
+                {
+                    if(y < e.MarginBounds.Bottom)
+                    {
+                        float height = getStringDimension('h', scoreExplanations[i], font, e);
+                        e.Graphics.DrawString(scoreExplanations[i], font, Brushes.Black, x, y);
+                        y += (int)height;
+                        i++;
+                    } else
+                    {
+                        e.HasMorePages = true;
+                        pages++;
+                    }//end if-else
+                }//end for
             }
             catch
             {

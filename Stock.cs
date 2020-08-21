@@ -14,11 +14,13 @@ namespace Screener
         private int growth;
         private int valuation;
         private int totalScore;
+        private int zacksRank;
         private double high52W;
         private double recom;
         private double currentRatio;
         private DateTime earningsDate;
         private string beforeAfterClose;
+        private string zacksString;
         public string SymbolValue
         {
             get { return symbol; }
@@ -78,6 +80,17 @@ namespace Screener
             get { return totalScore; }
             set { totalScore = value; }
         }
+
+        public int ZacksRankValue
+        {
+            get { return zacksRank; }
+            set { zacksRank = value; }
+        }
+        public string ZacksStringValue
+        {
+            get { return zacksString; }
+            set { zacksString = value; }
+        }
         public DateTime GetEarningsDate() { return earningsDate; }
         public string GetEarningsDateString()
         {
@@ -111,6 +124,7 @@ namespace Screener
             totalScore += GetRecomScore();
             totalScore += GetCurrentRatioScore();
             totalScore += GetEarningsDateScore();
+            totalScore += GetZacksRankScore();
         }
 
         /// <summary>
@@ -119,7 +133,7 @@ namespace Screener
         /// <returns>The attributes of the Stock object</returns>
         public IEnumerable<object> GetAttributesEnumerable()
         {
-            return new List<object>() { symbol, industry, fund, growth, valuation, high52W, recom, currentRatio, GetEarningsDateString(), totalScore };
+            return new List<object>() { symbol, industry, fund, growth, valuation, high52W, recom, currentRatio, GetEarningsDateString(), zacksString, totalScore };
         }
 
         /// <summary>
@@ -153,6 +167,32 @@ namespace Screener
         /// <returns></returns>
         public int GetCurrentRatioScore() { return (CurrentRatioValue >= 3 ? 4 : CurrentRatioValue >= 1 ? 2 : -2); }
 
+        /// <summary>
+        /// Determines the score of the Zacks Rank attribute and returns it to the calling program
+        /// </summary>
+        /// <returns></returns>
+        public int GetZacksRankScore() { return (ZacksRankValue == 5 ? 6 : ZacksRankValue == 4 ? 4 : ZacksRankValue == 3 ? 2 : ZacksRankValue == 2 ? -4 : -6); }
+
+        /// <summary>
+        /// Determines the color of the attribute to be used in document saving and printing
+        /// </summary>
+        /// <returns></returns>
+        public System.Drawing.Color[] GetFormatingColors()
+        {
+            return new System.Drawing.Color[] { GetAttributeColor(GetFundOrGrowthScore(FundValue)), GetAttributeColor(GetFundOrGrowthScore(GrowthValue)), GetAttributeColor(GetValuationScore()), GetAttributeColor(GetHigh52WScore()), GetAttributeColor(GetRecomScore()), GetAttributeColor(GetCurrentRatioScore()), GetAttributeColor(GetEarningsDateScore()), GetAttributeColor(GetZacksRankScore(), true) };
+        }
+
+        private System.Drawing.Color GetAttributeColor(int val, bool isZacks = false)
+        {
+            if(!isZacks)
+            {
+                return val == 4 ? System.Drawing.Color.Green : val == 2 ? System.Drawing.Color.Yellow : System.Drawing.Color.Red;
+            } else
+            {
+                return val == 6 ? System.Drawing.Color.Green : val == 4 ? System.Drawing.Color.Blue :
+                    val == 3 ? System.Drawing.Color.Yellow : val == 2 ? System.Drawing.Color.Orange : System.Drawing.Color.Red;
+            }
+        }//end GetAttributeColor
         /// <summary>
         /// Returns the score for the earningsDate attribute.
         /// </summary>

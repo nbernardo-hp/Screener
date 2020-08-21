@@ -231,7 +231,6 @@ namespace Screener
             {
                 foreach (Control control in controls)
                 {
-                    Console.WriteLine(control.Name + "\t" + control.GetType().ToString());
                     control.MouseDown += this.frmSplash_MouseDown;
                     control.MouseUp += this.frmSplash_MouseUp;
                     control.MouseMove += this.frmSplash_MouseMove;

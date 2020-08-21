@@ -17,17 +17,19 @@ namespace Screener
     {
         public delegate void ProgressUpdate(int i);
         public event ProgressUpdate OnProgressUpdate;
-        private List<string[]> finvizRows = new List<string[]>();
-        private List<object[]> chartMillRows = new List<object[]>();
-        private List<string> symbols = new List<string>();
-        private Stack<string> urls = new Stack<string>();
-        private Stack<string> proxies = new Stack<string>();
         private Dictionary<string, Dictionary<string, Stock>> stocks;
         private dynamic driver;
         private dynamic options;
+        private List<object[]> chartMillRows = new List<object[]>();
+        private List<string[]> finvizRows = new List<string[]>();
+        private List<string[]> zacksText = new List<string[]>();
+        private List<string> symbols = new List<string>();
+        private Stack<string> urls = new Stack<string>();
+        private Stack<string> proxies = new Stack<string>();
         private string status = "";
         private string[] chartMillUrl = new string[2] { "https://www.chartmill.com/stock/stock-charts?ticker=", "&v=16&s=t&sd=ASC" };
         private string[] sectorHeaders = { "Basic Materials", "Communication Services", "Consumer Cyclical", "Consumer Defensive", "Energy", "Financial", "Healthcare", "Industrials", "Real Estate", "Technology", "Utilities" };
+        private string[] zacksUrl = new String[2] { "https://www.zacks.com/stock/quote/", "?q=" };
         private string[] pe;
         private string[] rsi;
         public WebScraper(string browser, string[] pe, string[] rsi)
@@ -62,6 +64,12 @@ namespace Screener
 
                 ScrapeChartMill();
             }//end if
+
+            if(chartMillRows.Count > 0)
+            {
+                ScrapeZacks();
+            }//end if
+
             ChangeProgress(1, "Finalizing...");
             driver.Close();
             driver.Dispose();
@@ -91,12 +99,6 @@ namespace Screener
                 int fundValue = (int)(double.Parse(chartMillRows[i][1].ToString()) * 2);
                 if (fundValue >= 5)
                 {
-                    /*string sector = finvizRows.Select(x => x).Where(x => x[0].Equals(symbol)).First()[1];
-                    if (!stocks.ContainsKey(sector))
-                    {
-                        stocks.Add(symbol, new Dictionary<string, Stock>());
-                    }//end if*/
-
                     var finvizRow = finvizRows.Select(x => x).Where(x => x[0].Equals(symbol)).First();
                     Stock temp = new Stock();
                     temp.SymbolValue = symbol;
@@ -110,6 +112,8 @@ namespace Screener
                     temp.High52WValue = (high != "-" ? double.Parse(high) : 100);
                     temp.RecomValue = (finvizRow[7] != "-" ? double.Parse(finvizRow[7]) : 10);
                     temp.SetEarningsDate(finvizRow[8]);
+                    temp.ZacksRankValue = int.Parse(zacksText[i][0]);
+                    temp.ZacksStringValue = zacksText[i][1];
 
                     stocks[finvizRow[1]].Add(temp.SymbolValue, temp);
                 }//end if
@@ -127,6 +131,28 @@ namespace Screener
         /// </summary>
         /// <returns></returns>
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
+
+        /// <summary>
+        /// Filters the stocks scraped from ChartMill to determine if they should be scraped on Zacks as well
+        /// </summary>
+        private void FilterChartMillStocks()
+        {
+            symbols = new List<string>();
+            /*Loop through each element in chartMillRows and determine if the Fund value is >= 2.5.  If not remove the row
+             *from the List.  If it is increment the counter to move to the next Stock object and add the symbol to a List*/
+            int i = 0;
+            while(i < chartMillRows.Count)
+            {
+                if(int.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5)
+                {
+                    chartMillRows.RemoveAt(i);
+                } else
+                {
+                    symbols.Add(chartMillRows[i].ElementAt(0).ToString());
+                    i++;
+                }//end if
+            }//end while
+        }//end FilterChartMillStocks
 
         /// <summary>
         /// Loops through the items after scraping Finviz to determine if they should be scraped on ChartMill or removed
@@ -282,6 +308,11 @@ namespace Screener
             symbols.Sort();
         }//end ScrapeFinviz
 
+        /// <summary>
+        /// Determines if the element is present on the page or not to prevent freezing when shown
+        /// </summary>
+        /// <param name="by"></param>
+        /// <returns></returns>
         private bool IsElementPresent(By by)
         {
             try
@@ -345,6 +376,7 @@ namespace Screener
                 }//end if
                 SetProxy();
             }//end for
+            FilterChartMillStocks();
         }//end ScrapeChartMill
 
         private string GetChartMillUrl(List<string> s) { return chartMillUrl[0] + String.Join(" ", s) + chartMillUrl[1]; }
@@ -359,6 +391,18 @@ namespace Screener
 
             return val;
         }//end changeProgress
+
+        private void ScrapeZacks()
+        {
+            foreach(var s in symbols)
+            {
+                string url = String.Format("{0}{1}{2}{3}", zacksUrl[0], s, zacksUrl[1], s);
+                ChangeProgress(0, String.Format("Scraping Zacks - {0}", s));
+                driver.Url = url;
+                driver.Navigate();
+                zacksText.Add(driver.FindElement(By.XPath("/html/body/div[6]/div[3]/section/div[2]/div[1]/p")).Text.Split('-'));
+            }//end foreach
+        }//end ScrapeZacks
 
         private Bitmap TakeScreenshot()
         {

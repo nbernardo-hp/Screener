@@ -319,11 +319,11 @@ namespace Screener
         {
             try
             {
-                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
+                Font font = new Font("Arial", 11, FontStyle.Regular, GraphicsUnit.Pixel);
                 int headerHeight = 80;
-                int bodyCellHeight = 16;
-                int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 94, 74 };
-                int fullRowWidth = 41 + 237 + 69 + 69 + 82 + 106 + 82 + 73 + 85 + 74;
+                int bodyCellHeight = 20;
+                int[] cellWidths = { 44, 204, 61, 76, 90, 92, 88, 93, 92, 87, 87 };
+                int fullRowWidth = 44 + 204 + 61 + 76 + 90 + 92 + 88 + 93 + 92 + 87 + 87;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
                 int y = e.MarginBounds.Top;

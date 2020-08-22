@@ -120,9 +120,4 @@
   <metadata name="errPreferences.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="label6.Text" xml:space="preserve">
-    <value>Configure the preferences used for each Sector.  Preferences will be saved and used at the
-start of loading the application.  Individual Sector preferences are saved when changing a
-filter selection.</value>
-  </data>
 </root>

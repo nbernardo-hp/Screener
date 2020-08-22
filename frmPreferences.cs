@@ -51,6 +51,9 @@ namespace Screener
             cmbAverageVolume.SelectedItem = (preferences[sector]["averageVolume"] != "" ? preferences[sector]["averageVolume"] : "Any");
             //cmbRSI.SelectedItem = (preferences[sector]["rsi"] != "" ? preferences[sector]["rsi"] : "Any");
             cmbCurrentRatio.SelectedItem = (preferences[sector]["currentRatio"] != "" ? preferences[sector]["currentRatio"] : "Any");
+            cmbHigh52W.SelectedItem = (preferences[sector]["high"] != "" ? preferences[sector]["high"] : "Any");
+            cmbSMA20.SelectedItem = (preferences[sector]["sma20"] != "" ? preferences[sector]["sma20"] : "Any");
+            cmbSMA50.SelectedItem = (preferences[sector]["sma50"] != "" ? preferences[sector]["sma50"] : "Any");
             SetPEOrRSIInitialSelection(cmbPE, chkCustomPE, pnlCustomPE, preferences[sector]["pe"]);
             SetPEOrRSIInitialSelection(cmbRSI, chkCustomRSI, pnlCustomRSI, preferences[sector]["rsi"]);
             loadingSector = false;
@@ -86,47 +89,27 @@ namespace Screener
 
         private void cmbPE_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbPE.SelectedIndex < 0) { errPreferences.SetError(cmbSector, "Select a value for P/E filter from the dropdown menu!"); }
-            else if (!loadingSector)
-            {
-                SetFilterValue(cmbPE, "pe");
-            }//end if-else
+            ComboBoxIndexChanged(cmbPE, "P/E", "pe");
         }//end cmbPE_SelectedIndexChanged
 
         private void cmbPrice_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbPrice.SelectedIndex < 0) { errPreferences.SetError(cmbSector, "Select a value for Price filter from the dropdown menu!"); }
-            else if (!loadingSector)
-            {
-                SetFilterValue(cmbPrice, "price");
-            }//end if-else
+            ComboBoxIndexChanged(cmbPrice, "Price", "price");
         }//end cmbPrice_SelectedIndexChanged
 
         private void cmbCurrentRatio_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbCurrentRatio.SelectedIndex < 0) { errPreferences.SetError(cmbSector, "Select a value for Current Ratio filter from the dropdown menu!"); }
-            else if (!loadingSector)
-            {
-                SetFilterValue(cmbCurrentRatio, "currentRatio");
-            }//end if-else
+            ComboBoxIndexChanged(cmbCurrentRatio, "Current Ratio", "currentRatio");
         }//end cmbCurrentRatio_SelectedIndexChanged
 
         private void cmbAverageVolume_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbAverageVolume.SelectedIndex < 0) { errPreferences.SetError(cmbSector, "Select a value for Average Volume filter from the dropdown menu!"); }
-            else if (!loadingSector)
-            {
-                SetFilterValue(cmbAverageVolume, "averageVolume");
-            }//end if-else
+            ComboBoxIndexChanged(cmbAverageVolume, "averageVolume", "averageVolume");
         }//end cmbAverageVolume_SelectedIndexChanged
 
         private void cmbRSI_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbRSI.SelectedIndex < 0) { errPreferences.SetError(cmbSector, "Select a value for RSI filter from the dropdown menu!"); }
-            else if (!loadingSector)
-            {
-                SetFilterValue(cmbRSI, "rsi");
-            }//end if-else
+            ComboBoxIndexChanged(cmbRSI, "rsi", "rsi");
         }//end cmbRSI_SelectedIndexChanged
 
         private void btnSaved_Click(object sender, EventArgs e)
@@ -232,6 +215,22 @@ namespace Screener
                 SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
             }
         }//end nudRSIMax_ValueChanged
+
+        /// <summary>
+        /// The essential function of each ComboBox.  Checks to make sure a valid index is selected and sets the value in
+        /// the Preferences Dictionary if the Sector has already been loaded
+        /// </summary>
+        /// <param name="cmb">The ComboBox being changed</param>
+        /// <param name="name">The name of the filter</param>
+        /// <param name="filterIdentifier">The filter string used in the Dictionary.  Camel case with no special characters; ex. pe, currentRatio, sma20</param>
+        private void ComboBoxIndexChanged(ComboBox cmb, string name, string filterIdentifier)
+        {
+            if (cmb.SelectedIndex < 0) { errPreferences.SetError(cmb, String.Format("Select a value for {0} filter from the dropdown menu!", name)); }
+            else if (!loadingSector)
+            {
+                SetFilterValue(cmb, filterIdentifier);
+            }//end if-else
+        }
 
         /// <summary>
         /// Sets the filter value in the Dictionary local to the form

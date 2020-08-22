@@ -154,6 +154,101 @@ namespace Screener
                 ["Real Estate"] = "sec_realestate",
                 ["Technology"] = "sec_technology",
                 ["Utilities"] = "sec_utilities"
+            },
+            ["high"] = new Dictionary<string, string>()
+            {
+                ["New High"] = "ta_highlow52w_nh",
+                ["New Low"] = "ta_highlow52w_nl",
+                ["5% or more below High"] = "ta_highlow52w_b5h",
+                ["10% or more below High"] = "ta_highlow52w_b10h",
+                ["15% or more below High"] = "ta_highlow52w_b15h",
+                ["20% or more below High"] = "ta_highlow52w_b20h",
+                ["30% or more below High"] = "ta_highlow52w_b30h",
+                ["40% or more below High"] = "ta_highlow52w_b40h",
+                ["50% or more below High"] = "ta_highlow52w_b50h",
+                ["60% or more below High"] = "ta_highlow52w_b60h",
+                ["70% or more below High"] = "ta_highlow52w_b70h",
+                ["80% or more below High"] = "ta_highlow52w_b80h",
+                ["90% or more below High"] = "ta_highlow52w_b90h",
+                ["0-3% below High"] = "ta_highlow52w_b0to3h",
+                ["0-5% below High"] = "ta_highlow52w_b0to5h",
+                ["0-5% below High"] = "ta_highlow52w_b0to5h",
+                ["5% or more above Low"] = "ta_highlow52w_a5h",
+                ["10% or more above Low"] = "ta_highlow52w_a10h",
+                ["15% or more above Low"] = "ta_highlow52w_a15h",
+                ["20% or more above Low"] = "ta_highlow52w_a20h",
+                ["30% or more above Low"] = "ta_highlow52w_a30h",
+                ["40% or more above Low"] = "ta_highlow52w_a40h",
+                ["50% or more above Low"] = "ta_highlow52w_a50h",
+                ["60% or more above Low"] = "ta_highlow52w_a60h",
+                ["70% or more above Low"] = "ta_highlow52w_a70h",
+                ["80% or more above Low"] = "ta_highlow52w_a80h",
+                ["90% or more above Low"] = "ta_highlow52w_a90h",
+                ["100% or more above Low"] = "ta_highlow52w_a100h",
+                ["120% or more above Low"] = "ta_highlow52w_a120h",
+                ["150% or more above Low"] = "ta_highlow52w_a150h",
+                ["200% or more above Low"] = "ta_highlow52w_a200h",
+                ["300% or more above Low"] = "ta_highlow52w_a300h",
+                ["500% or more above Low"] = "ta_highlow52w_a500h",
+                ["0-3% above Low"] = "ta_highlow52w_a0to3h",
+                ["0-5% above Low"] = "ta_highlow52w_a0to5h",
+                ["0-10% above Low"] = "ta_highlow52w_a0to10h"
+            },
+            ["sma20"] = new Dictionary<string, string>()
+            {
+                ["Price below SMA20"] = "ta_sma20_pb",
+                ["Price 10% below SMA20"] = "ta_sma20_pb10",
+                ["Price 20% below SMA20"] = "ta_sma20_pb20",
+                ["Price 30% below SMA20"] = "ta_sma20_pb30",
+                ["Price 40% below SMA20"] = "ta_sma20_pb40",
+                ["Price 50% below SMA20"] = "ta_sma20_pb50",
+                ["Price above SMA20"] = "ta_sma20_pa",
+                ["Price 10% above SMA20"] = "ta_sma20_pa10",
+                ["Price 20% above SMA20"] = "ta_sma20_pa20",
+                ["Price 30% above SMA20"] = "ta_sma20_pa30",
+                ["Price 40% above SMA20"] = "ta_sma20_pa40",
+                ["Price 50% above SMA20"] = "ta_sma20_pa50",
+                ["Price crossed SMA20"] = "ta_sma20_pc",
+                ["Price crossed SMA20 above"] = "ta_sma20_pca",
+                ["Price crossed SMA20 below"] = "ta_sma20_pcb",
+                ["SMA20 crossed SMA50"] = "ta_sma20_cross50",
+                ["SMA20 crossed SMA50 above"] = "ta_sma20_cross50a",
+                ["SMA20 crossed SMA50 below"] = "ta_sma20_cross50b",
+                ["SMA20 crossed SMA200"] = "ta_sma20_cross200",
+                ["SMA20 crossed SMA200 above"] = "ta_sma20_cross200a",
+                ["SMA20 crossed SMA200 below"] = "ta_sma20_cross200b",
+                ["SMA20 above SMA50"] = "ta_sma20_sa50",
+                ["SMA20 below SMA50"] = "ta_sma20_sb50",
+                ["SMA20 above SMA200"] = "ta_sma20_sa200",
+                ["SMA20 below SMA200"] = "ta_sma20_sab200",
+            },
+            ["sma50"] = new Dictionary<string, string>()
+            {
+                ["Price below SMA50"] = "ta_sma50_pb",
+                ["Price 10% below SMA50"] = "ta_sma50_pb10",
+                ["Price 20% below SMA50"] = "ta_sma50_pb20",
+                ["Price 30% below SMA50"] = "ta_sma50_pb30",
+                ["Price 40% below SMA50"] = "ta_sma50_pb40",
+                ["Price 50% below SMA50"] = "ta_sma50_pb50",
+                ["Price above SMA50"] = "ta_sma50_pa",
+                ["Price 10% above SMA50"] = "ta_sma50_pa10",
+                ["Price 20% above SMA50"] = "ta_sma50_pa20",
+                ["Price 30% above SMA50"] = "ta_sma50_pa30",
+                ["Price 40% above SMA50"] = "ta_sma50_pa40",
+                ["Price 50% above SMA50"] = "ta_sma50_pa50",
+                ["Price crossed SMA50"] = "ta_sma50_pc",
+                ["Price crossed SMA50 above"] = "ta_sma50_pca",
+                ["Price crossed SMA50 below"] = "ta_sma50_pcb",
+                ["SMA50 crossed SMA20"] = "ta_sma50_cross20",
+                ["SMA50 crossed SMA20 above"] = "ta_sma50_cross20a",
+                ["SMA50 crossed SMA20 below"] = "ta_sma50_cross20b",
+                ["SMA50 crossed SMA200"] = "ta_sma50_cross200",
+                ["SMA50 crossed SMA200 above"] = "ta_sma50_cross200a",
+                ["SMA50 crossed SMA200 below"] = "ta_sma50_cross200b",
+                ["SMA50 above SMA20"] = "ta_sma50_sa20",
+                ["SMA50 below SMA20"] = "ta_sma50_sb20",
+                ["SMA50 above SMA200"] = "ta_sma50_sa200",
+                ["SMA50 below SMA200"] = "ta_sma50_sab200",
             }
         };
 
@@ -169,6 +264,9 @@ namespace Screener
                 ["averageVolume"] = "Any",
                 ["rsi"] = "Any",
                 ["currentRatio"] = "Any",
+                ["high"] = "Any",
+                ["sma20"] = "Any",
+                ["sma50"] = "Any"
             },
             ["Basic Materials"] = new Dictionary<string, string>()
             {
@@ -177,6 +275,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Communication Services"] = new Dictionary<string, string>()
             {
@@ -185,6 +286,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Consumer Cyclical"] = new Dictionary<string, string>()
             {
@@ -193,6 +297,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Consumer Defensive"] = new Dictionary<string, string>()
             {
@@ -201,6 +308,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Energy"] = new Dictionary<string, string>()
             {
@@ -209,6 +319,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Financial"] = new Dictionary<string, string>()
             {
@@ -217,6 +330,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Healthcare"] = new Dictionary<string, string>()
             {
@@ -225,6 +341,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Industrials"] = new Dictionary<string, string>()
             {
@@ -233,6 +352,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Real Estate"] = new Dictionary<string, string>()
             {
@@ -241,6 +363,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Technology"] = new Dictionary<string, string>()
             {
@@ -249,6 +374,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             },
             ["Utilities"] = new Dictionary<string, string>()
             {
@@ -257,6 +385,9 @@ namespace Screener
                 ["averageVolume"] = "",
                 ["rsi"] = "",
                 ["currentRatio"] = "",
+                ["high"] = "",
+                ["sma20"] = "",
+                ["sma50"] = ""
             }
         };
 
@@ -316,7 +447,7 @@ namespace Screener
              *to get the appropriate attribute and the value selects the proper filter string*/
             foreach (var kvp in sectorMap[sector])
             {
-                if (kvp.Value != "Any" && !kvp.Value.Contains("/"))
+                if (kvp.Value != "Any" && kvp.Value != "" && !kvp.Value.Contains("/"))
                 {
                     url.Append("," + finvizMap[kvp.Key][kvp.Value]);
                 }

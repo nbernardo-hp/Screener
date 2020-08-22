@@ -44,7 +44,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 9);
+            this.label1.Location = new System.Drawing.Point(26, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 0;
@@ -53,7 +53,7 @@
             // lnkIcon
             // 
             this.lnkIcon.AutoSize = true;
-            this.lnkIcon.Location = new System.Drawing.Point(133, 9);
+            this.lnkIcon.Location = new System.Drawing.Point(133, 16);
             this.lnkIcon.Name = "lnkIcon";
             this.lnkIcon.Size = new System.Drawing.Size(42, 13);
             this.lnkIcon.TabIndex = 1;
@@ -74,7 +74,7 @@
             // lnkFlaticon
             // 
             this.lnkFlaticon.AutoSize = true;
-            this.lnkFlaticon.Location = new System.Drawing.Point(133, 33);
+            this.lnkFlaticon.Location = new System.Drawing.Point(133, 35);
             this.lnkFlaticon.Name = "lnkFlaticon";
             this.lnkFlaticon.Size = new System.Drawing.Size(67, 13);
             this.lnkFlaticon.TabIndex = 1;
@@ -145,7 +145,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(68, 33);
+            this.label2.Location = new System.Drawing.Point(68, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 13);
             this.label2.TabIndex = 3;

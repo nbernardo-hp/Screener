@@ -33,7 +33,7 @@ namespace Screener
         {
             try
             {
-
+                frmScreener.OpenBrowserToUrl("https://www.flaticon.com/authors/freepik");
             } catch
             {
 
@@ -44,7 +44,7 @@ namespace Screener
         {
             try
             {
-
+                frmScreener.OpenBrowserToUrl("https://www.flaticon.com/");
             } catch
             {
 
@@ -55,7 +55,7 @@ namespace Screener
         {
             try
             {
-
+                frmScreener.OpenBrowserToUrl("https://www.stockvault.net/user/profile/139626");
             }
             catch
             {
@@ -67,7 +67,7 @@ namespace Screener
         {
             try
             {
-
+                frmScreener.OpenBrowserToUrl("https://www.stockvault.net/photo/261845/bull-versus-bear---financial-markets-concept#");
             }
             catch
             {
@@ -79,7 +79,7 @@ namespace Screener
         {
             try
             {
-
+                frmScreener.OpenBrowserToUrl("https://www.stockvault.net/");
             }
             catch
             {

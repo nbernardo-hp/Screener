@@ -31,6 +31,35 @@ namespace Screener
             preferences = pref;
         }//end two argument constructor
 
+        public static void OpenBrowserToUrl(string url)
+        {
+            try
+            {
+
+                Process.Start(url);
+            }
+            catch
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }//end if-else if-else if-else
+            }//end try-catch
+        }//end OpenBrowserToUrl
+
         /// <summary>
         /// Sorts and returns the Stock objects in the provided Sector by multiple different criteria.
         /// </summary>
@@ -59,8 +88,8 @@ namespace Screener
                 PopulateListView();
                 LoadFinvizWithStocks();
                 pdocStocks.DefaultPageSettings.Landscape = true;
-                pdocStocks.DefaultPageSettings.Margins.Left = 85;
-                pdocStocks.DefaultPageSettings.Margins.Right = 75;
+                pdocStocks.DefaultPageSettings.Margins.Left = 25;
+                pdocStocks.DefaultPageSettings.Margins.Right = 25;
             } catch
             {
 
@@ -283,41 +312,17 @@ namespace Screener
                 }//end nested foreach
             }//end foreach
             var url = preferences.GetFinvizUrlAfterScraping(symbols.AsEnumerable());
-            try
-            {
-
-                Process.Start(url);
-            }
-            catch
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", url);
-                }
-                else
-                {
-                    throw;
-                }//end if-else if-else if-else
-            }//end try-catch
+            OpenBrowserToUrl(url);
         }//end LoadFinvizWithStocks
 
         private void pdocStocks_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             try
             {
-                Font font = new Font("Arial", 11, FontStyle.Regular, GraphicsUnit.Pixel);
+                Font font = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Pixel);
                 int headerHeight = 80;
                 int bodyCellHeight = 16;
-                int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 74 };
+                int[] cellWidths = { 41, 237, 69, 69, 82, 106, 82, 73, 85, 94, 74 };
                 int fullRowWidth = 41 + 237 + 69 + 69 + 82 + 106 + 82 + 73 + 85 + 74;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
@@ -442,6 +447,7 @@ namespace Screener
                     {
                         e.HasMorePages = true;
                         pages++;
+                        break;
                     }//end if-else
                 }//end for
             }

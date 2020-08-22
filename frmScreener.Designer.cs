@@ -75,12 +75,12 @@
             this.Recom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.CurrentRatio = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.EarningsDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ZacksRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TotalScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ttpColumns = new System.Windows.Forms.ToolTip(this.components);
             this.pdlogStocks = new System.Windows.Forms.PrintDialog();
             this.pdocStocks = new System.Drawing.Printing.PrintDocument();
             this.pprevStocks = new System.Windows.Forms.PrintPreviewDialog();
-            this.ZacksRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -92,7 +92,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(964, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(978, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -328,7 +328,7 @@
             this.lstvStocks.Location = new System.Drawing.Point(0, 24);
             this.lstvStocks.Name = "lstvStocks";
             this.lstvStocks.ShowItemToolTips = true;
-            this.lstvStocks.Size = new System.Drawing.Size(964, 373);
+            this.lstvStocks.Size = new System.Drawing.Size(978, 373);
             this.lstvStocks.TabIndex = 1;
             this.lstvStocks.UseCompatibleStateImageBehavior = false;
             this.lstvStocks.View = System.Windows.Forms.View.Details;
@@ -386,6 +386,12 @@
             this.EarningsDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.EarningsDate.Width = 82;
             // 
+            // ZacksRank
+            // 
+            this.ZacksRank.Text = "Zacks Rank";
+            this.ZacksRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.ZacksRank.Width = 92;
+            // 
             // TotalScore
             // 
             this.TotalScore.Text = "Total Score";
@@ -411,17 +417,11 @@
             this.pprevStocks.Name = "pprevStocks";
             this.pprevStocks.Visible = false;
             // 
-            // ZacksRank
-            // 
-            this.ZacksRank.Text = "Zacks Rank";
-            this.ZacksRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ZacksRank.Width = 92;
-            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 397);
+            this.ClientSize = new System.Drawing.Size(978, 397);
             this.Controls.Add(this.lstvStocks);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;

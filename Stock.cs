@@ -171,7 +171,7 @@ namespace Screener
         /// Determines the score of the Zacks Rank attribute and returns it to the calling program
         /// </summary>
         /// <returns></returns>
-        public int GetZacksRankScore() { return (ZacksRankValue == 5 ? 6 : ZacksRankValue == 4 ? 4 : ZacksRankValue == 3 ? 2 : ZacksRankValue == 2 ? -4 : -6); }
+        public int GetZacksRankScore() { return (ZacksRankValue == 1 ? 6 : ZacksRankValue == 2 ? 4 : ZacksRankValue == 3 ? 2 : ZacksRankValue == 4 ? -4 : -6); }
 
         /// <summary>
         /// Determines the color of the attribute to be used in document saving and printing
@@ -190,7 +190,7 @@ namespace Screener
             } else
             {
                 return val == 6 ? System.Drawing.Color.Green : val == 4 ? System.Drawing.Color.Blue :
-                    val == 3 ? System.Drawing.Color.Yellow : val == 2 ? System.Drawing.Color.Orange : System.Drawing.Color.Red;
+                    val == 2 ? System.Drawing.Color.Yellow : val == -4 ? System.Drawing.Color.Orange : System.Drawing.Color.Red;
             }
         }//end GetAttributeColor
         /// <summary>

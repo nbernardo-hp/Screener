@@ -116,7 +116,12 @@ namespace Screener
                             formatRange = GetRange(worksheet, i, j, i, j);
                             formatRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(colors[i - 3]);
                         }
-                        worksheet.Cells[i, j] = attributes.ElementAt(j - 1).ToString();
+                        var val = attributes.ElementAt(j - 1).ToString();
+                        if(val == Double.MinValue.ToString())
+                        {
+                            val = "NA";
+                        }
+                        worksheet.Cells[i, j] = val;
                     }//end for
                     k++;
                     i++;

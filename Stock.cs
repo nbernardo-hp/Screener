@@ -153,19 +153,19 @@ namespace Screener
         /// Determines the score of the High52W attribute and returns it to the calling program
         /// </summary>
         /// <returns></returns>
-        public int GetHigh52WScore() { return (High52WValue <= -30 ? 4 : High52WValue <= -10 ? 2 : -2); }
+        public int GetHigh52WScore() { return (High52WValue <= -30 ? 4 : High52WValue <= -10 || High52WValue == Double.MinValue ? 2 : -2); }
 
         /// <summary>
         /// Determines the score of the Recom attribute and returns it to the calling program
         /// </summary>
         /// <returns></returns>
-        public int GetRecomScore() { return (RecomValue <= 2 ? 4 : RecomValue <= 3 ? 2 : -2); }
+        public int GetRecomScore() { return (RecomValue <= 2 ? 4 : RecomValue <= 3 || RecomValue == Double.MinValue ? 2 : -2); }
 
         /// <summary>
         /// Determines the score of the Current Ratio attribute and returns it to the calling program
         /// </summary>
         /// <returns></returns>
-        public int GetCurrentRatioScore() { return (CurrentRatioValue >= 3 ? 4 : CurrentRatioValue >= 1 ? 2 : -2); }
+        public int GetCurrentRatioScore() { return (CurrentRatioValue >= 3 ? 4 : CurrentRatioValue >= 1 || CurrentRatioValue == Double.MinValue ? 2 : -2); }
 
         /// <summary>
         /// Determines the score of the Zacks Rank attribute and returns it to the calling program
@@ -221,7 +221,7 @@ namespace Screener
                 {
                     return 4;
                 }
-                else if (70 < temp && temp < (earningsDate - DateTime.Today.AddMonths(-4)).Days)
+                else if ((70 < temp && temp < (earningsDate - DateTime.Today.AddMonths(-4)).Days) || earningsDate == new DateTime(0))
                 {
                     return 2;
                 }

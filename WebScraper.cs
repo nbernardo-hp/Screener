@@ -15,7 +15,7 @@ namespace Screener
 {
     class WebScraper
     {
-        public delegate void ProgressUpdate(int i);
+        public delegate void ProgressUpdate(int i, string update, int change);
         public event ProgressUpdate OnProgressUpdate;
         private Dictionary<string, Dictionary<string, Stock>> stocks;
         private dynamic driver;
@@ -106,11 +106,11 @@ namespace Screener
                     temp.GrowthValue = (int)(double.Parse(chartMillRows[i][2].ToString()) * 2);
                     temp.ValuationValue = (int)(double.Parse(chartMillRows[i][3].ToString()) * 2);
                     temp.IndustryValue = finvizRow[2];
-                    temp.CurrentRatioValue = (finvizRow[4] != "-" ? double.Parse(finvizRow[4]) : 0);
+                    temp.CurrentRatioValue = (finvizRow[4] != "-" ? double.Parse(finvizRow[4]) : Double.MinValue);
 
                     var high = finvizRow[5].Remove(finvizRow[5].IndexOf("%"));
-                    temp.High52WValue = (high != "-" ? double.Parse(high) : 100);
-                    temp.RecomValue = (finvizRow[7] != "-" ? double.Parse(finvizRow[7]) : 10);
+                    temp.High52WValue = (high != "-" ? double.Parse(high) : Double.MinValue);
+                    temp.RecomValue = (finvizRow[7] != "-" ? double.Parse(finvizRow[7]) : Double.MinValue);
                     temp.SetEarningsDate(finvizRow[8]);
                     temp.ZacksRankValue = int.Parse(zacksText[i][0]);
                     temp.ZacksStringValue = zacksText[i][1];
@@ -256,6 +256,7 @@ namespace Screener
         }//end SetProxy
         private void ScrapeFinviz()
         {
+            int current = 0;
             int sect = 0;
             while (urls.Count > 0)
             {
@@ -287,6 +288,9 @@ namespace Screener
                         ChangeProgress(1, String.Format("Scraping Finviz - {0} - {1} {2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j + 1, rows.Count - 1));
                         finvizRows.Add(temp.ToArray());
                     }//end for
+
+                    ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]), finvizRows.Count - current);
+                    current = finvizRows.Count;
 
                     if(IsElementPresent(By.ClassName("modal-elite-ad_content")))
                     {
@@ -381,12 +385,12 @@ namespace Screener
 
         private string GetChartMillUrl(List<string> s) { return chartMillUrl[0] + String.Join(" ", s) + chartMillUrl[1]; }
 
-        private int ChangeProgress(int val, string update)
+        private int ChangeProgress(int val, string update, int change = 0)
         {
-            status = update;
+            //status = update;
             if (OnProgressUpdate != null)
             {
-                OnProgressUpdate(val);
+                OnProgressUpdate(val, update, change);
             }//end if
 
             return val;

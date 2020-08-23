@@ -88,8 +88,10 @@ namespace Screener
                 PopulateListView();
                 LoadFinvizWithStocks();
                 pdocStocks.DefaultPageSettings.Landscape = true;
-                pdocStocks.DefaultPageSettings.Margins.Left = 25;
-                pdocStocks.DefaultPageSettings.Margins.Right = 25;
+                pdocStocks.DefaultPageSettings.Margins.Left = 10;
+                pdocStocks.DefaultPageSettings.Margins.Right = 10;
+                pdocStocks.DefaultPageSettings.Margins.Top = 10;
+                pdocStocks.DefaultPageSettings.Margins.Bottom = 10;
             } catch
             {
 
@@ -277,16 +279,20 @@ namespace Screener
             int i = 0;
             foreach (var stock in stocks)
             {
-                ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), stock.High52WValue.ToString() + "%", stock.RecomValue.ToString(), stock.CurrentRatioValue.ToString(), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue, stock.TotalScoreValue.ToString() });
-                row.UseItemStyleForSubItems = false;
+                ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), (stock.High52WValue != Double.MinValue ? stock.High52WValue.ToString() + "%" : "NA"), (stock.RecomValue != Double.MinValue ? stock.RecomValue.ToString() : "NA"), (stock.CurrentRatioValue != Double.MinValue ? stock.CurrentRatioValue.ToString() : "NA"), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue, stock.TotalScoreValue.ToString() });
                 if (i % 2 != 0)
                 {
-                    row.SubItems[0].BackColor = SystemColors.Control;
-                    row.SubItems[1].BackColor = SystemColors.Control;
-                    row.SubItems[10].BackColor = SystemColors.Control;
+                    row.BackColor = SystemColors.Control;
                 }
                 if(stock.TotalScoreValue >= 18)
                 {
+                    row.UseItemStyleForSubItems = false;
+                    if(i%2 != 0)
+                    {
+                        row.SubItems[0].BackColor = SystemColors.Control;
+                        row.SubItems[1].BackColor = SystemColors.Control;
+                        row.SubItems[10].BackColor = SystemColors.Control;
+                    }
                     var colors = stock.GetFormattingColors();
                     int j = 2;
                     foreach(var c in colors)
@@ -319,21 +325,27 @@ namespace Screener
         {
             try
             {
-                Font font = new Font("Arial", 11, FontStyle.Regular, GraphicsUnit.Pixel);
-                int headerHeight = 80;
+                Font font = new Font("Arial", 10, FontStyle.Regular, GraphicsUnit.Pixel);
+                int headerHeight = 77;
                 int bodyCellHeight = 20;
-                int[] cellWidths = { 44, 204, 61, 76, 90, 92, 88, 93, 92, 87, 87 };
-                int fullRowWidth = 44 + 204 + 61 + 76 + 90 + 92 + 88 + 93 + 92 + 87 + 87;
+                int[] cellWidths = { 51, 219, 94, 94, 94, 130, 112, 94, 101, 89, 96 };
+                int fullRowWidth = 51 + 219 + (94 * 4) + 130 + 112 + 101 + 89 + 96;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
                 int y = e.MarginBounds.Top;
                 int width = 0;
 
-                string[] headerText = new string[] { "CM Fund\n7-10 = Green\n4-6 = Yellow\n0-3 = Red", "CM Growth\n7-10 = Green\n4-6 = Yellow\n0-3 = Red",
-                "CM Valuation\n5-10 = Green\n3-4 = Yellow\n0-2 = Red", "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red", "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red",
-                "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red", "Earnings Date\n*See end of\ndocument", "Zacks Rank\n Stong Buy = Green\nBuy = Blue\nHold = Yellow\nSell = Orange\nStrong Sell = Red", "Total\n**See end of\ndocument" };
+                string[] headerText = new string[] { "CM Fund\n7-10 = Green\n4-6 = Yellow\n0-3 = Red",
+                    "CM Growth\n7-10 = Green\n4-6 = Yellow\n0-3 = Red",
+                    "CM Valuation\n5-10 = Green\n3-4 = Yellow\n0-2 = Red",
+                    "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red",
+                    "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red",
+                    "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red",
+                    "Earnings Date\n*See end of\ndocument",
+                    "Zacks Rank\n Stong Buy = Green\nBuy = Blue\nHold = Yellow\nSell = Orange\nStrong Sell = Red",
+                    "Total\n**See end of\ndocument" };
 
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 11; j++)
                 {
                     if (j < 2)
                     {
@@ -342,9 +354,7 @@ namespace Screener
 
                     if (j >= 2)
                     {
-                        var l = e.PageBounds.Width;
-                        var q = (x + cellWidths[j]) + 100;
-                        if (e.PageBounds.Width > (x + cellWidths[j]) + 75)
+                        if (e.PageBounds.Width > (x + cellWidths[j]))
                         {
                             var stringSize = e.Graphics.MeasureString(headerText[j - 2], font);
                             float w = stringSize.Width;
@@ -379,6 +389,7 @@ namespace Screener
 
                         e.Graphics.FillRectangle(Brushes.Silver, x, y, fullRowWidth, bodyCellHeight);
                         e.Graphics.DrawRectangle(Pens.Black, x, y, cellWidths[0] + cellWidths[1], bodyCellHeight);
+                        e.Graphics.DrawRectangle(Pens.Black, x, y, fullRowWidth, bodyCellHeight);
                         e.Graphics.DrawString(header, font, Brushes.Black, (x + cellWidths[0] + cellWidths[1] - 10) - getStringDimension('w', header, font, e), y + ((bodyCellHeight / 2) - (getStringDimension('h', header, font, e) / 2)));
                         y += bodyCellHeight;
                     }
@@ -394,25 +405,34 @@ namespace Screener
                     {
                         x = e.MarginBounds.Left;
                         cell = 0;
+
                         if (y < e.MarginBounds.Bottom)
                         {
+                            if (currentStock % 2 != 0)
+                            {
+                                e.Graphics.FillRectangle(Brushes.Gainsboro, e.MarginBounds.Left, y, fullRowWidth, bodyCellHeight);
+                            }
+
                             var attributes = sorted.ElementAt(currentStock).GetAttributesEnumerable();
+                            var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormattingColors() : null);
+
                             foreach (var a in attributes)
                             {
                                 var val = a.ToString();
                                 stringWidth = getStringDimension('w', val, font, e);
                                 stringHeight = getStringDimension('h', val, font, e);
-                                var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormattingColors() : null);
-                                if(currentStock % 2 != 0)
-                                {
-                                    e.Graphics.FillRectangle(Brushes.Gainsboro, x, y, fullRowWidth, bodyCellHeight);
-                                }
+                                
                                 if(colors != null && (2 <= cell && cell <= 9))
                                 {
                                     Brush attributeBG = (colors[cell - 2].Name == "Green" ? Brushes.Green : colors[cell - 2].Name == "Yellow" ? Brushes.Yellow : colors[cell - 2].Name == "Red" ? Brushes.Red : colors[cell - 2].Name == "Blue" ? Brushes.Blue : Brushes.Orange);
                                     e.Graphics.FillRectangle(attributeBG, (x + (cellWidths[cell] / 2)) - (stringWidth / 2), (y + halfHeight) - (stringHeight / 2), stringWidth, stringHeight);
                                 }
                                 e.Graphics.DrawRectangle(Pens.Black, x, y, cellWidths[cell], bodyCellHeight);
+
+                                if(5 <= cell && cell <= 7)
+                                {
+                                    val = (val != Double.MinValue.ToString() ? val : "NA");
+                                }
                                 e.Graphics.DrawString(val, font, Brushes.Black, (x + (cellWidths[cell] / 2)) - (stringWidth / 2), (y + halfHeight) - (stringHeight / 2));
 
                                 x += cellWidths[cell];
@@ -434,7 +454,7 @@ namespace Screener
 
                 int i = 0;
                 x = e.MarginBounds.Left;
-                string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.", "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.", "**Total score is calculated using a weight for each color.", "**Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4." };
+                string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.", "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.", "***Total score is calculated using a weight for each color.", "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2." };
                 while(i < scoreExplanations.Length)
                 {
                     if(y < e.MarginBounds.Bottom)

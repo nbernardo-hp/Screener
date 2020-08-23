@@ -193,22 +193,23 @@ namespace Screener
             }
         }//end frmSplash_MouseUp
 
-        private void scraper_OnProgressUpdate(int val)
+        private void scraper_OnProgressUpdate(int val, string update, int change)
         {
             base.Invoke((Action)delegate
             {
+                pgbProgress.Maximum += change;
                 if(pgbProgress.Value < pgbProgress.Maximum)
                 {
-                    pgbProgress.Value += val;
-                    lblStatus.Text = scraper.GetStatus();
-                    lblProgress.Text = String.Format("{0}%", pgbProgress.Value);
+                    pgbProgress.Value = (update != "Finalizing..." ? pgbProgress.Value + val : pgbProgress.Maximum);
+                    lblStatus.Text = update;
+                    lblProgress.Text = String.Format("{0:0.0}%", (update != "Finalizing..." ? pgbProgress.Value / pgbProgress.Maximum : 100));
                     if (pgbProgress.Value == 10 || pgbProgress.Value == 100)
                     {
                         lblProgress.Location = new Point(lblProgress.Location.X - 7, lblProgress.Location.Y);
                     }//end if
                 }//end if
             });
-        }//end scraper_OnProgressUpdate
+        }//end scraper_OnProgressUpdate(int, string)
 
         private void StartWork()
         {

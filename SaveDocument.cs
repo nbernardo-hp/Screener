@@ -53,32 +53,32 @@ namespace Screener
             ChangeProgress(1, "Writing header rows...");
             Excel.Range formatRange = GetRange(worksheet, 1, 1, 1, 10);
             formatRange.EntireRow.RowHeight = 60.00;
-            SetColumnWidth(ref worksheet, 1, 1, 1, 1, 5.14);
-            SetColumnWidth(ref worksheet, 1, 2, 1, 2, 26.29);
+            SetColumnWidth(ref worksheet, 1, 1, 1, 1, 6.57);
+            SetColumnWidth(ref worksheet, 1, 2, 1, 2, 30.57);
             MergeCells(ref worksheet, 1, 1, 1, 2);
             worksheet.Cells[1, 3] = GetHeaderText(3);
-            SetColumnWidth(ref worksheet, 1, 3, 1, 3, 9.14);
+            SetColumnWidth(ref worksheet, 1, 3, 1, 3, 12.71);
             worksheet.Cells[1, 4] = GetHeaderText(4);
-            SetColumnWidth(ref worksheet, 1, 4, 1, 4, 10.86);
+            SetColumnWidth(ref worksheet, 1, 4, 1, 4, 12.71);
             worksheet.Cells[1, 5] = GetHeaderText(5);
-            SetColumnWidth(ref worksheet, 1, 5, 1, 5, 12.14);
-            worksheet.Cells[1, 6] = GetHeaderText(6);
-            SetColumnWidth(ref worksheet, 1, 6, 1, 6, 13.43);
-            worksheet.Cells[1, 7] = GetHeaderText(7);
-            SetColumnWidth(ref worksheet, 1, 7, 1, 7, 13.57);
-            worksheet.Cells[1, 8] = GetHeaderText(8);
-            SetColumnWidth(ref worksheet, 1, 8, 1, 8, 9.57);
-            worksheet.Cells[1, 9] = GetHeaderText(9);
-            SetColumnWidth(ref worksheet, 1, 9, 1, 9, 12.43);
-            worksheet.Cells[1, 10] = GetHeaderText(10);
-            SetColumnWidth(ref worksheet, 1, 10, 1, 10, 7.71);
+            SetColumnWidth(ref worksheet, 1, 5, 1, 5, 12.71);
+            worksheet.Cells[1, 5] = GetHeaderText(6);
+            SetColumnWidth(ref worksheet, 1, 6, 1, 6, 17.86);
+            worksheet.Cells[1, 6] = GetHeaderText(7);
+            SetColumnWidth(ref worksheet, 1, 7, 1, 7, 15.29);
+            worksheet.Cells[1, 7] = GetHeaderText(8);
+            SetColumnWidth(ref worksheet, 1, 8, 1, 8, 12.71);
+            worksheet.Cells[1, 8] = GetHeaderText(9);
+            SetColumnWidth(ref worksheet, 1, 9, 1, 9, 13.71);
+            worksheet.Cells[1, 9] = GetHeaderText(10);
+            SetColumnWidth(ref worksheet, 1, 10, 1, 10, 12.00);
+            worksheet.Cells[1, 10] = GetHeaderText(11);
+            SetColumnWidth(ref worksheet, 1, 11, 1, 11, 13.00);
 
-            formatRange = GetRange(worksheet, 2, 7, 2, 8);
-            formatRange.EntireColumn.NumberFormat = "#.#";
-            formatRange = GetRange(worksheet, 1, 2, 1, 10);
+            //formatRange = GetRange(worksheet, 2, 7, 2, 8);
+            //formatRange.EntireColumn.NumberFormat = "#.#";
+            formatRange = GetRange(worksheet, 1, 2, 1, 11);
             formatRange.EntireColumn.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            //formatRange = GetRange(worksheet, 3, 9, 3, 9);
-            //formatRange.EntireColumn.NumberFormat = "mm/dd/yyyy";
 
             int i = 2;//indicates the current row to begin on.  Excel starts indexing at 1
             foreach (var sector in frmScreener.SortSectorKeys(map.Keys))
@@ -86,11 +86,11 @@ namespace Screener
                 ChangeProgress(1, String.Format("Writing and formatting {0} header", sector));
                 /*Sets the background color and text alignment of the Sector header row.  Merges the first two columns
                  *together and the last 8 together.  Sets the header text for the Sector and increments the current row*/
-                formatRange = GetRange(worksheet, i, 1, i, 10);
+                formatRange = GetRange(worksheet, i, 1, i, 11);
                 formatRange.EntireRow.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Silver);
                 formatRange.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
                 MergeCells(ref worksheet, i, 1, i, 2);
-                MergeCells(ref worksheet, i, 3, i, 10);
+                MergeCells(ref worksheet, i, 3, i, 11);
                 worksheet.Cells[i, 1] = String.Format("{0} {1}", DateTime.Today.ToShortDateString(), sector);
                 i++;
 
@@ -104,13 +104,18 @@ namespace Screener
                     ChangeProgress(1, String.Format("Writing {0} information", s.SymbolValue));
                     if (k % 2 != 0)
                     {
-                        formatRange = GetRange(worksheet, i, 1, i, 10);
+                        formatRange = GetRange(worksheet, i, 1, i, 11);
                         formatRange.EntireRow.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Gainsboro);
                     }
-
+                    var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
                     var attributes = s.GetAttributesEnumerable();
                     for (int j = 1; j <= attributes.Count(); j++)
                     {
+                        if(colors != null && 3 <= j && j <= 10)
+                        {
+                            formatRange = GetRange(worksheet, i, j, i, j);
+                            formatRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(colors[i - 3]);
+                        }
                         worksheet.Cells[i, j] = attributes.ElementAt(j - 1).ToString();
                     }//end for
                     k++;
@@ -124,12 +129,14 @@ namespace Screener
             formatRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
             formatRange.Borders.Weight = 2d;
 
-            ChangeProgress(1, "Adding Earnings Date score explaination...");
-            //Merge two cells at the botom of the document and add the earnings date explanation
-            MergeCells(ref worksheet, i, 1, i, 10);
-            MergeCells(ref worksheet, i+1, 1, i+1, 10);
-            worksheet.Cells[i, 1] = GetEarningsDateText(1);
-            worksheet.Cells[i+1, 1] = GetEarningsDateText(2);
+            ChangeProgress(1, "Adding Earnings Date, Zacks score explaination...");
+            //Merge rows at the botom of the document and add the scoring explanation
+            for(int j = 1; j < 6; j++)
+            {
+                MergeCells(ref worksheet, i, 1, i, 11);
+                worksheet.Cells[i, 1] = GetScoreExplanation(j);
+                i++;
+            }
 
             ChangeProgress(1, "Finializing...");
             //Save the document and close the workbook and application
@@ -164,13 +171,14 @@ namespace Screener
                     sw.WriteLine("<th>52 Week High<br>-90 to -30 = +4<br>-29 to -10 = +2<br>-9 to + = -2</th>");
                     sw.WriteLine("<th>Finviz Recom<br>1-2 = +4<br>2.1-3.0 = +2<br>3.1-5 = -2</th>");
                     sw.WriteLine("<th>Current Ratio<br>> 3.0 = +4<br>1-3 = +2<br>0-.9 = -2</th>");
-                    sw.WriteLine("<th>Earnings Date<br>See scoring below</th>");
-                    sw.WriteLine("<th>Total Score<br>The sum of the scoring<br>from each column</th>");
+                    sw.WriteLine("<th>Earnings Date<br>*See scoring below</th>");
+                    sw.WriteLine("<th>Zacks Rank<br>**See scoring below</th>");
+                    sw.WriteLine("<th>Total Score<br>***See scoring below</th>");
                     sw.WriteLine("</tr>");
 
                     foreach(var sector in frmScreener.SortSectorKeys(map.Keys))
                     {
-                        sw.Write(String.Format("<tr style=\"text-align:right\" class=\"sectorHeader\"><th colspan=\"2\">{0} {1}</th><th colspan=\"8\"/></tr>", DateTime.Today.ToShortDateString(), sector));
+                        sw.Write(String.Format("<tr style=\"text-align:right\" class=\"sectorHeader\"><th colspan=\"2\">{0} {1}</th><th colspan=\"9\"/></tr>", DateTime.Today.ToShortDateString(), sector));
 
                         int i = 0;
                         IOrderedEnumerable<Stock> stocks = frmScreener.SortSectorDictionary(map[sector]);
@@ -190,7 +198,7 @@ namespace Screener
                     }//end foreach
 
                     sw.WriteLine("</table>");
-                    sw.WriteLine(String.Format("<p>{0}</p><p>{1}</p>", GetEarningsDateText(1), GetEarningsDateText(2)));
+                    sw.WriteLine(String.Format("<p>{0}</p><p>{1}</p><p>{2}</p><p>{3}</p><p>{4}</p>", GetScoreExplanation(1), GetScoreExplanation(2), GetScoreExplanation(3), GetScoreExplanation(4), GetScoreExplanation(5)));
                     sw.WriteLine("</body>");
                     sw.WriteLine("</html>");
                 }//end nested using
@@ -228,7 +236,7 @@ namespace Screener
             ChangeProgress(1, "Writing header rows...");
             /*Loops through the first row and sets the text to the string returned from GetHeaderText.  Aligns the
              *paragraph text and merges the first 2 cells of the table*/
-            for (int i = 3; i < 11; i++)
+            for (int i = 3; i < 12; i++)
             {
                 table.Cell(1, i).Range.Text = GetHeaderText(i);
             }//end for
@@ -242,7 +250,7 @@ namespace Screener
              foreach(var sector in frmScreener.SortSectorKeys(map.Keys))
             {
                 ChangeProgress(1, String.Format("Writing and formatting {0} header", sector));
-                MergeCells(ref table, row, 3, row, 10);
+                MergeCells(ref table, row, 3, row, 11);
                 MergeCells(ref table, row, 1, row, 2);
                 table.Rows[row].Range.Shading.BackgroundPatternColor = WdColor.wdColorGray15;
                 table.Rows[row].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphRight;
@@ -263,9 +271,17 @@ namespace Screener
                         table.Rows[row].Range.Shading.BackgroundPatternColor = WdColor.wdColorGray05;
                     }
                     var attributes = s.GetAttributesEnumerable();
+                    var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
                     for(int i = 0; i < attributes.Count(); i++)
                     {
                         table.Cell(row, i+1).Range.Text = attributes.ElementAt(i).ToString();
+                        if (colors != null && 3 <= i && i <= 10)
+                        {
+                            var name = colors[i - 3].Name;
+                            table.Cell(row, i + 1).Range.Shading.BackgroundPatternColor = (name == "Green" ? WdColor.wdColorGreen :
+                                name == "Yellow" ? WdColor.wdColorYellow : name == "Red" ? WdColor.wdColorRed : name == "Blue" ?
+                                WdColor.wdColorBlue : WdColor.wdColorOrange);
+                        }
                     }//end for
                     j++;
                     row++;
@@ -274,9 +290,9 @@ namespace Screener
 
             ChangeProgress(1, "Adding Earnings Date score explaination...");
             /*Adds a new paragraph containing the explanation for the earningsDate scoring*/
-            Word.Paragraph earningsDate = document.Content.Paragraphs.Add();
-            earningsDate.Range.Text = String.Format("{0}\n{1}", GetEarningsDateText(1), GetEarningsDateText(2));
-            earningsDate.Range.InsertParagraphAfter();
+            Word.Paragraph scoreExplanation = document.Content.Paragraphs.Add();
+            scoreExplanation.Range.Text = String.Format("{0}\n{1}\n{2}\n{3}\n{4}", GetScoreExplanation(1), GetScoreExplanation(2), GetScoreExplanation(3), GetScoreExplanation(4), GetScoreExplanation(5));
+            scoreExplanation.Range.InsertParagraphAfter();
 
             ChangeProgress(1, "Finializing...");
             //Saves the document to the path provided when instantiating the SaveDocument object and closes the Word instance
@@ -319,21 +335,23 @@ namespace Screener
             switch(col)
             {
                 case 3:
-                    return "CM Fund\n7-10 = +4\n4-6 = +2\n0-3 = -2";
+                    return "CM Fund\n7-10 = Green\n4-6 = +2\n0-3 = -2";
                 case 4:
-                    return "CM Growth\n7-10 = +4\n4-6 = +2\n0-3 = -2";
+                    return "CM Growth\n7-10 = Green\n4-6 = +2\n0-3 = -2";
                 case 5:
-                    return "CM Valuation\n5-10 = +4\n3-4 = +2\n0-2 = -2";
+                    return "CM Valuation\n5-10 = Green\n3-4 = +2\n0-2 = -2";
                 case 6:
-                    return "52W High\n-90 to -10 = +4\n-29 to -10 = +2\n-9 to + = -2";
+                    return "52W High\n-90 to -10 = Green\n-29 to -10 = +2\n-9 to + = -2";
                 case 7:
-                    return "Finviz Recom\n1-2 = +4\n2.1-3.0 = +2\n3.1-5 = -2";
+                    return "Finviz Recom\n1-2 = Green\n2.1-3.0 = +2\n3.1-5 = -2";
                 case 8:
-                    return "Curr_Ratio\n>3.0 = +4\n1-3 = +2\n0-.9 = -2";
+                    return "Curr_Ratio\n>3.0 = Green\n1-3 = +2\n0-.9 = -2";
                 case 9:
-                    return "Earnings Date\n**See end of\ndocument";
+                    return "Earnings Date\n*See end of\ndocument";
                 case 10:
-                    return "Total\nThe sum of the scoring\nfrom each column";
+                    return "Zacks Rank\n**See end of\ndocument";
+                case 11:
+                    return "Total\n***See end of\ndocument";
                 default:
                     return "";
             }//end switch
@@ -344,14 +362,22 @@ namespace Screener
         /// </summary>
         /// <param name="line">The line requested.  1 for the first, 2 for the second</param>
         /// <returns>The requested line</returns>
-        private string GetEarningsDateText(int line)
+        private string GetScoreExplanation(int line)
         {
-            if(line == 1)
+            switch(line)
             {
-                return "**Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2";
-            } else
-            {
-                return "**Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4";
+                case 1:
+                    return "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.";
+                case 2:
+                    return "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.";
+                case 3:
+                    return "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.";
+                case 4:
+                    return "***Total score is calculated using a weight for each color.";
+                case 5:
+                    return "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2.";
+                default:
+                    return "";
             }
         }//end GetEarningsDateText
 

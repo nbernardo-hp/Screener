@@ -107,6 +107,7 @@ namespace Screener
                         writer.WriteElementString("RECOM", s.RecomValue.ToString());
                         writer.WriteElementString("CURRENT_RATIO", s.CurrentRatioValue.ToString());
                         writer.WriteElementString("EARNINGS_DATE", s.GetEarningsDateString());
+                        writer.WriteElementString("ZACKS_RANK", s.ZacksStringValue);
                         writer.WriteElementString("TOTAL_SCORE", s.TotalScoreValue.ToString());
                         writer.WriteEndElement();
                     }//end nest foreach

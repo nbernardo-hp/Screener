@@ -31,7 +31,7 @@ namespace Screener
 
         public void SaveExcelDocument(Dictionary<string, Dictionary<string, Stock>> map)
         {
-            ChangeProgress(0, "Initializing...");
+            ChangeProgress(0, "Initializing...", (map.Count + map.Values.Count));
             Excel.Application app = new Excel.Application();
 
             if(app == null)
@@ -47,33 +47,33 @@ namespace Screener
 
             Excel.Style style = workbook.Styles.Add("style");
             style.Font.Name = "Arial";
-            style.Font.Size = 9;
+            style.Font.Size = 10;
 
             //Sets the column width of each column and the header text for each column
             ChangeProgress(1, "Writing header rows...");
             Excel.Range formatRange = GetRange(worksheet, 1, 1, 1, 10);
-            formatRange.EntireRow.RowHeight = 60.00;
-            SetColumnWidth(ref worksheet, 1, 1, 1, 1, 6.57);
-            SetColumnWidth(ref worksheet, 1, 2, 1, 2, 30.57);
+            formatRange.EntireRow.RowHeight = 51.75;
+            SetColumnWidth(ref worksheet, 1, 1, 1, 1, 5.57);
+            SetColumnWidth(ref worksheet, 1, 2, 1, 2, 27.29);
             MergeCells(ref worksheet, 1, 1, 1, 2);
             worksheet.Cells[1, 3] = GetHeaderText(3);
-            SetColumnWidth(ref worksheet, 1, 3, 1, 3, 12.71);
+            SetColumnWidth(ref worksheet, 1, 3, 1, 3, 8.29);
             worksheet.Cells[1, 4] = GetHeaderText(4);
-            SetColumnWidth(ref worksheet, 1, 4, 1, 4, 12.71);
+            SetColumnWidth(ref worksheet, 1, 4, 1, 4, 9.57);
             worksheet.Cells[1, 5] = GetHeaderText(5);
-            SetColumnWidth(ref worksheet, 1, 5, 1, 5, 12.71);
+            SetColumnWidth(ref worksheet, 1, 5, 1, 5, 11.43);
             worksheet.Cells[1, 5] = GetHeaderText(6);
-            SetColumnWidth(ref worksheet, 1, 6, 1, 6, 17.86);
+            SetColumnWidth(ref worksheet, 1, 6, 1, 6, 12.71);
             worksheet.Cells[1, 6] = GetHeaderText(7);
-            SetColumnWidth(ref worksheet, 1, 7, 1, 7, 15.29);
+            SetColumnWidth(ref worksheet, 1, 7, 1, 7, 11.43);
             worksheet.Cells[1, 7] = GetHeaderText(8);
-            SetColumnWidth(ref worksheet, 1, 8, 1, 8, 12.71);
+            SetColumnWidth(ref worksheet, 1, 8, 1, 8, 9.00);
             worksheet.Cells[1, 8] = GetHeaderText(9);
-            SetColumnWidth(ref worksheet, 1, 9, 1, 9, 13.71);
+            SetColumnWidth(ref worksheet, 1, 9, 1, 9, 12.00);
             worksheet.Cells[1, 9] = GetHeaderText(10);
-            SetColumnWidth(ref worksheet, 1, 10, 1, 10, 12.00);
+            SetColumnWidth(ref worksheet, 1, 10, 1, 10, 11.29);
             worksheet.Cells[1, 10] = GetHeaderText(11);
-            SetColumnWidth(ref worksheet, 1, 11, 1, 11, 13.00);
+            SetColumnWidth(ref worksheet, 1, 11, 1, 11, 10.43);
 
             //formatRange = GetRange(worksheet, 2, 7, 2, 8);
             //formatRange.EntireColumn.NumberFormat = "#.#";
@@ -114,7 +114,7 @@ namespace Screener
                         if(colors != null && 3 <= j && j <= 10)
                         {
                             formatRange = GetRange(worksheet, i, j, i, j);
-                            formatRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(colors[i - 3]);
+                            formatRange.Interior.Color = System.Drawing.ColorTranslator.ToOle(colors[j - 3]);
                         }
                         var val = attributes.ElementAt(j - 1).ToString();
                         if(val == Double.MinValue.ToString())
@@ -192,9 +192,16 @@ namespace Screener
                             sw.WriteLine(String.Format("<tr{0}>", (i % 2 != 0 ? " style=\"background-color:gainsboro\"" : "")));
 
                             var attributes = s.GetAttributesEnumerable();
+                            var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
                             for (int j = 0; j < attributes.Count(); j++)
                             {
-                                sw.WriteLine(String.Format("<td>{0}</td>", attributes.ElementAt(j)));
+                                string val = attributes.ElementAt(j).ToString();
+                                if (5 <= j && j <= 7 && val == Double.MinValue.ToString()) { val = "NA"; }
+                                sw.WriteLine(String.Format("<td{0}>{1}</td>",
+                                    (colors != null && 2 <= j && j <= 9 ? 
+                                        String.Format(" style=\"background-color:{0}\"",colors[j-2].Name.ToLower()) :
+                                        ""),
+                                    val));
                             }//end for
 
                             sw.WriteLine("</tr>");
@@ -235,7 +242,7 @@ namespace Screener
             Word.Paragraph paragraph = document.Content.Paragraphs.Add();
 
             //Adds a new Word table to the paragraph created and enables the borders
-            Table table = document.Tables.Add(paragraph.Range, numRows, 10);
+            Table table = document.Tables.Add(paragraph.Range, numRows, 11);
             table.Borders.Enable = 1;
 
             ChangeProgress(1, "Writing header rows...");
@@ -279,10 +286,12 @@ namespace Screener
                     var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
                     for(int i = 0; i < attributes.Count(); i++)
                     {
-                        table.Cell(row, i+1).Range.Text = attributes.ElementAt(i).ToString();
-                        if (colors != null && 3 <= i && i <= 10)
+                        string val = attributes.ElementAt(i).ToString();
+                        if(5 <= i && i <= 7 && val == Double.MinValue.ToString()) { val = "NA"; }
+                        table.Cell(row, i+1).Range.Text = val;
+                        if (colors != null && 2 <= i && i <= 9)
                         {
-                            var name = colors[i - 3].Name;
+                            var name = colors[i - 2].Name;
                             table.Cell(row, i + 1).Range.Shading.BackgroundPatternColor = (name == "Green" ? WdColor.wdColorGreen :
                                 name == "Yellow" ? WdColor.wdColorYellow : name == "Red" ? WdColor.wdColorRed : name == "Blue" ?
                                 WdColor.wdColorBlue : WdColor.wdColorOrange);
@@ -314,9 +323,9 @@ namespace Screener
             xml.SaveStocks(stocks, filePath, fileName);
         }//end SaveXmlDocument
 
-        private object[] ChangeProgress(int val, string update)
+        private object[] ChangeProgress(int val, string update, int max = 0)
         {
-            object[] change = { val, update };
+            object[] change = { val, update, max };
             if (OnProgressUpdate != null)
             {
                 OnProgressUpdate(change);

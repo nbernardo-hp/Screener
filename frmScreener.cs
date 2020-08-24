@@ -326,10 +326,10 @@ namespace Screener
             try
             {
                 Font font = new Font("Arial", 10, FontStyle.Regular, GraphicsUnit.Pixel);
-                int headerHeight = 77;
+                int headerHeight = 69;
                 int bodyCellHeight = 20;
-                int[] cellWidths = { 51, 219, 94, 94, 94, 130, 112, 94, 101, 89, 96 };
-                int fullRowWidth = 51 + 219 + (94 * 4) + 130 + 112 + 101 + 89 + 96;
+                int[] cellWidths = { 44, 196, 66, 73, 85, 94, 85, 68, 89, 84, 78 };
+                int fullRowWidth = 44 + 196 + 63 + 73 + 85 + 94 + 85 + 68 + 89 + 84 + 78;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
                 int y = e.MarginBounds.Top;

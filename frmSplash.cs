@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -119,7 +121,7 @@ namespace Screener
                 {
                     Console.WriteLine(u);
                 }
-
+                
                 if (scraper == null)
                 {
                     scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
@@ -202,7 +204,7 @@ namespace Screener
                 {
                     pgbProgress.Value = (update != "Finalizing..." ? pgbProgress.Value + val : pgbProgress.Maximum);
                     lblStatus.Text = update;
-                    lblProgress.Text = String.Format("{0:0.0}%", (update != "Finalizing..." ? pgbProgress.Value / pgbProgress.Maximum : 100));
+                    lblProgress.Text = String.Format("{0:0.0}%", (update != "Finalizing..." ? ((double)pgbProgress.Value / (double)pgbProgress.Maximum) * 100 : 100));
                     if (pgbProgress.Value == 10 || pgbProgress.Value == 100)
                     {
                         lblProgress.Location = new Point(lblProgress.Location.X - 7, lblProgress.Location.Y);
@@ -211,19 +213,42 @@ namespace Screener
             });
         }//end scraper_OnProgressUpdate(int, string)
 
+        private void GetDriver(string browser)
+        {
+            try
+            {
+                string file = "chromedriver_win32.zip";
+                string path = AppDomain.CurrentDomain.BaseDirectory;
+                string url = "https://chromedriver.storage.googleapis.com/84.0.4147.30/chromedriver_win32.zip";
+
+                if (browser == "f")
+                {
+                    file = String.Format("geckodriver-v0.27.0-win{0}.zip", (Environment.Is64BitOperatingSystem ? "64" : "32"));
+                    url = "https://github.com/mozilla/geckodriver/releases/download/v0.27.0/" + file;
+                }//end if
+
+                WebClient client = new WebClient();
+                client.DownloadFile(url, Path.Combine(path, file));
+
+
+                //System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
+            } catch
+            {
+
+            }//end try-catch
+        }//end GetDriver
         private void StartWork()
         {
             try
             {
                 pnlProgress.Visible = true;
                 pnlStart.Visible = false;
-                lblStatus.Text = "Initializing...";
                 urls = splashPref.GetFinvizUrls();
                 bgwScrape.RunWorkerAsync();
             } catch
             {
 
-            }
+            }//end try-catch
         }//end StartWork
 
         private void SetControlMouseEvents(Control.ControlCollection controls)

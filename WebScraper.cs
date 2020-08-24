@@ -398,10 +398,11 @@ namespace Screener
 
         private void ScrapeZacks()
         {
-            foreach(var s in symbols)
+            ChangeProgress(0, "Loading Zacks...", chartMillRows.Count);
+            foreach (var s in symbols)
             {
                 string url = String.Format("{0}{1}{2}{3}", zacksUrl[0], s, zacksUrl[1], s);
-                ChangeProgress(0, String.Format("Scraping Zacks - {0}", s));
+                ChangeProgress(1, String.Format("Scraping Zacks - {0}", s));
                 driver.Url = url;
                 driver.Navigate();
                 zacksText.Add(driver.FindElement(By.ClassName("rank_view")).Text.Split(new char[] { '-', '\r', '\n' }));

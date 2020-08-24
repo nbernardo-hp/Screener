@@ -63,6 +63,7 @@ namespace Screener
             this.label13 = new System.Windows.Forms.Label();
             this.cmbSMA50 = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.chkReplaceAll = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errPreferences)).BeginInit();
             this.pnlCustomPE.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPEMax)).BeginInit();
@@ -98,6 +99,7 @@ namespace Screener
             // 
             this.cmbPE.FormattingEnabled = true;
             this.cmbPE.Items.AddRange(new object[] {
+            "...",
             "Any",
             "Low (<15)",
             "Profitable (<0)",
@@ -154,6 +156,7 @@ namespace Screener
             // 
             this.cmbPrice.FormattingEnabled = true;
             this.cmbPrice.Items.AddRange(new object[] {
+            "...",
             "Any",
             "Under $1",
             "Under $2",
@@ -204,6 +207,7 @@ namespace Screener
             // 
             this.cmbAverageVolume.FormattingEnabled = true;
             this.cmbAverageVolume.Items.AddRange(new object[] {
+            "...",
             "Any",
             "Under 50K",
             "Under 100K",
@@ -242,6 +246,7 @@ namespace Screener
             // 
             this.cmbRSI.FormattingEnabled = true;
             this.cmbRSI.Items.AddRange(new object[] {
+            "...",
             "Any",
             "Overbought (90)",
             "Overbought (80)",
@@ -274,6 +279,7 @@ namespace Screener
             // 
             this.cmbCurrentRatio.FormattingEnabled = true;
             this.cmbCurrentRatio.Items.AddRange(new object[] {
+            "...",
             "Any",
             "High (>3)",
             "Low (<1)",
@@ -477,6 +483,7 @@ namespace Screener
             // 
             this.cmbHigh52W.FormattingEnabled = true;
             this.cmbHigh52W.Items.AddRange(new object[] {
+            "...",
             "Any",
             "New High",
             "New Low",
@@ -518,11 +525,13 @@ namespace Screener
             this.cmbHigh52W.Name = "cmbHigh52W";
             this.cmbHigh52W.Size = new System.Drawing.Size(202, 21);
             this.cmbHigh52W.TabIndex = 17;
+            this.cmbHigh52W.SelectedIndexChanged += new System.EventHandler(this.cmbHigh52W_SelectedIndexChanged);
             // 
             // cmbSMA20
             // 
             this.cmbSMA20.FormattingEnabled = true;
             this.cmbSMA20.Items.AddRange(new object[] {
+            "...",
             "Any",
             "Price below SMA20",
             "Price 10% below SMA20",
@@ -553,6 +562,7 @@ namespace Screener
             this.cmbSMA20.Name = "cmbSMA20";
             this.cmbSMA20.Size = new System.Drawing.Size(187, 21);
             this.cmbSMA20.TabIndex = 18;
+            this.cmbSMA20.SelectedIndexChanged += new System.EventHandler(this.cmbSMA20_SelectedIndexChanged);
             // 
             // label13
             // 
@@ -567,6 +577,7 @@ namespace Screener
             // 
             this.cmbSMA50.FormattingEnabled = true;
             this.cmbSMA50.Items.AddRange(new object[] {
+            "...",
             "Any",
             "Price below SMA50",
             "Price 10% below SMA50",
@@ -597,6 +608,7 @@ namespace Screener
             this.cmbSMA50.Name = "cmbSMA50";
             this.cmbSMA50.Size = new System.Drawing.Size(187, 21);
             this.cmbSMA50.TabIndex = 18;
+            this.cmbSMA50.SelectedIndexChanged += new System.EventHandler(this.cmbSMA50_SelectedIndexChanged);
             // 
             // label14
             // 
@@ -607,11 +619,22 @@ namespace Screener
             this.label14.TabIndex = 19;
             this.label14.Text = "50-Day SMA:";
             // 
+            // chkReplaceAll
+            // 
+            this.chkReplaceAll.AutoSize = true;
+            this.chkReplaceAll.Location = new System.Drawing.Point(242, 86);
+            this.chkReplaceAll.Name = "chkReplaceAll";
+            this.chkReplaceAll.Size = new System.Drawing.Size(110, 17);
+            this.chkReplaceAll.TabIndex = 20;
+            this.chkReplaceAll.Text = "Replace All Filters";
+            this.chkReplaceAll.UseVisualStyleBackColor = true;
+            // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 365);
+            this.Controls.Add(this.chkReplaceAll);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.cmbSMA50);
@@ -694,6 +717,7 @@ namespace Screener
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox cmbSMA50;
+        private System.Windows.Forms.CheckBox chkReplaceAll;
     }
 }
 

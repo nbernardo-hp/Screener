@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
+using System.IO.Compression;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Screener
@@ -121,7 +118,12 @@ namespace Screener
                 {
                     Console.WriteLine(u);
                 }
-                
+
+                if(!splashPref.GetLoaded())
+                {
+                    GetDriver(splashPref.BrowserValue);
+                }
+
                 if (scraper == null)
                 {
                     scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
@@ -227,22 +229,39 @@ namespace Screener
                     url = "https://github.com/mozilla/geckodriver/releases/download/v0.27.0/" + file;
                 }//end if
 
-                WebClient client = new WebClient();
-                client.DownloadFile(url, Path.Combine(path, file));
+                if(!File.Exists(Path.Combine(path, (browser == "f" ? "geckodriver.exe" : "chromedriver.exe"))))
+                {
+                    WebClient client = new WebClient();
+                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgress);
+                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadComplete);
+                    client.DownloadFile(url, Path.Combine(path, file));
+                }//end if
 
-
+                ZipFile.ExtractToDirectory(Path.Combine(path, file), path);
                 //System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
-            } catch
+            } catch(Exception)
             {
 
             }//end try-catch
         }//end GetDriver
+
+        private void DownloadComplete(object sender, AsyncCompletedEventArgs e)
+        {
+
+        }//end DownloadComplete
+        private void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        {
+            pgbProgress.Maximum = (int)e.TotalBytesToReceive;
+            lblProgress.Text = e.ProgressPercentage.ToString();
+        }//end DownloadProgress
+
         private void StartWork()
         {
             try
             {
                 pnlProgress.Visible = true;
                 pnlStart.Visible = false;
+                lblStatus.Text = "Initializing...";
                 urls = splashPref.GetFinvizUrls();
                 bgwScrape.RunWorkerAsync();
             } catch

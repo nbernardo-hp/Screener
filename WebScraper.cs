@@ -37,6 +37,7 @@ namespace Screener
             if (browser == "c")
             {
                 options = new ChromeOptions();
+                options.AddArgument("--incognito");
                 driver = new ChromeDriver(options);
             }
             else

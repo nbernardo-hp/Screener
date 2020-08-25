@@ -266,8 +266,9 @@ namespace Screener
                 int pages = 0;
                 driver.Url = urls.Pop();
                 driver.Navigate();
-
+                var pagination = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementExists(By.ClassName("screener_pagination")));
                 System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> sectorPages = driver.FindElements(By.ClassName("screener-pages"));
+
                 if (sectorPages != null && sectorPages.Count > 0)
                 {
                     pages = int.Parse(sectorPages.Last().Text);
@@ -293,16 +294,19 @@ namespace Screener
                     ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]), finvizRows.Count - current);
                     current = finvizRows.Count;
 
-                    if(IsElementPresent(By.ClassName("modal-elite-ad_content")))
+                    /*if (IsElementPresent(By.ClassName("modal-elite-ad_content")))
                     {
-                        driver.FindElement(By.ClassName("modal-elite-ad_close")).Click();
-                    }//end if
+                        driver.FindElement(By.ClassName("modal-elite-ad_content")).Click();
+                    }//end if*/
 
                     SetProxy();
                     if (i < pages)
                     {
-                        System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> tabLink = driver.FindElements(By.ClassName("tab-link"));
-                        tabLink.Last().Click();
+                        string temp = driver.Url;
+                        int end = temp.LastIndexOf('&');
+                        temp = temp.Remove(end) + String.Format("&r={0}", (i + 1) * 20 + 1) + temp.Remove(0, end);
+                        driver.Url = temp;
+                        driver.Navigate();
                     }
                     i++;
                 } while (i < pages);//end do while
@@ -350,7 +354,7 @@ namespace Screener
                 driver.Url = url;
                 driver.Navigate();
 
-                var table = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(By.XPath("/html/body/app-root/app-menu/div/mat-sidenav-container/mat-sidenav-content/app-stockcharts/app-results/div[2]/div/div/app-property-display/div/div/div/mat-card/mat-card-content/div/table/tbody")));
+                var table = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("/html/body/app-root/app-menu/div/mat-sidenav-container/mat-sidenav-content/app-stockcharts/app-results/div[2]/div/div/app-property-display/div/div/div/mat-card/mat-card-content/div/table/tbody")));
                 var rows = table.FindElements(By.TagName("tr"));
                 foreach (IWebElement r in rows)
                 {

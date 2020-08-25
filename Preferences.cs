@@ -439,7 +439,7 @@ namespace Screener
         /// </summary>
         /// <param name="sector">The Sector to scrape</param>
         /// <returns>The URL for the specific Sector</returns>
-        public string CreateFinvizUrl(string sector)
+        public string CreateFinvizUrl(string sector, int page = 0)
         {
             StringBuilder url = new StringBuilder().Append(finvizStartUrl);
 
@@ -452,9 +452,8 @@ namespace Screener
                     url.Append("," + finvizMap[kvp.Key][kvp.Value]);
                 }
             }
-
             return url.Append("," + finvizMap["sector"][sector] + finvizEndUrl).ToString();
-        }
+        }//end CreateFinvizUrl
 
         /// <summary>
         /// Returns a bool to tell the program if preferences were loaded or no

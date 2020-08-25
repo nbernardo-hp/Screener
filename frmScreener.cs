@@ -548,7 +548,7 @@ namespace Screener
         {
             try
             {
-                string message = String.Format("A stock screening application used for selecting stocks.\nThe application scrapes two websites, Finviz and ChartMill.\n" +
+                string message = String.Format("A stock screening application used for selecting stocks.\nThe application scrapes three websites; Finviz, ChartMill, and Zacks.\n" +
                     "Then evaluates the stocks to determine if they should be included in the table.\n\nProgrammer: Nicholas Bernardo\nVersion: {0}",
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
                 MessageBox.Show(message);

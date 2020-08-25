@@ -225,7 +225,7 @@ namespace Screener
         {
             /*starts a new instance of Word and checks to verify that the instance is created.  Sets the visibility and animation to false.
              *Creates a new Word document, adjusts the orientation, and creates a new paragraph*/
-            ChangeProgress(0, "Initializing...");
+            ChangeProgress(0, "Initializing...", (map.Count + map.Values.Count));
             Word.Application app = new Word.Application();
             if(app == null)
             {

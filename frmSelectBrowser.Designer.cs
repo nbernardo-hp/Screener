@@ -74,7 +74,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(361, 26);
             this.label1.TabIndex = 3;
-            this.label1.Text = "This application requires either Google Chrome of Mozilla Firefox to operate.\r\nSe" +
+            this.label1.Text = "This application requires either Google Chrome or Mozilla Firefox to operate.\r\nSe" +
     "lect the browser that you have installed to use.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 

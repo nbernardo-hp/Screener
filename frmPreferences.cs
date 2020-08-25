@@ -46,30 +46,43 @@ namespace Screener
 
         private void SetSectorFiltersSet(string sector)
         {
-            var sectorKeys = preferences.Keys.ToList();
-            if (sector == "Any" && chkReplaceAll.Checked)
+            try
             {
-                for(int i = 1; i < sectorKeys.Count; i++)
+                var sectorKeys = preferences.Keys.ToList();
+                if (sector == "Any" && chkReplaceAll.Checked)
                 {
-                    SetSaved(sectorKeys[i], i - 1);
-                }//end for
-            } else if(sector != "Any")
+                    for (int i = 1; i < sectorKeys.Count; i++)
+                    {
+                        SetSaved(sectorKeys[i], i - 1);
+                    }//end for
+                }
+                else if (sector != "Any")
+                {
+                    SetSaved(sector, sectorKeys.IndexOf(sector) - 1);
+                }//end if-else
+            } catch (Exception ex)
             {
-                SetSaved(sector, sectorKeys.IndexOf(sector) - 1);
-            }//end if-else
+                frmScreener.ErrorMessage(ex);
+            }
         }//end SetSectorFiltersSet
 
         private void SetSaved(string sector, int index)
         {
-            var values = preferences[sector].Values.Select(x => x).Where(x => x.Equals("") || x.Equals("..."));
-            var containsBlanks = values.Count() > 0;
-            if (containsBlanks)
+            try
             {
-                saved[index] = false;
-            }
-            else
+                var values = preferences[sector].Values.Select(x => x).Where(x => x.Equals("") || x.Equals("..."));
+                var containsBlanks = values.Count() > 0;
+                if (containsBlanks)
+                {
+                    saved[index] = false;
+                }
+                else
+                {
+                    saved[index] = true;
+                }
+            } catch (Exception ex)
             {
-                saved[index] = true;
+                frmScreener.ErrorMessage(ex);
             }
         }//end SetSaved
 
@@ -78,52 +91,71 @@ namespace Screener
         /// </summary>
         private void SetInitialSelection(string sector)
         {
-            //cmbPE.SelectedItem = (preferences[sector]["pe"] != "" ? preferences[sector]["pe"] : "Any");
-            cmbPrice.SelectedItem = (preferences[sector]["price"] != "" ? preferences[sector]["price"] : "...");
-            cmbAverageVolume.SelectedItem = (preferences[sector]["averageVolume"] != "" ? preferences[sector]["averageVolume"] : "...");
-            //cmbRSI.SelectedItem = (preferences[sector]["rsi"] != "" ? preferences[sector]["rsi"] : "Any");
-            cmbCurrentRatio.SelectedItem = (preferences[sector]["currentRatio"] != "" ? preferences[sector]["currentRatio"] : "...");
-            cmbHigh52W.SelectedItem = (preferences[sector]["high"] != "" ? preferences[sector]["high"] : "...");
-            cmbSMA20.SelectedItem = (preferences[sector]["sma20"] != "" ? preferences[sector]["sma20"] : "...");
-            cmbSMA50.SelectedItem = (preferences[sector]["sma50"] != "" ? preferences[sector]["sma50"] : "...");
-            SetPEOrRSIInitialSelection(cmbPE, chkCustomPE, pnlCustomPE, preferences[sector]["pe"]);
-            SetPEOrRSIInitialSelection(cmbRSI, chkCustomRSI, pnlCustomRSI, preferences[sector]["rsi"]);
-            loadingSector = false;
-            errPreferences.Clear();
+            try
+            {
+                //cmbPE.SelectedItem = (preferences[sector]["pe"] != "" ? preferences[sector]["pe"] : "Any");
+                cmbPrice.SelectedItem = (preferences[sector]["price"] != "" ? preferences[sector]["price"] : "...");
+                cmbAverageVolume.SelectedItem = (preferences[sector]["averageVolume"] != "" ? preferences[sector]["averageVolume"] : "...");
+                //cmbRSI.SelectedItem = (preferences[sector]["rsi"] != "" ? preferences[sector]["rsi"] : "Any");
+                cmbCurrentRatio.SelectedItem = (preferences[sector]["currentRatio"] != "" ? preferences[sector]["currentRatio"] : "...");
+                cmbHigh52W.SelectedItem = (preferences[sector]["high"] != "" ? preferences[sector]["high"] : "...");
+                cmbSMA20.SelectedItem = (preferences[sector]["sma20"] != "" ? preferences[sector]["sma20"] : "...");
+                cmbSMA50.SelectedItem = (preferences[sector]["sma50"] != "" ? preferences[sector]["sma50"] : "...");
+                SetPEOrRSIInitialSelection(cmbPE, chkCustomPE, pnlCustomPE, preferences[sector]["pe"]);
+                SetPEOrRSIInitialSelection(cmbRSI, chkCustomRSI, pnlCustomRSI, preferences[sector]["rsi"]);
+                loadingSector = false;
+                errPreferences.Clear();
+            } catch (Exception ex)
+            {
+                frmScreener.ErrorMessage(ex);
+            }
         }//end SetInitialSelection
 
         private void SetPEOrRSIInitialSelection(ComboBox cmb, CheckBox chk, Panel panel, string pref)
         {
-            if (pref.Contains("/"))
+            try
             {
-                var temp = pref.Split('/');
-                panel.Controls.OfType<NumericUpDown>().Select(x => x).Where(x => x.Name.Contains("Min")).First().Value = int.Parse(temp[0]);
-                panel.Controls.OfType<NumericUpDown>().Select(x => x).Where(x => x.Name.Contains("Max")).First().Value = int.Parse(temp[1]);
-                chk.Checked = true;
-            }
-            else
+                if (pref.Contains("/"))
+                {
+                    var temp = pref.Split('/');
+                    panel.Controls.OfType<NumericUpDown>().Select(x => x).Where(x => x.Name.Contains("Min")).First().Value = int.Parse(temp[0]);
+                    panel.Controls.OfType<NumericUpDown>().Select(x => x).Where(x => x.Name.Contains("Max")).First().Value = int.Parse(temp[1]);
+                    chk.Checked = true;
+                }
+                else
+                {
+                    cmb.SelectedItem = (pref != "" ? pref : "...");
+                    chk.Checked = false;
+                }
+            } catch (Exception ex)
             {
-                cmb.SelectedItem = (pref != "" ? pref : "...");
-                chk.Checked = false;
+                frmScreener.ErrorMessage(ex);
             }
 
         }//end SetPEOrRSIInitialSelection
         private void cmbSector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbSector.SelectedIndex < 0)
+            try
             {
-                errPreferences.SetError(cmbSector, "You must select a valid Sector");
-                return;
-            }
-            loadingSector = true;
-            currentSector = cmbSector.SelectedItem.ToString();
-            SetInitialSelection(currentSector);
-            if(currentSector == "Any")
+                if (cmbSector.SelectedIndex < 0)
+                {
+                    errPreferences.SetError(cmbSector, "You must select a valid Sector");
+                    return;
+                }
+                loadingSector = true;
+                currentSector = cmbSector.SelectedItem.ToString();
+                SetInitialSelection(currentSector);
+                if (currentSector == "Any")
+                {
+                    chkReplaceAll.Enabled = true;
+                }
+                else
+                {
+                    chkReplaceAll.Enabled = false;
+                }
+            } catch (Exception ex)
             {
-                chkReplaceAll.Enabled = true;
-            } else
-            {
-                chkReplaceAll.Enabled = false;
+                frmScreener.ErrorMessage(ex);
             }
         }//end cmbSector_SelectedIndexChanged
 
@@ -183,20 +215,20 @@ namespace Screener
                     }//end RSI if-else
 
                     ComboBoxIndexChanged(cmbPrice, "Price", "price");
-                    ComboBoxIndexChanged(cmbPE, "Current Ratio", "currentRatio");
-                    ComboBoxIndexChanged(cmbPE, "Average Volume", "averageVolume");
-                    ComboBoxIndexChanged(cmbPE, "52 Week High", "high");
-                    ComboBoxIndexChanged(cmbPE, "SMA 20", "sma20");
-                    ComboBoxIndexChanged(cmbPE, "SMA 50", "sma50");
+                    ComboBoxIndexChanged(cmbCurrentRatio, "Current Ratio", "currentRatio");
+                    ComboBoxIndexChanged(cmbAverageVolume, "Average Volume", "averageVolume");
+                    ComboBoxIndexChanged(cmbHigh52W, "52 Week High", "high");
+                    ComboBoxIndexChanged(cmbSMA20, "SMA 20", "sma20");
+                    ComboBoxIndexChanged(cmbSMA50, "SMA 50", "sma50");
 
                     if(CheckAllSaved())
                     {
                         this.Close();
                     }
                 }//end if-else
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end btnSaved_Click
 

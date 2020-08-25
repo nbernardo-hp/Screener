@@ -96,9 +96,9 @@ namespace Screener
                 pdocStocks.DefaultPageSettings.Margins.Right = 10;
                 pdocStocks.DefaultPageSettings.Margins.Top = 10;
                 pdocStocks.DefaultPageSettings.Margins.Bottom = 10;
-            } catch
+            } catch (Exception ex)
             {
-
+                ErrorMessage(ex);
             }
         }//end frmScreener_Load
 
@@ -197,26 +197,33 @@ namespace Screener
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                ErrorMessage(ex);
             }
         }//end tsmSave_Click
 
         private void OfficeDocumentProgressForm(SaveDocument doc, string extension)
         {
-            frmOfficeDocumentProgress frm;
-            if(extension == "xlsx")
+            try
             {
-                frm = new frmOfficeDocumentProgress(doc, stocks);
-            } else
-            {
-                int rows = stocks.Keys.Count() + 1;
-                foreach (var kvp in stocks.Values)
+                frmOfficeDocumentProgress frm;
+                if (extension == "xlsx")
                 {
-                    rows += kvp.Values.Count();
+                    frm = new frmOfficeDocumentProgress(doc, stocks);
                 }
-                frm = new frmOfficeDocumentProgress(doc, stocks, rows);
-            }//end if-else
-            frm.ShowDialog();
+                else
+                {
+                    int rows = stocks.Keys.Count() + 1;
+                    foreach (var kvp in stocks.Values)
+                    {
+                        rows += kvp.Values.Count();
+                    }
+                    frm = new frmOfficeDocumentProgress(doc, stocks, rows);
+                }//end if-else
+                frm.ShowDialog();
+            } catch (Exception ex)
+            {
+                ErrorMessage(ex);
+            }
         }//end OfficeDocumentProgressForm
         private void tsmPrint_Click(object sender, EventArgs e)
         {
@@ -233,11 +240,11 @@ namespace Screener
                     {
                         pdocStocks.Print();
                     }
-                    //TODO call the print event for the document
                 }//end if
-            } catch
+            }
+            catch (Exception ex)
             {
-
+                ErrorMessage(ex);
             }//end try-catch
         }//end tsmPrint_Click
 
@@ -262,16 +269,22 @@ namespace Screener
                 }//end if
             } catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                ErrorMessage(ex);
             }
         }//end LoadPreferencesForm
 
         private void PopulateListView()
         {
-            foreach(var sector in stocks.Keys)
+            try
             {
-                AddListViewItem(SortSectorDictionary(stocks[sector]), sector);
-            }//end foreach
+                foreach (var sector in stocks.Keys)
+                {
+                    AddListViewItem(SortSectorDictionary(stocks[sector]), sector);
+                }//end foreach
+            } catch (Exception ex)
+            {
+                ErrorMessage(ex);
+            }//end try-catch
         }//end PopulateListView
 
         /// <summary>
@@ -280,60 +293,75 @@ namespace Screener
         /// <param name="sector">The sorted Sector kvp</param>
         private void AddListViewItem(IOrderedEnumerable<Stock> stocks, string sector)
         {
-            int i = 0;
-            foreach (var stock in stocks)
+            try
             {
-                ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), (stock.High52WValue != Double.MinValue ? stock.High52WValue.ToString() + "%" : "NA"), (stock.RecomValue != Double.MinValue ? stock.RecomValue.ToString() : "NA"), (stock.CurrentRatioValue != Double.MinValue ? stock.CurrentRatioValue.ToString() : "NA"), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue, stock.TotalScoreValue.ToString() });
-                if (i % 2 != 0)
+                int i = 0;
+                foreach (var stock in stocks)
                 {
-                    row.BackColor = SystemColors.Control;
-                }
-                if(stock.TotalScoreValue >= 18)
-                {
-                    row.UseItemStyleForSubItems = false;
-                    if(i%2 != 0)
+                    ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue, stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(), (stock.High52WValue != Double.MinValue ? stock.High52WValue.ToString() + "%" : "NA"), (stock.RecomValue != Double.MinValue ? stock.RecomValue.ToString() : "NA"), (stock.CurrentRatioValue != Double.MinValue ? stock.CurrentRatioValue.ToString() : "NA"), (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue, stock.TotalScoreValue.ToString() });
+                    if (i % 2 != 0)
                     {
-                        row.SubItems[0].BackColor = SystemColors.Control;
-                        row.SubItems[1].BackColor = SystemColors.Control;
-                        row.SubItems[10].BackColor = SystemColors.Control;
+                        row.BackColor = SystemColors.Control;
                     }
-                    var colors = stock.GetFormattingColors();
-                    int j = 2;
-                    foreach(var c in colors)
+                    if (stock.TotalScoreValue >= 18)
                     {
-                        row.SubItems[j].BackColor = c;
-                        j++;
-                    }//end foreach
-                }//end if
-                lstvStocks.Groups[sector].Items.Add(row);
-                lstvStocks.Items.Add(row);
-                i++;
-            }//end foreach
+                        row.UseItemStyleForSubItems = false;
+                        if (i % 2 != 0)
+                        {
+                            row.SubItems[0].BackColor = SystemColors.Control;
+                            row.SubItems[1].BackColor = SystemColors.Control;
+                            row.SubItems[10].BackColor = SystemColors.Control;
+                        }
+                        var colors = stock.GetFormattingColors();
+                        int j = 2;
+                        foreach (var c in colors)
+                        {
+                            row.SubItems[j].BackColor = c;
+                            j++;
+                        }//end foreach
+                    }//end if
+                    lstvStocks.Groups[sector].Items.Add(row);
+                    lstvStocks.Items.Add(row);
+                    i++;
+                }//end foreach
+            } catch (Exception ex)
+            {
+                ErrorMessage(ex);
+            }
         }//end AddListViewItem
 
         private void LoadFinvizWithStocks()
         {
-            List<string> symbols = new List<string>();
-            foreach(var key in stocks.Keys)
+            try
             {
-                foreach(var stock in stocks[key].Keys)
+                List<string> symbols = new List<string>();
+                foreach (var key in stocks.Keys)
                 {
-                    symbols.Add(stock);
-                }//end nested foreach
-            }//end foreach
-            var url = preferences.GetFinvizUrlAfterScraping(symbols.AsEnumerable());
-            OpenBrowserToUrl(url);
+                    foreach (var stock in stocks[key].Keys)
+                    {
+                        symbols.Add(stock);
+                    }//end nested foreach
+                }//end foreach
+                var url = preferences.GetFinvizUrlAfterScraping(symbols.AsEnumerable());
+                OpenBrowserToUrl(url);
+            } catch (Exception ex)
+            {
+                ErrorMessage(ex);
+            }
         }//end LoadFinvizWithStocks
 
         private void pdocStocks_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
         {
             try
             {
-                Font font = new Font("Arial", 10, FontStyle.Regular, GraphicsUnit.Pixel);
-                int headerHeight = 69;
+                Font font = new Font("Arial", 11, FontStyle.Regular, GraphicsUnit.Pixel);
+                StringFormat format = new StringFormat();
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
+                int headerHeight = 65;
                 int bodyCellHeight = 20;
-                int[] cellWidths = { 44, 196, 66, 73, 85, 94, 85, 68, 89, 84, 78 };
-                int fullRowWidth = 44 + 196 + 63 + 73 + 85 + 94 + 85 + 68 + 89 + 84 + 78;
+                int[] cellWidths = { 43, 275, 79, 79, 79, 107, 80, 78, 86, 76, 81 };
+                int fullRowWidth = 43 + 275 + 79 + 79 + 79 + 107 + 80 + 78 + 86 + 76 + 81;
                 int pages = 0;
                 int x = e.MarginBounds.Left;
                 int y = e.MarginBounds.Top;
@@ -346,7 +374,7 @@ namespace Screener
                     "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red",
                     "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red",
                     "Earnings Date\n*See end of\ndocument",
-                    "Zacks Rank\n Stong Buy = Green\nBuy = Blue\nHold = Yellow\nSell = Orange\nStrong Sell = Red",
+                    "Zacks Rank\n**See end of\ndocument",
                     "Total\n**See end of\ndocument" };
 
                 for (int j = 0; j < 11; j++)
@@ -364,7 +392,8 @@ namespace Screener
                             float w = stringSize.Width;
                             float height = stringSize.Height;
                             e.Graphics.DrawRectangle(Pens.Black, new Rectangle(x, y, cellWidths[j], headerHeight));
-                            e.Graphics.DrawString(headerText[j - 2], font, Brushes.Black, x + (cellWidths[j] / 2) - (w / 2), y + (height / 2));
+                            e.Graphics.DrawString(headerText[j - 2], font, Brushes.Black, new RectangleF(x, y, cellWidths[j], headerHeight), format);
+                            //e.Graphics.DrawString(headerText[j - 2], font, Brushes.Black, x + (cellWidths[j] / 2) - (w / 2), y + (height / 2));
                             x += cellWidths[j];
                         }
                     }
@@ -386,6 +415,7 @@ namespace Screener
                     float stringWidth = 0;
                     float stringHeight = 0;
                     int currentStock = 0;
+                    format.Alignment = StringAlignment.Far;
 
                     if (y < e.MarginBounds.Bottom && y + bodyCellHeight < e.MarginBounds.Bottom)
                     {
@@ -394,7 +424,7 @@ namespace Screener
                         e.Graphics.FillRectangle(Brushes.Silver, x, y, fullRowWidth, bodyCellHeight);
                         e.Graphics.DrawRectangle(Pens.Black, x, y, cellWidths[0] + cellWidths[1], bodyCellHeight);
                         e.Graphics.DrawRectangle(Pens.Black, x, y, fullRowWidth, bodyCellHeight);
-                        e.Graphics.DrawString(header, font, Brushes.Black, (x + cellWidths[0] + cellWidths[1] - 10) - getStringDimension('w', header, font, e), y + ((bodyCellHeight / 2) - (getStringDimension('h', header, font, e) / 2)));
+                        e.Graphics.DrawString(header, font, Brushes.Black, new RectangleF(x, y, cellWidths[0] + cellWidths[1], bodyCellHeight), format);
                         y += bodyCellHeight;
                     }
                     else
@@ -407,6 +437,7 @@ namespace Screener
                     var sorted = frmScreener.SortSectorDictionary(stocks[sectors.ElementAt(currentSector)]);
                     while (currentStock < sorted.Count())
                     {
+                        format.Alignment = StringAlignment.Center;
                         x = e.MarginBounds.Left;
                         cell = 0;
 
@@ -437,7 +468,7 @@ namespace Screener
                                 {
                                     val = (val != Double.MinValue.ToString() ? val : "NA");
                                 }
-                                e.Graphics.DrawString(val, font, Brushes.Black, (x + (cellWidths[cell] / 2)) - (stringWidth / 2), (y + halfHeight) - (stringHeight / 2));
+                                e.Graphics.DrawString(val, font, Brushes.Black, new RectangleF(x, y, cellWidths[cell], bodyCellHeight), format);
 
                                 x += cellWidths[cell];
                                 cell++;
@@ -461,7 +492,7 @@ namespace Screener
                 string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.", "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.", "***Total score is calculated using a weight for each color.", "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2." };
                 while(i < scoreExplanations.Length)
                 {
-                    if(y < e.MarginBounds.Bottom)
+                    if(y + (int)getStringDimension('h', scoreExplanations[i],  font, e) < e.MarginBounds.Bottom)
                     {
                         float height = getStringDimension('h', scoreExplanations[i], font, e);
                         e.Graphics.DrawString(scoreExplanations[i], font, Brushes.Black, x, y);
@@ -475,9 +506,9 @@ namespace Screener
                     }//end if-else
                 }//end for
             }
-            catch
+            catch (Exception ex)
             {
-
+                ErrorMessage(ex);
             }//end try-catch
         }//end pdocStocks_PrintPage
 
@@ -507,9 +538,9 @@ namespace Screener
             {
                 pprevStocks.ShowDialog();
                 currentSector = 0;//reset the sector flag for the PrintDocument object so the print document can be generated again
-            } catch
+            } catch (Exception ex)
             {
-
+                ErrorMessage(ex);
             }
         }//end tsmPrintPreview_Click
 
@@ -521,9 +552,10 @@ namespace Screener
                     "Then evaluates the stocks to determine if they should be included in the table.\n\nProgrammer: Nicholas Bernardo\nVersion: {0}",
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
                 MessageBox.Show(message);
-            } catch
+            }
+            catch (Exception ex)
             {
-
+                ErrorMessage(ex);
             }
         }//end tsmAbout_Click
 
@@ -532,9 +564,10 @@ namespace Screener
             try
             {
                 new frmAttribution().ShowDialog();
-            } catch
+            }
+            catch (Exception ex)
             {
-
+                ErrorMessage(ex);
             }
         }//end tsmAttribution_Click
     }//end class

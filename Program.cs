@@ -32,12 +32,15 @@ namespace Screener
             {
                 frmSplash splash = new frmSplash(preferences);
                 Application.Run(splash);
-                frmScreener screener = new frmScreener(splash.GetStocks(), preferences);
-                Application.Run(screener);
+                if(!splash.CancelledValue)
+                {
+                    frmScreener screener = new frmScreener(splash.GetStocks(), preferences);
+                    Application.Run(screener);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }//end try-catch
         }//end LoadForms
 
@@ -70,9 +73,9 @@ namespace Screener
                 }//end if-else
 
                 Environment.Exit(0);
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end StartProgram
     }//end class Program

@@ -110,15 +110,19 @@ namespace Screener
             }//end try-catch
         }//end bgwSaveDocument_DoWork
 
-        private void doc_OnProgressUpdate(object[] change)
+        private void doc_OnProgressUpdate(int change, string update, int max = 0)
         {
             base.Invoke((Action)delegate
             {
+                if(max != 0)
+                {
+                    pgbProgress.Maximum = max;
+                }
                 if (pgbProgress.Value < pgbProgress.Maximum)
                 {
-                    pgbProgress.Value += int.Parse(change[0].ToString());
-                    lblStatus.Text = change[1].ToString();
-                    lblProgress.Text = String.Format("{0}%", pgbProgress.Value);
+                    pgbProgress.Value += change;
+                    lblStatus.Text = update;
+                    lblProgress.Text = String.Format("{0:0.0}%", ((double)pgbProgress.Value / (double)pgbProgress.Maximum) * 100);
                     if (pgbProgress.Value == 10 || pgbProgress.Value == 100)
                     {
                         lblProgress.Location = new Point(lblProgress.Location.X - 7, lblProgress.Location.Y);

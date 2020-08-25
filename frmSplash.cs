@@ -13,6 +13,7 @@ namespace Screener
     {
         private Preferences splashPref;
         private WebScraper scraper;
+        public static bool cancelled = false;
         private bool mouseDown = false;
         private Point lastLocation;
         private Point formLocation;
@@ -24,9 +25,9 @@ namespace Screener
             {
                 InitializeComponent();
                 this.Icon = Properties.Resources.screenerIcon;
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end default constructor
 
@@ -37,12 +38,18 @@ namespace Screener
                 InitializeComponent();
                 this.Icon = Properties.Resources.screenerIcon;
                 splashPref = pref;
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end one argument constructor
 
+        public bool CancelledValue
+        {
+            get { return cancelled; }
+            set { cancelled = value; }
+        }
+        public static bool GetCancelled() { return cancelled; }
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
         private void frmSplash_Load(object sender, EventArgs e)
         {
@@ -54,9 +61,9 @@ namespace Screener
                 {
                     StartWork();
                 }//end if
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end frmSplash_Load
 
@@ -72,9 +79,9 @@ namespace Screener
                         splashPref.SetSectorMap(frmPref.GetPreferences());
                     }//end 2x nested if
                 }//end if
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end btnSettings_Click
 
@@ -86,9 +93,9 @@ namespace Screener
                 {
                     StartWork();
                 }
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end btnScrape_Click
 
@@ -98,15 +105,16 @@ namespace Screener
             {
                 if (formLocation == this.Location)
                 {
+                    CancelledValue = true;
                     bgwScrape.CancelAsync();
                 }
                 if (bgwScrape.IsBusy == false)
                 {
-                    Application.Exit();
+                    Environment.Exit(0);
                 }
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end btnCancel_Click
 
@@ -114,27 +122,33 @@ namespace Screener
         {
             try
             {
-                foreach (var u in urls)
+                if(bgwScrape.CancellationPending == true)
                 {
-                    Console.WriteLine(u);
-                }
-
-                if(!splashPref.GetLoaded())
+                    e.Cancel = true;
+                } else
                 {
-                    GetDriver(splashPref.BrowserValue);
-                }
+                    foreach (var u in urls)
+                    {
+                        Console.WriteLine(u);
+                    }
 
-                if (scraper == null)
-                {
-                    scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
-                    scraper.OnProgressUpdate += scraper_OnProgressUpdate;
-                }
+                    if (!splashPref.GetLoaded())
+                    {
+                        GetDriver(splashPref.BrowserValue);
+                    }
 
-                scraper.Start(urls);
-                scraper.ParseInformation();
-            } catch
+                    if (scraper == null)
+                    {
+                        scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
+                        scraper.OnProgressUpdate += scraper_OnProgressUpdate;
+                    }
+
+                    scraper.Start(urls);
+                    scraper.ParseInformation();
+                }//end if-else
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end bgwScrape_DoWork
 
@@ -142,18 +156,24 @@ namespace Screener
         {
             try
             {
-                stocks = scraper.GetStocks();
-                foreach (var sector in stocks.Values)
+                if(bgwScrape.CancellationPending)
                 {
-                    foreach (var stock in sector.Values)
+                    Environment.Exit(0);
+                } else
+                {
+                    stocks = scraper.GetStocks();
+                    foreach (var sector in stocks.Values)
                     {
-                        stock.CalculateTotalScore();
-                    }//end nested foreach
-                }//end foreach
-                this.Close();
-            } catch
+                        foreach (var stock in sector.Values)
+                        {
+                            stock.CalculateTotalScore();
+                        }//end nested foreach
+                    }//end foreach
+                    this.Close();
+                }//end if-else
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end bgwScrape_RunWorkerCompleted
 
@@ -163,9 +183,9 @@ namespace Screener
             {
                 mouseDown = true;
                 lastLocation = e.Location;
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end frmSplash_MouseDown
 
@@ -179,9 +199,9 @@ namespace Screener
                         (this.Location.X - lastLocation.X) + e.X, (this.Location.Y - lastLocation.Y) + e.Y);
                     this.Update();
                 }
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end frmSplash_MouseMove
 
@@ -191,9 +211,9 @@ namespace Screener
             {
                 mouseDown = false;
                 formLocation = this.Location;
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }
         }//end frmSplash_MouseUp
 
@@ -204,7 +224,7 @@ namespace Screener
                 pgbProgress.Maximum += change;
                 if(pgbProgress.Value < pgbProgress.Maximum)
                 {
-                    pgbProgress.Value = (update != "Finalizing..." ? pgbProgress.Value + val : pgbProgress.Maximum);
+                    pgbProgress.Value = (update != "Finalizing..." && update != "Cancelling..." ? pgbProgress.Value + val : pgbProgress.Maximum);
                     lblStatus.Text = update;
                     lblProgress.Text = String.Format("{0:0.0}%", (update != "Finalizing..." ? ((double)pgbProgress.Value / (double)pgbProgress.Maximum) * 100 : 100));
                     if (pgbProgress.Value == 10 || pgbProgress.Value == 100)
@@ -239,9 +259,9 @@ namespace Screener
 
                 ZipFile.ExtractToDirectory(Path.Combine(path, file), path);
                 //System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
-            } catch(Exception)
+            } catch(Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }//end try-catch
         }//end GetDriver
 
@@ -264,9 +284,9 @@ namespace Screener
                 lblStatus.Text = "Initializing...";
                 urls = splashPref.GetFinvizUrls();
                 bgwScrape.RunWorkerAsync();
-            } catch
+            } catch (Exception ex)
             {
-
+                frmScreener.ErrorMessage(ex);
             }//end try-catch
         }//end StartWork
 
@@ -284,9 +304,9 @@ namespace Screener
                         SetControlMouseEvents(control.Controls);
                     }
                 }//end foreach
-            } catch
+            } catch (Exception ex)
             {
-                
+                frmScreener.ErrorMessage(ex);
             }
         }//end SetMoustControlEvents
     }//end frmSplash

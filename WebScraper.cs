@@ -53,26 +53,38 @@ namespace Screener
 
         public void Start(Stack<string> urls)
         {
-            this.urls = urls;
-            GetProxies();
-            ScrapeFinviz();
-            foreach (var f in finvizRows)
+            bool stop = false;
+            while(!stop)
             {
-                Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
-            }
+                this.urls = urls;
+                GetProxies();
+                ScrapeFinviz();
+                /*foreach (var f in finvizRows)
+                {
+                    Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
+                }*/
 
-            if (symbols != null && symbols.Count > 0)
-            {
+                if (symbols != null && symbols.Count > 0 && !frmSplash.GetCancelled())
+                {
 
-                ScrapeChartMill();
-            }//end if
+                    ScrapeChartMill();
+                }//end if
 
-            if(chartMillRows != null && chartMillRows.Count > 0)
-            {
-                ScrapeZacks();
-            }//end if
+                if (chartMillRows != null && chartMillRows.Count > 0 && !frmSplash.GetCancelled())
+                {
+                    ScrapeZacks();
+                }//end if
 
-            ChangeProgress(1, "Finalizing...");
+                if (frmSplash.GetCancelled())
+                {
+                    ChangeProgress(1, "Cancelling...");
+                } else
+                {
+                    ChangeProgress(1, "Finalizing...");
+                    stop = true;
+                }
+            }//end while
+            
             driver.Close();
             driver.Dispose();
             driver.Quit();
@@ -94,7 +106,7 @@ namespace Screener
                 ["Technology"] = new Dictionary<string, Stock>(),
                 ["Utilities"] = new Dictionary<string, Stock>()
             };
-            for (int i = 0; i < chartMillRows.Count; i++)
+            for (int i = 0; i < chartMillRows.Count && !frmSplash.GetCancelled(); i++)
             {
                 string symbol = chartMillRows[i][0].ToString();
                 ChangeProgress(1, String.Format("Parsing Stock information - {0}  {1}/{2}", symbol, i + 1, finvizRows.Count));
@@ -143,7 +155,7 @@ namespace Screener
             /*Loop through each element in chartMillRows and determine if the Fund value is >= 2.5.  If not remove the row
              *from the List.  If it is increment the counter to move to the next Stock object and add the symbol to a List*/
             int i = 0;
-            while(i < chartMillRows.Count)
+            while(i < chartMillRows.Count && !frmSplash.GetCancelled())
             {
                 if(double.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5)
                 {
@@ -163,7 +175,7 @@ namespace Screener
         {
             int[] peIndexes = GetCustomIndexes(pe);
             int[] rsiIndexes = GetCustomIndexes(rsi);
-            for (int i = 0; i < sectorHeaders.Length; i++)
+            for (int i = 0; i < sectorHeaders.Length && !frmSplash.GetCancelled(); i++)
             {
                 //start at i+1 because GetCustomIndexes will include the Any Sector as an option at index 0.  Always want to exclude
                 if (peIndexes.Contains(i + 1) || rsiIndexes.Contains(i + 1))
@@ -185,12 +197,12 @@ namespace Screener
                             isValid[1] = (check[j][3] != "-" ? CheckPEOrRSI(double.Parse(check[j][6]), rsi[i + 1]) : false);
                         }//end if
 
-                        Console.WriteLine(String.Format("pe filter={0}  rsi filter={1} - pe={2} rsi={3} - isValid[0]={4} isValid[1]={5}", pe[i + 1], rsi[i + 1], check[j][3], check[j][6], isValid[0], isValid[1]));
+                        //Console.WriteLine(String.Format("pe filter={0}  rsi filter={1} - pe={2} rsi={3} - isValid[0]={4} isValid[1]={5}", pe[i + 1], rsi[i + 1], check[j][3], check[j][6], isValid[0], isValid[1]));
                         //Remove the Stock from finvizRows if either of comes back false
                         if (!isValid[0] || !isValid[1])
                         {
                             finvizRows.Remove(finvizRows.Find(s => s[0].Equals(check[j][0])));
-                            Console.WriteLine(check[j][0] + " removed");
+                            //Console.WriteLine(check[j][0] + " removed");
                         }
                     }//end nested for
                 }//end if
@@ -227,7 +239,7 @@ namespace Screener
 
             driver.Url = "https://free-proxy-list.net/";
             driver.Navigate();
-            for (int p = 0; p < 10; p++)
+            for (int p = 0; p < 10 && !frmSplash.GetCancelled(); p++)
             {
                 System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> rows = driver.FindElements(By.CssSelector("tr[role=\"row\"]"));
 
@@ -239,7 +251,10 @@ namespace Screener
                 }//end for
                 driver.FindElement(By.CssSelector("#proxylisttable_next > a:nth-child(1)")).Click();
             }
-            SetProxy();
+            if(!frmSplash.GetCancelled())
+            {
+                SetProxy();
+            }
         }//end GetProxies()
 
         private void SetProxy()
@@ -260,42 +275,65 @@ namespace Screener
         {
             int current = 0;
             int sect = 0;
-            while (urls.Count > 0)
+            while (urls.Count > 0 && !frmSplash.GetCancelled())
             {
                 ChangeProgress(1, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
+                bool paginationFound = false;
+                int currentStock = 1;
                 int i = 0;
                 int pages = 0;
                 driver.Url = urls.Pop();
                 driver.Navigate();
-                var pagination = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementExists(By.ClassName("screener_pagination")));
-                System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> sectorPages = driver.FindElements(By.ClassName("screener-pages"));
 
-                if (sectorPages != null && sectorPages.Count > 0)
+                string[] numStocks = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementExists(By.ClassName("count-text"))).Text.Split(' ');
+                if(int.Parse(numStocks[1]) > 20)
                 {
-                    pages = int.Parse(sectorPages.Last().Text);
-                }//end if
-
+                    while (timeOuts < 5 && !paginationFound && !frmSplash.GetCancelled())
+                    {
+                        try
+                        {
+                            var pagination = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementExists(By.ClassName("screener_pagination")));
+                            paginationFound = true;
+                            System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> sectorPages = driver.FindElements(By.ClassName("screener-pages"));
+                            if (sectorPages != null && sectorPages.Count > 0)
+                            {
+                                pages = int.Parse(sectorPages.Last().Text);
+                            }//end if
+                        }
+                        catch (TimeoutException)
+                        {
+                            timeOuts++;
+                            Console.WriteLine("In Finviz catch.  timeOuts = " + timeOuts.ToString());
+                            if (timeOuts > 4)
+                            {
+                                frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
+                                Environment.Exit(1);
+                            }
+                        }//end try-catch
+                    }//end while
+                }
                 //TakeScreenshot().Save(Path.Combine("C:\\Users\\N\\Pictures\\Run3", String.Format("{0}Page{1}.png", sectorHeaders[sect], i + 1)), ImageFormat.Png);
-
+                ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]), int.Parse(numStocks[1]));
                 do
                 {
                     try
                     {
-                        Console.WriteLine("In try");
+                        //Console.WriteLine("In try");
                         ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
                         var table = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("#screener-content > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")));
                         var rows = table.FindElements(By.TagName("tr"));
-                        for (int j = 1; j < rows.Count; j++)
+                        for (int j = 1; j < rows.Count && !frmSplash.GetCancelled(); j++)
                         {
                             var split = rows.ElementAt(j).Text.Split(new char[] { '\r', '\n' });
                             var temp = from s in split
                                        where s != ""
                                        select s;
-                            ChangeProgress(1, String.Format("Scraping Finviz - {0} - {1} {2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j + 1, rows.Count - 1));
+                            ChangeProgress(1, String.Format("Scraping Finviz - {0} - {1} {2}/{3}", sectorHeaders[sect], temp.ElementAt(0), currentStock, numStocks[1]));
                             finvizRows.Add(temp.ToArray());
+                            currentStock++;
                         }//end for
 
-                        ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]), finvizRows.Count - current);
+                        ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
                         current = finvizRows.Count;
 
                         /*if (IsElementPresent(By.ClassName("modal-elite-ad_content")))
@@ -323,7 +361,7 @@ namespace Screener
                             Environment.Exit(1);
                         }
                     }//end try-catch
-                } while (i < pages);//end do while
+                } while (i < pages && !frmSplash.GetCancelled());//end do while
                 sect++;
             }//end while
             FilterFinvizStocks();
@@ -352,11 +390,12 @@ namespace Screener
             int numSymbols = 20;
             int currentStock = 0;
             int symbolsCount = symbols.Count;
-            for (int i = 0; i < symbolsCount; i += numSymbols)
+            ChangeProgress(0, "Loading ChartMill page...", finvizRows.Count);
+            for (int i = 0; i < symbolsCount && !frmSplash.GetCancelled(); i += numSymbols)
             {
                 try
                 {
-                    Console.WriteLine("In ChartMill try");
+                    //Console.WriteLine("In ChartMill try");
                     ChangeProgress(0, "Loading ChartMill page...");
                     if (numSymbols > symbolsCount)
                     {
@@ -393,7 +432,7 @@ namespace Screener
                             double halfCount = (half != null ? (half.Count * 0.5) : 0);
                             chartMillRows[currentStock][k] = fullCount + halfCount;
                         }//end nested for
-                        Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
+                        //Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
                         currentStock++;
                     }
                     if (rows != null && rows.Count == 3)
@@ -431,9 +470,9 @@ namespace Screener
 
         private void ScrapeZacks()
         {
-            Console.WriteLine("In Zacks try");
+            //Console.WriteLine("In Zacks try");
             ChangeProgress(0, "Loading Zacks...", chartMillRows.Count);
-            for(int i = 0; i < symbols.Count; i++)
+            for(int i = 0; i < symbols.Count && !frmSplash.GetCancelled(); i++)
             {
                 try
                 {
@@ -454,10 +493,6 @@ namespace Screener
                     }
                 }//end try-catch
             }//end for
-            foreach (var s in symbols)
-            {
-                
-            }//end foreach
         }//end ScrapeZacks
 
         private Bitmap TakeScreenshot()

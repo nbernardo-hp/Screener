@@ -12,7 +12,7 @@ namespace Screener
 {
     public class SaveDocument
     {
-        public delegate void ProgressUpdate(object[] update);
+        public delegate void ProgressUpdate(int change, string update, int max = 0);
         public event ProgressUpdate OnProgressUpdate;
         string filePath;
         string fileName;
@@ -53,27 +53,27 @@ namespace Screener
             ChangeProgress(1, "Writing header rows...");
             Excel.Range formatRange = GetRange(worksheet, 1, 1, 1, 10);
             formatRange.EntireRow.RowHeight = 51.75;
-            SetColumnWidth(ref worksheet, 1, 1, 1, 1, 5.57);
-            SetColumnWidth(ref worksheet, 1, 2, 1, 2, 27.29);
+            SetColumnWidth(ref worksheet, 1, 1, 1, 1, 6.14);
+            SetColumnWidth(ref worksheet, 1, 2, 1, 2, 36.71);
             MergeCells(ref worksheet, 1, 1, 1, 2);
             worksheet.Cells[1, 3] = GetHeaderText(3);
-            SetColumnWidth(ref worksheet, 1, 3, 1, 3, 8.29);
+            SetColumnWidth(ref worksheet, 1, 3, 1, 3, 11.29);
             worksheet.Cells[1, 4] = GetHeaderText(4);
-            SetColumnWidth(ref worksheet, 1, 4, 1, 4, 9.57);
+            SetColumnWidth(ref worksheet, 1, 4, 1, 4, 11.29);
             worksheet.Cells[1, 5] = GetHeaderText(5);
-            SetColumnWidth(ref worksheet, 1, 5, 1, 5, 11.43);
-            worksheet.Cells[1, 5] = GetHeaderText(6);
-            SetColumnWidth(ref worksheet, 1, 6, 1, 6, 12.71);
-            worksheet.Cells[1, 6] = GetHeaderText(7);
-            SetColumnWidth(ref worksheet, 1, 7, 1, 7, 11.43);
-            worksheet.Cells[1, 7] = GetHeaderText(8);
-            SetColumnWidth(ref worksheet, 1, 8, 1, 8, 9.00);
-            worksheet.Cells[1, 8] = GetHeaderText(9);
-            SetColumnWidth(ref worksheet, 1, 9, 1, 9, 12.00);
-            worksheet.Cells[1, 9] = GetHeaderText(10);
-            SetColumnWidth(ref worksheet, 1, 10, 1, 10, 11.29);
-            worksheet.Cells[1, 10] = GetHeaderText(11);
-            SetColumnWidth(ref worksheet, 1, 11, 1, 11, 10.43);
+            SetColumnWidth(ref worksheet, 1, 5, 1, 5, 12.14);
+            worksheet.Cells[1, 6] = GetHeaderText(6);
+            SetColumnWidth(ref worksheet, 1, 6, 1, 6, 16.57);
+            worksheet.Cells[1, 7] = GetHeaderText(7);
+            SetColumnWidth(ref worksheet, 1, 7, 1, 7, 14.14);
+            worksheet.Cells[1, 8] = GetHeaderText(8);
+            SetColumnWidth(ref worksheet, 1, 8, 1, 8, 11.14);
+            worksheet.Cells[1, 9] = GetHeaderText(9);
+            SetColumnWidth(ref worksheet, 1, 9, 1, 9, 12.71);
+            worksheet.Cells[1, 10] = GetHeaderText(10);
+            SetColumnWidth(ref worksheet, 1, 10, 1, 10, 11.71);
+            worksheet.Cells[1, 11] = GetHeaderText(11);
+            SetColumnWidth(ref worksheet, 1, 11, 1, 11, 12.86);
 
             //formatRange = GetRange(worksheet, 2, 7, 2, 8);
             //formatRange.EntireColumn.NumberFormat = "#.#";
@@ -323,15 +323,13 @@ namespace Screener
             xml.SaveStocks(stocks, filePath, fileName);
         }//end SaveXmlDocument
 
-        private object[] ChangeProgress(int val, string update, int max = 0)
-        {
-            object[] change = { val, update, max };
-            if (OnProgressUpdate != null)
+        private int ChangeProgress(int val, string update, int max = 0)
+        {            if (OnProgressUpdate != null)
             {
-                OnProgressUpdate(change);
+                OnProgressUpdate(val, update, max);
             }//end if
 
-            return change;
+            return val;
         }//end changeProgress
 
         private void MergeCells(ref Table table, int row1, int cell1, int row2, int cell2)
@@ -349,17 +347,17 @@ namespace Screener
             switch(col)
             {
                 case 3:
-                    return "CM Fund\n7-10 = Green\n4-6 = +2\n0-3 = -2";
+                    return "CM Fund\n7-10 = Green\n4-6 = Yellow\n0-3 = Red";
                 case 4:
-                    return "CM Growth\n7-10 = Green\n4-6 = +2\n0-3 = -2";
+                    return "CM Growth\n7-10 = Green\n4-6 = Yellow\n0-3 = Red";
                 case 5:
-                    return "CM Valuation\n5-10 = Green\n3-4 = +2\n0-2 = -2";
+                    return "CM Valuation\n5-10 = Green\n3-4 = Yellow\n0-2 = Red";
                 case 6:
-                    return "52W High\n-90 to -10 = Green\n-29 to -10 = +2\n-9 to + = -2";
+                    return "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red";
                 case 7:
-                    return "Finviz Recom\n1-2 = Green\n2.1-3.0 = +2\n3.1-5 = -2";
+                    return "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red";
                 case 8:
-                    return "Curr_Ratio\n>3.0 = Green\n1-3 = +2\n0-.9 = -2";
+                    return "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red";
                 case 9:
                     return "Earnings Date\n*See end of\ndocument";
                 case 10:
@@ -394,6 +392,11 @@ namespace Screener
                     return "";
             }
         }//end GetEarningsDateText
+
+        private int GetStockCount(Dictionary<string, Dictionary<string, string>> map)
+        {
+            return (from m in map.Values select m.Values).Count() + 12;
+        }
 
         /// <summary>
         /// Returns the cell range from the worksheet

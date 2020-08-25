@@ -31,6 +31,10 @@ namespace Screener
             preferences = pref;
         }//end two argument constructor
 
+        public static void ErrorMessage(Exception ex)
+        {
+            MessageBox.Show(String.Format("Error!  {0}", ex.Message), ex.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }//end ErrorMessage
         public static void OpenBrowserToUrl(string url)
         {
             try

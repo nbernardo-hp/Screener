@@ -20,6 +20,7 @@ namespace Screener
         private Dictionary<string, Dictionary<string, Stock>> stocks;
         private dynamic driver;
         private dynamic options;
+        private int timeOuts = 0;
         private List<object[]> chartMillRows = new List<object[]>();
         private List<string[]> finvizRows = new List<string[]>();
         private List<string[]> zacksText = new List<string[]>();
@@ -278,37 +279,50 @@ namespace Screener
 
                 do
                 {
-                    ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
-                    var table = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("#screener-content > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")));
-                    var rows = table.FindElements(By.TagName("tr"));
-                    for (int j = 1; j < rows.Count; j++)
+                    try
                     {
-                        var split = rows.ElementAt(j).Text.Split(new char[] { '\r', '\n' });
-                        var temp = from s in split
-                                   where s != ""
-                                   select s;
-                        ChangeProgress(1, String.Format("Scraping Finviz - {0} - {1} {2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j + 1, rows.Count - 1));
-                        finvizRows.Add(temp.ToArray());
-                    }//end for
+                        Console.WriteLine("In try");
+                        ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]));
+                        var table = new WebDriverWait(driver, TimeSpan.FromSeconds(30)).Until(ExpectedConditions.ElementIsVisible(By.CssSelector("#screener-content > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")));
+                        var rows = table.FindElements(By.TagName("tr"));
+                        for (int j = 1; j < rows.Count; j++)
+                        {
+                            var split = rows.ElementAt(j).Text.Split(new char[] { '\r', '\n' });
+                            var temp = from s in split
+                                       where s != ""
+                                       select s;
+                            ChangeProgress(1, String.Format("Scraping Finviz - {0} - {1} {2}/{3}", sectorHeaders[sect], temp.ElementAt(0), j + 1, rows.Count - 1));
+                            finvizRows.Add(temp.ToArray());
+                        }//end for
 
-                    ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]), finvizRows.Count - current);
-                    current = finvizRows.Count;
+                        ChangeProgress(0, String.Format("Scraping Finviz - {0}", sectorHeaders[sect]), finvizRows.Count - current);
+                        current = finvizRows.Count;
 
-                    /*if (IsElementPresent(By.ClassName("modal-elite-ad_content")))
+                        /*if (IsElementPresent(By.ClassName("modal-elite-ad_content")))
+                        {
+                            driver.FindElement(By.ClassName("modal-elite-ad_content")).Click();
+                        }//end if*/
+
+                        SetProxy();
+                        if (i < pages)
+                        {
+                            string temp = driver.Url;
+                            int end = temp.LastIndexOf('&');
+                            temp = temp.Remove(end) + String.Format("&r={0}", (i + 1) * 20 + 1) + temp.Remove(0, end);
+                            driver.Url = temp;
+                            driver.Navigate();
+                        }
+                        i++;
+                    } catch (TimeoutException)
                     {
-                        driver.FindElement(By.ClassName("modal-elite-ad_content")).Click();
-                    }//end if*/
-
-                    SetProxy();
-                    if (i < pages)
-                    {
-                        string temp = driver.Url;
-                        int end = temp.LastIndexOf('&');
-                        temp = temp.Remove(end) + String.Format("&r={0}", (i + 1) * 20 + 1) + temp.Remove(0, end);
-                        driver.Url = temp;
-                        driver.Navigate();
-                    }
-                    i++;
+                        timeOuts++;
+                        Console.WriteLine("In Finviz catch.  timeOuts = " + timeOuts.ToString());
+                        if(timeOuts > 4)
+                        {
+                            frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
+                            Environment.Exit(1);
+                        }
+                    }//end try-catch
                 } while (i < pages);//end do while
                 sect++;
             }//end while
@@ -340,50 +354,64 @@ namespace Screener
             int symbolsCount = symbols.Count;
             for (int i = 0; i < symbolsCount; i += numSymbols)
             {
-                ChangeProgress(0, "Loading ChartMill page...");
-                if (numSymbols > symbolsCount)
+                try
                 {
-                    numSymbols = symbolsCount - 1;
-                }
-                else if (i + numSymbols > symbolsCount)
-                {
-                    numSymbols = symbolsCount - i;
-                }
-
-                string url = GetChartMillUrl(symbols.GetRange(i, numSymbols));
-                driver.Url = url;
-                driver.Navigate();
-
-                var table = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("/html/body/app-root/app-menu/div/mat-sidenav-container/mat-sidenav-content/app-stockcharts/app-results/div[2]/div/div/app-property-display/div/div/div/mat-card/mat-card-content/div/table/tbody")));
-                var rows = table.FindElements(By.TagName("tr"));
-                foreach (IWebElement r in rows)
-                {
-                    var sym = r.FindElement(By.ClassName("text-primary")).Text;
-                    var fund = r.FindElements(By.ClassName("cdk-column-fa"));
-                    var growth = r.FindElements(By.ClassName("cdk-column-gr"));
-                    var val = r.FindElements(By.ClassName("cdk-column-val"));
-
-                    ChangeProgress(1, String.Format("Scraping ChartMill - {0} {1}/{2}", sym, currentStock + 1, finvizRows.Count));
-
-                    chartMillRows.Add(new object[4]);
-                    chartMillRows[currentStock][0] = sym;
-                    for (int k = 1; k < 4; k++)
+                    Console.WriteLine("In ChartMill try");
+                    ChangeProgress(0, "Loading ChartMill page...");
+                    if (numSymbols > symbolsCount)
                     {
-                        var stars = (k == 1 ? fund : k == 2 ? growth : val);
-                        var full = stars.ElementAt(0).FindElements(By.CssSelector("svg[data-icon=\"star\"]")).Select(f => f).Where(f => f.GetAttribute("data-prefix") == "fas");
-                        var half = stars.ElementAt(0).FindElements(By.ClassName("fa-star-half-alt"));
-                        double fullCount = full.Count();
-                        double halfCount = (half != null ? (half.Count * 0.5) : 0);
-                        chartMillRows[currentStock][k] = fullCount + halfCount;
-                    }//end nested for
-                    Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
-                    currentStock++;
-                }
-                if (rows != null && rows.Count == 3)
+                        numSymbols = symbolsCount - 1;
+                    }
+                    else if (i + numSymbols > symbolsCount)
+                    {
+                        numSymbols = symbolsCount - i;
+                    }
+
+                    string url = GetChartMillUrl(symbols.GetRange(i, numSymbols));
+                    driver.Url = url;
+                    driver.Navigate();
+
+                    var table = new WebDriverWait(driver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementIsVisible(By.XPath("/html/body/app-root/app-menu/div/mat-sidenav-container/mat-sidenav-content/app-stockcharts/app-results/div[2]/div/div/app-property-display/div/div/div/mat-card/mat-card-content/div/table/tbody")));
+                    var rows = table.FindElements(By.TagName("tr"));
+                    foreach (IWebElement r in rows)
+                    {
+                        var sym = r.FindElement(By.ClassName("text-primary")).Text;
+                        var fund = r.FindElements(By.ClassName("cdk-column-fa"));
+                        var growth = r.FindElements(By.ClassName("cdk-column-gr"));
+                        var val = r.FindElements(By.ClassName("cdk-column-val"));
+
+                        ChangeProgress(1, String.Format("Scraping ChartMill - {0} {1}/{2}", sym, currentStock + 1, finvizRows.Count));
+
+                        chartMillRows.Add(new object[4]);
+                        chartMillRows[currentStock][0] = sym;
+                        for (int k = 1; k < 4; k++)
+                        {
+                            var stars = (k == 1 ? fund : k == 2 ? growth : val);
+                            var full = stars.ElementAt(0).FindElements(By.CssSelector("svg[data-icon=\"star\"]")).Select(f => f).Where(f => f.GetAttribute("data-prefix") == "fas");
+                            var half = stars.ElementAt(0).FindElements(By.ClassName("fa-star-half-alt"));
+                            double fullCount = full.Count();
+                            double halfCount = (half != null ? (half.Count * 0.5) : 0);
+                            chartMillRows[currentStock][k] = fullCount + halfCount;
+                        }//end nested for
+                        Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
+                        currentStock++;
+                    }
+                    if (rows != null && rows.Count == 3)
+                    {
+                        numSymbols = 3;
+                    }//end if
+                    SetProxy();
+                } catch (TimeoutException)
                 {
-                    numSymbols = 3;
-                }//end if
-                SetProxy();
+                    numSymbols = 0;
+                    timeOuts++;
+                    Console.WriteLine("In ChartMill catch.  timeOuts = " + timeOuts.ToString());
+                    if (timeOuts > 4)
+                    {
+                        frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
+                        Environment.Exit(1);
+                    }
+                }//end try-catch
             }//end for
             FilterChartMillStocks();
         }//end ScrapeChartMill
@@ -403,14 +431,32 @@ namespace Screener
 
         private void ScrapeZacks()
         {
+            Console.WriteLine("In Zacks try");
             ChangeProgress(0, "Loading Zacks...", chartMillRows.Count);
+            for(int i = 0; i < symbols.Count; i++)
+            {
+                try
+                {
+                    string url = String.Format("{0}{1}{2}{3}", zacksUrl[0], symbols[i], zacksUrl[1], symbols[i]);
+                    ChangeProgress(1, String.Format("Scraping Zacks - {0}", symbols[i]));
+                    driver.Url = url;
+                    driver.Navigate();
+                    zacksText.Add(driver.FindElement(By.ClassName("rank_view")).Text.Split(new char[] { '-', '\r', '\n' }));
+                } catch (TimeoutException)
+                {
+                    i--;
+                    timeOuts++;
+                    Console.WriteLine("In Zacks catch.  timeOuts = " + timeOuts.ToString());
+                    if (timeOuts > 4)
+                    {
+                        frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
+                        Environment.Exit(1);
+                    }
+                }//end try-catch
+            }//end for
             foreach (var s in symbols)
             {
-                string url = String.Format("{0}{1}{2}{3}", zacksUrl[0], s, zacksUrl[1], s);
-                ChangeProgress(1, String.Format("Scraping Zacks - {0}", s));
-                driver.Url = url;
-                driver.Navigate();
-                zacksText.Add(driver.FindElement(By.ClassName("rank_view")).Text.Split(new char[] { '-', '\r', '\n' }));
+                
             }//end foreach
         }//end ScrapeZacks
 

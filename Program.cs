@@ -68,6 +68,8 @@ namespace Screener
                         }//end 2x nested if
                     }//end nested if
                 }//end if-else
+
+                Environment.Exit(0);
             } catch
             {
 

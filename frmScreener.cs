@@ -482,7 +482,7 @@ namespace Screener
                             pages++;
                             break;
                         }//end if-else
-                    }//end foreach
+                    }//end while
 
                     currentStock = 0;
                     currentSector++;

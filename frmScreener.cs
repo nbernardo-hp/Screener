@@ -17,6 +17,7 @@ namespace Screener
         private Dictionary<string, Dictionary<string, Stock>> stocks;
         Preferences preferences;
         int currentSector = 0;
+        int currentStock = 0;
         public frmScreener()
         {
             InitializeComponent();
@@ -414,7 +415,6 @@ namespace Screener
                     int cell = 0;
                     float stringWidth = 0;
                     float stringHeight = 0;
-                    int currentStock = 0;
                     format.Alignment = StringAlignment.Far;
 
                     if (y < e.MarginBounds.Bottom && y + bodyCellHeight < e.MarginBounds.Bottom)
@@ -484,6 +484,7 @@ namespace Screener
                         }//end if-else
                     }//end foreach
 
+                    currentStock = 0;
                     currentSector++;
                 }//end while
 

@@ -359,6 +359,7 @@ namespace Screener
                 StringFormat format = new StringFormat();
                 format.Alignment = StringAlignment.Center;
                 format.LineAlignment = StringAlignment.Center;
+                bool skip = false;
                 int headerHeight = 65;
                 int bodyCellHeight = 20;
                 int[] cellWidths = { 43, 275, 79, 79, 79, 107, 80, 78, 86, 76, 81 };
@@ -480,17 +481,21 @@ namespace Screener
                         {
                             e.HasMorePages = true;
                             pages++;
+                            skip = true;
                             break;
                         }//end if-else
                     }//end while
 
-                    currentStock = 0;
-                    currentSector++;
+                    if(!skip)
+                    {
+                        currentStock = 0;
+                        currentSector++;
+                    }//end if
                 }//end while
 
                 int i = 0;
                 x = e.MarginBounds.Left;
-                string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.", "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.", "***Total score is calculated using a weight for each color.", "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2." };
+                string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = Green, 71 days <= x < 4 months = Yellow, After 4mo = Red.", "*Earnings Date Same Day: Before close - before 9:30am = Red, after 9:30am = Green; After close - before 4:00pm = Red, after = Green.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.", "***Total score is calculated using a weight for each color.", "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2." };
                 while(i < scoreExplanations.Length)
                 {
                     if(y + (int)getStringDimension('h', scoreExplanations[i],  font, e) < e.MarginBounds.Bottom)

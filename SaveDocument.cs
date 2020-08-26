@@ -379,9 +379,9 @@ namespace Screener
             switch(line)
             {
                 case 1:
-                    return "*Earnings Date: 1 <= x <= 70 days = +4, 71 days <= x < 4 months = +2, After 4mo = -2.";
+                    return "*Earnings Date: 1 <= x <= 70 days = Green, 71 days <= x < 4 months = Yellow, After 4mo = Red.";
                 case 2:
-                    return "*Earnings Date Same Day: Before close - before 9:30am = -2, after 9:30am = +4; After close - before 4:00pm = -2, after = +4.";
+                    return "*Earnings Date Same Day: Before close - before 9:30am = Red, after 9:30am = Green; After close - before 4:00pm = Red, after = Green.";
                 case 3:
                     return "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.";
                 case 4:

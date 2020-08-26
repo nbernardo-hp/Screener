@@ -39,12 +39,14 @@ namespace Screener
             {
                 options = new ChromeOptions();
                 options.AddArgument("--incognito");
+                options.AddArgument("--headless");
                 driver = new ChromeDriver(options);
             }
             else
             {
                 options = new FirefoxOptions();
                 options.AddArgument("-private");
+                options.AddArgument("-headless");
                 driver = new FirefoxDriver(options);
             }//end if-else
             this.pe = pe;
@@ -59,10 +61,10 @@ namespace Screener
                 this.urls = urls;
                 GetProxies();
                 ScrapeFinviz();
-                foreach (var f in finvizRows)
+                /*foreach (var f in finvizRows)
                 {
                     Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
-                }
+                }*/
 
                 if (symbols != null && symbols.Count > 0 && !frmSplash.GetCancelled())
                 {
@@ -176,60 +178,6 @@ namespace Screener
             }//end while
         }//end FilterChartMillStocks
 
-        /// <summary>
-        /// Loops through the items after scraping Finviz to determine if they should be scraped on ChartMill or removed
-        /// </summary>
-        private void FilterFinvizStocks()
-        {
-            int[] peIndexes = GetCustomIndexes(pe);
-            int[] rsiIndexes = GetCustomIndexes(rsi);
-            for (int i = 0; i < sectorHeaders.Length && !frmSplash.GetCancelled(); i++)
-            {
-                //start at i+1 because GetCustomIndexes will include the Any Sector as an option at index 0.  Always want to exclude
-                if (peIndexes.Contains(i + 1) || rsiIndexes.Contains(i + 1))
-                {
-                    var check = finvizRows.Select(s => s).Where(s => s[1].Equals(sectorHeaders[i])).ToList();
-                    for (int j = 0; j < check.Count; j++)
-                    {
-                        bool[] isValid = new bool[] { true, true };
-
-                        //Check the PE value of all Stocks in the current Sector if the index is in the array
-                        if (peIndexes.Contains(i + 1))
-                        {
-                            isValid[0] = (check[j][3] != "-" ? CheckPEOrRSI(double.Parse(check[j][3]), pe[i + 1]) : false);
-                        }//end if
-
-                        //Check the RSI value of all Stocks in the current Sector if the index is in the array
-                        if (rsiIndexes.Contains(i + 1))
-                        {
-                            isValid[1] = (check[j][3] != "-" ? CheckPEOrRSI(double.Parse(check[j][6]), rsi[i + 1]) : false);
-                        }//end if
-
-                        //Console.WriteLine(String.Format("pe filter={0}  rsi filter={1} - pe={2} rsi={3} - isValid[0]={4} isValid[1]={5}", pe[i + 1], rsi[i + 1], check[j][3], check[j][6], isValid[0], isValid[1]));
-                        //Remove the Stock from finvizRows if either of comes back false
-                        if (!isValid[0] || !isValid[1])
-                        {
-                            finvizRows.Remove(finvizRows.Find(s => s[0].Equals(check[j][0])));
-                            //Console.WriteLine(check[j][0] + " removed");
-                        }
-                    }//end nested for
-                }//end if
-            }//end for
-        }//end FilterFinvizStocks
-
-        private int[] GetCustomIndexes(string[] filter)
-        {
-            var temp = Array.FindAll(filter, s => s.Contains("/"));
-            int[] res = new int[temp.Length];
-            int i = 0;
-            foreach (var t in temp)
-            {
-                res[i] = Array.FindIndex(filter, x => x.Equals(t));
-                i++;
-            }
-            return res;
-        }//end GetIndexes
-
         private bool CheckPEOrRSI(double value, string filter)
         {
             var temp = filter.Split('/');
@@ -311,7 +259,7 @@ namespace Screener
                         catch (TimeoutException)
                         {
                             timeOuts++;
-                            Console.WriteLine("In Finviz catch.  timeOuts = " + timeOuts.ToString());
+                            //Console.WriteLine("In Finviz catch.  timeOuts = " + timeOuts.ToString());
                             if (timeOuts > 4)
                             {
                                 frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
@@ -362,7 +310,7 @@ namespace Screener
                     } catch (TimeoutException)
                     {
                         timeOuts++;
-                        Console.WriteLine("In Finviz catch.  timeOuts = " + timeOuts.ToString());
+                        //Console.WriteLine("In Finviz catch.  timeOuts = " + timeOuts.ToString());
                         if(timeOuts > 4)
                         {
                             frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
@@ -452,7 +400,7 @@ namespace Screener
                 {
                     numSymbols = 0;
                     timeOuts++;
-                    Console.WriteLine("In ChartMill catch.  timeOuts = " + timeOuts.ToString());
+                    //Console.WriteLine("In ChartMill catch.  timeOuts = " + timeOuts.ToString());
                     if (timeOuts > 4)
                     {
                         frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));
@@ -493,7 +441,7 @@ namespace Screener
                 {
                     i--;
                     timeOuts++;
-                    Console.WriteLine("In Zacks catch.  timeOuts = " + timeOuts.ToString());
+                    //Console.WriteLine("In Zacks catch.  timeOuts = " + timeOuts.ToString());
                     if (timeOuts > 4)
                     {
                         frmScreener.ErrorMessage(new Exception("Number of browser timeouts exceded.  Consider taking the following actions and try again.\n1. Clear the browsers cached images and files.\n2. Download an Ad Blocker extension.\n3. Close open browsers.\n4. Close additional running applications."));

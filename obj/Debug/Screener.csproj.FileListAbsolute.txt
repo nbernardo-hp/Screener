@@ -19,3 +19,7 @@ C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmScreener.
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.csproj.ResolveComReference.cache
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmOfficeDocumentProgress.resources
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmAttribution.resources
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.exe.manifest
+C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.application
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.exe.manifest
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.application

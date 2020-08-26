@@ -447,11 +447,24 @@ namespace Screener
              *to get the appropriate attribute and the value selects the proper filter string*/
             foreach (var kvp in sectorMap[sector])
             {
-                if (kvp.Value != "Any" && kvp.Value != "" && !kvp.Value.Contains("/"))
+                if (kvp.Value != "Any" && kvp.Value != "" && kvp.Value !="...")
                 {
-                    url.Append("," + finvizMap[kvp.Key][kvp.Value]);
-                }
-            }
+                    if(!kvp.Value.Contains("/"))
+                    {
+                        url.Append("," + finvizMap[kvp.Key][kvp.Value]);
+                    } else
+                    {
+                        var temp = kvp.Value.Split('/');
+                        if(kvp.Key == "pe")
+                        {
+                            url.Append(String.Format(",fa_pe_{0}to{1}", temp[0], temp[1]));
+                        } else
+                        {
+                            url.Append(String.Format(",ta_rsi_{0}to{1}", temp[0], temp[1]));
+                        }//end 2x nested if-else
+                    }//end nested if-else
+                }//end if
+            }//end foreach
             return url.Append("," + finvizMap["sector"][sector] + finvizEndUrl).ToString();
         }//end CreateFinvizUrl
 

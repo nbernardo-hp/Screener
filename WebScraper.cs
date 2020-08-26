@@ -59,10 +59,10 @@ namespace Screener
                 this.urls = urls;
                 GetProxies();
                 ScrapeFinviz();
-                /*foreach (var f in finvizRows)
+                foreach (var f in finvizRows)
                 {
                     Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
-                }*/
+                }
 
                 if (symbols != null && symbols.Count > 0 && !frmSplash.GetCancelled())
                 {
@@ -126,8 +126,16 @@ namespace Screener
                     temp.High52WValue = (high != "-" ? double.Parse(high) : Double.MinValue);
                     temp.RecomValue = (finvizRow[7] != "-" ? double.Parse(finvizRow[7]) : Double.MinValue);
                     temp.SetEarningsDate(finvizRow[8]);
-                    temp.ZacksRankValue = int.Parse(zacksText[i][0]);
-                    temp.ZacksStringValue = zacksText[i][1];
+                    if(zacksText[i] != null && zacksText[i][0] != "")
+                    {
+                        temp.ZacksRankValue = int.Parse(zacksText[i][0]);
+                        temp.ZacksStringValue = zacksText[i][1];
+                    } else
+                    {
+                        temp.ZacksRankValue = 3;
+                        temp.ZacksStringValue = "Hold";
+                    }
+                    
 
                     stocks[finvizRow[1]].Add(temp.SymbolValue, temp);
                 }//end if
@@ -227,11 +235,11 @@ namespace Screener
             var temp = filter.Split('/');
             //Holds the min and max values, min index 0   max index 1
             double[] minMax = new double[] { double.Parse(temp[0]), double.Parse(temp[1]) };
-            if (value < minMax[0] || minMax[1] < value)
+            if (minMax[0] <= value  && value <= minMax[1])
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }//end CheckPEOrRSI
 
         private void GetProxies()
@@ -364,7 +372,7 @@ namespace Screener
                 } while (i < pages && !frmSplash.GetCancelled());//end do while
                 sect++;
             }//end while
-            FilterFinvizStocks();
+            //FilterFinvizStocks();
             symbols = (from f in finvizRows select f.ElementAt(0)).ToList();
             symbols.Sort();
         }//end ScrapeFinviz

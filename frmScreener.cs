@@ -441,7 +441,7 @@ namespace Screener
                         x = e.MarginBounds.Left;
                         cell = 0;
 
-                        if (y < e.MarginBounds.Bottom)
+                        if (y < e.MarginBounds.Bottom && y + bodyCellHeight < e.MarginBounds.Bottom)
                         {
                             if (currentStock % 2 != 0)
                             {
@@ -453,7 +453,7 @@ namespace Screener
 
                             foreach (var a in attributes)
                             {
-                                var val = a.ToString();
+                                var val = (a.ToString() != Double.MinValue.ToString() ? a.ToString() : "NA");
                                 stringWidth = getStringDimension('w', val, font, e);
                                 stringHeight = getStringDimension('h', val, font, e);
                                 

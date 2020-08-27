@@ -63,7 +63,6 @@ namespace Screener
             this.label13 = new System.Windows.Forms.Label();
             this.cmbSMA50 = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.chkReplaceAll = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.errPreferences)).BeginInit();
             this.pnlCustomPE.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPEMax)).BeginInit();
@@ -89,7 +88,7 @@ namespace Screener
             "Real Estate",
             "Technology",
             "Utilities"});
-            this.cmbSector.Location = new System.Drawing.Point(242, 59);
+            this.cmbSector.Location = new System.Drawing.Point(242, 66);
             this.cmbSector.Name = "cmbSector";
             this.cmbSector.Size = new System.Drawing.Size(150, 21);
             this.cmbSector.TabIndex = 0;
@@ -140,7 +139,7 @@ namespace Screener
             this.label1.Location = new System.Drawing.Point(12, 117);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(29, 13);
-            this.label1.TabIndex = 2;
+            this.label1.TabIndex = 100;
             this.label1.Text = "P/E:";
             // 
             // label2
@@ -149,7 +148,7 @@ namespace Screener
             this.label2.Location = new System.Drawing.Point(12, 173);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 2;
+            this.label2.TabIndex = 100;
             this.label2.Text = "Price:";
             // 
             // cmbPrice
@@ -230,7 +229,7 @@ namespace Screener
             this.cmbAverageVolume.Location = new System.Drawing.Point(381, 173);
             this.cmbAverageVolume.Name = "cmbAverageVolume";
             this.cmbAverageVolume.Size = new System.Drawing.Size(121, 21);
-            this.cmbAverageVolume.TabIndex = 4;
+            this.cmbAverageVolume.TabIndex = 8;
             this.cmbAverageVolume.SelectedIndexChanged += new System.EventHandler(this.cmbAverageVolume_SelectedIndexChanged);
             // 
             // label3
@@ -263,7 +262,7 @@ namespace Screener
             this.cmbRSI.Location = new System.Drawing.Point(57, 217);
             this.cmbRSI.Name = "cmbRSI";
             this.cmbRSI.Size = new System.Drawing.Size(133, 21);
-            this.cmbRSI.TabIndex = 6;
+            this.cmbRSI.TabIndex = 4;
             this.cmbRSI.SelectedIndexChanged += new System.EventHandler(this.cmbRSI_SelectedIndexChanged);
             // 
             // label4
@@ -272,7 +271,7 @@ namespace Screener
             this.label4.Location = new System.Drawing.Point(19, 221);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 13);
-            this.label4.TabIndex = 7;
+            this.label4.TabIndex = 100;
             this.label4.Text = "RSI:";
             // 
             // cmbCurrentRatio
@@ -296,7 +295,7 @@ namespace Screener
             this.cmbCurrentRatio.Location = new System.Drawing.Point(381, 116);
             this.cmbCurrentRatio.Name = "cmbCurrentRatio";
             this.cmbCurrentRatio.Size = new System.Drawing.Size(121, 21);
-            this.cmbCurrentRatio.TabIndex = 8;
+            this.cmbCurrentRatio.TabIndex = 7;
             this.cmbCurrentRatio.SelectedIndexChanged += new System.EventHandler(this.cmbCurrentRatio_SelectedIndexChanged);
             // 
             // label5
@@ -323,7 +322,7 @@ namespace Screener
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(195, 63);
+            this.label7.Location = new System.Drawing.Point(195, 70);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 13);
             this.label7.TabIndex = 11;
@@ -335,8 +334,8 @@ namespace Screener
             this.btnSaved.Location = new System.Drawing.Point(216, 319);
             this.btnSaved.Name = "btnSaved";
             this.btnSaved.Size = new System.Drawing.Size(75, 23);
-            this.btnSaved.TabIndex = 12;
-            this.btnSaved.Text = "Save";
+            this.btnSaved.TabIndex = 11;
+            this.btnSaved.Text = "&Save";
             this.btnSaved.UseVisualStyleBackColor = true;
             this.btnSaved.Click += new System.EventHandler(this.btnSaved_Click);
             // 
@@ -346,8 +345,8 @@ namespace Screener
             this.btnCancel.Location = new System.Drawing.Point(315, 319);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 13;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.TabIndex = 12;
+            this.btnCancel.Text = "&Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -357,7 +356,7 @@ namespace Screener
             this.chkCustomPE.Location = new System.Drawing.Point(52, 139);
             this.chkCustomPE.Name = "chkCustomPE";
             this.chkCustomPE.Size = new System.Drawing.Size(61, 17);
-            this.chkCustomPE.TabIndex = 14;
+            this.chkCustomPE.TabIndex = 2;
             this.chkCustomPE.Text = "Custom";
             this.chkCustomPE.UseVisualStyleBackColor = true;
             this.chkCustomPE.CheckedChanged += new System.EventHandler(this.chkCustomPE_CheckedChanged);
@@ -368,7 +367,7 @@ namespace Screener
             this.chkCustomRSI.Location = new System.Drawing.Point(52, 244);
             this.chkCustomRSI.Name = "chkCustomRSI";
             this.chkCustomRSI.Size = new System.Drawing.Size(61, 17);
-            this.chkCustomRSI.TabIndex = 14;
+            this.chkCustomRSI.TabIndex = 5;
             this.chkCustomRSI.Text = "Custom";
             this.chkCustomRSI.UseVisualStyleBackColor = true;
             this.chkCustomRSI.CheckedChanged += new System.EventHandler(this.chkCustomRSI_CheckedChanged);
@@ -391,7 +390,7 @@ namespace Screener
             this.label9.Location = new System.Drawing.Point(102, 5);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(30, 13);
-            this.label9.TabIndex = 2;
+            this.label9.TabIndex = 100;
             this.label9.Text = "Max:";
             // 
             // label8
@@ -400,7 +399,7 @@ namespace Screener
             this.label8.Location = new System.Drawing.Point(6, 5);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(27, 13);
-            this.label8.TabIndex = 2;
+            this.label8.TabIndex = 100;
             this.label8.Text = "Min:";
             // 
             // nudPEMax
@@ -408,7 +407,7 @@ namespace Screener
             this.nudPEMax.Location = new System.Drawing.Point(132, 2);
             this.nudPEMax.Name = "nudPEMax";
             this.nudPEMax.Size = new System.Drawing.Size(59, 20);
-            this.nudPEMax.TabIndex = 1;
+            this.nudPEMax.TabIndex = 15;
             this.nudPEMax.ValueChanged += new System.EventHandler(this.nudPEMax_ValueChanged);
             // 
             // nudPEMin
@@ -421,7 +420,7 @@ namespace Screener
             -2147483648});
             this.nudPEMin.Name = "nudPEMin";
             this.nudPEMin.Size = new System.Drawing.Size(59, 20);
-            this.nudPEMin.TabIndex = 0;
+            this.nudPEMin.TabIndex = 15;
             this.nudPEMin.ValueChanged += new System.EventHandler(this.nudPEMin_ValueChanged);
             // 
             // pnlCustomRSI
@@ -459,7 +458,7 @@ namespace Screener
             this.nudRSIMax.Location = new System.Drawing.Point(132, 2);
             this.nudRSIMax.Name = "nudRSIMax";
             this.nudRSIMax.Size = new System.Drawing.Size(59, 20);
-            this.nudRSIMax.TabIndex = 1;
+            this.nudRSIMax.TabIndex = 15;
             this.nudRSIMax.ValueChanged += new System.EventHandler(this.nudRSIMax_ValueChanged);
             // 
             // nudRSIMin
@@ -467,7 +466,7 @@ namespace Screener
             this.nudRSIMin.Location = new System.Drawing.Point(33, 2);
             this.nudRSIMin.Name = "nudRSIMin";
             this.nudRSIMin.Size = new System.Drawing.Size(59, 20);
-            this.nudRSIMin.TabIndex = 0;
+            this.nudRSIMin.TabIndex = 15;
             this.nudRSIMin.ValueChanged += new System.EventHandler(this.nudRSIMin_ValueChanged);
             // 
             // label12
@@ -524,7 +523,7 @@ namespace Screener
             this.cmbHigh52W.Location = new System.Drawing.Point(381, 215);
             this.cmbHigh52W.Name = "cmbHigh52W";
             this.cmbHigh52W.Size = new System.Drawing.Size(202, 21);
-            this.cmbHigh52W.TabIndex = 17;
+            this.cmbHigh52W.TabIndex = 9;
             this.cmbHigh52W.SelectedIndexChanged += new System.EventHandler(this.cmbHigh52W_SelectedIndexChanged);
             // 
             // cmbSMA20
@@ -561,7 +560,7 @@ namespace Screener
             this.cmbSMA20.Location = new System.Drawing.Point(88, 272);
             this.cmbSMA20.Name = "cmbSMA20";
             this.cmbSMA20.Size = new System.Drawing.Size(187, 21);
-            this.cmbSMA20.TabIndex = 18;
+            this.cmbSMA20.TabIndex = 6;
             this.cmbSMA20.SelectedIndexChanged += new System.EventHandler(this.cmbSMA20_SelectedIndexChanged);
             // 
             // label13
@@ -570,7 +569,7 @@ namespace Screener
             this.label13.Location = new System.Drawing.Point(12, 276);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(70, 13);
-            this.label13.TabIndex = 19;
+            this.label13.TabIndex = 22;
             this.label13.Text = "20-Day SMA:";
             // 
             // cmbSMA50
@@ -607,7 +606,7 @@ namespace Screener
             this.cmbSMA50.Location = new System.Drawing.Point(379, 272);
             this.cmbSMA50.Name = "cmbSMA50";
             this.cmbSMA50.Size = new System.Drawing.Size(187, 21);
-            this.cmbSMA50.TabIndex = 18;
+            this.cmbSMA50.TabIndex = 10;
             this.cmbSMA50.SelectedIndexChanged += new System.EventHandler(this.cmbSMA50_SelectedIndexChanged);
             // 
             // label14
@@ -619,22 +618,11 @@ namespace Screener
             this.label14.TabIndex = 19;
             this.label14.Text = "50-Day SMA:";
             // 
-            // chkReplaceAll
-            // 
-            this.chkReplaceAll.AutoSize = true;
-            this.chkReplaceAll.Location = new System.Drawing.Point(242, 86);
-            this.chkReplaceAll.Name = "chkReplaceAll";
-            this.chkReplaceAll.Size = new System.Drawing.Size(110, 17);
-            this.chkReplaceAll.TabIndex = 20;
-            this.chkReplaceAll.Text = "Replace All Filters";
-            this.chkReplaceAll.UseVisualStyleBackColor = true;
-            // 
             // frmPreferences
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 365);
-            this.Controls.Add(this.chkReplaceAll);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.cmbSMA50);
@@ -717,7 +705,6 @@ namespace Screener
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox cmbSMA50;
-        private System.Windows.Forms.CheckBox chkReplaceAll;
     }
 }
 

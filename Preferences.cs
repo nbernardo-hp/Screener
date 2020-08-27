@@ -9,6 +9,7 @@ namespace Screener
 {
     public class Preferences
     {
+        private bool dontShowAgain = false;
         private bool loaded = false;
         private string browser;
         private string finvizStartUrl = "https://www.finviz.com/screener.ashx?v=151&f=an_recom_buybetter,geo_usa";
@@ -395,6 +396,12 @@ namespace Screener
         {
             get { return browser; }
             set { browser = value; }
+        }
+
+        public bool DontShowAgainValue
+        {
+            get { return dontShowAgain; }
+            set { dontShowAgain = value; }
         }
 
         /// <summary>

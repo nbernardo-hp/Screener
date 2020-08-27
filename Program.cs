@@ -62,7 +62,7 @@ namespace Screener
                     if (frmSelect.DialogResult == DialogResult.OK)
                     {
                         pref.BrowserValue = frmSelect.GetBrowserString();
-                        frmPreferences frmPref = new frmPreferences(pref.GetSectorMapCopy());
+                        frmPreferences frmPref = new frmPreferences(pref.GetSectorMapCopy(), pref.DontShowAgainValue);
                         Application.Run(frmPref);
                         if (frmPref.DialogResult == DialogResult.OK)
                         {

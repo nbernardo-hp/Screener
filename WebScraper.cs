@@ -355,7 +355,7 @@ namespace Screener
                     ChangeProgress(0, "Loading ChartMill page...");
                     if (numSymbols > symbolsCount)
                     {
-                        numSymbols = symbolsCount - 1;
+                        numSymbols = symbolsCount;
                     }
                     else if (i + numSymbols > symbolsCount)
                     {
@@ -388,7 +388,7 @@ namespace Screener
                             double halfCount = (half != null ? (half.Count * 0.5) : 0);
                             chartMillRows[currentStock][k] = fullCount + halfCount;
                         }//end nested for
-                        //Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
+                         //Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
                         currentStock++;
                     }
                     if (rows != null && rows.Count == 3)
@@ -396,7 +396,8 @@ namespace Screener
                         numSymbols = 3;
                     }//end if
                     SetProxy();
-                } catch (TimeoutException)
+                }
+                catch (TimeoutException)
                 {
                     numSymbols = 0;
                     timeOuts++;

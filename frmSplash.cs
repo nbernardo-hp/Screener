@@ -73,10 +73,11 @@ namespace Screener
             {
                 if (formLocation == this.Location)
                 {
-                    frmPreferences frmPref = new frmPreferences(splashPref.GetSectorMapCopy());
+                    frmPreferences frmPref = new frmPreferences(splashPref.GetSectorMapCopy(), splashPref.DontShowAgainValue);
                     if (frmPref.ShowDialog() == DialogResult.OK)
                     {
                         splashPref.SetSectorMap(frmPref.GetPreferences());
+                        splashPref.DontShowAgainValue = frmPref.GetDontShowAgain();
                     }//end 2x nested if
                 }//end if
             } catch (Exception ex)

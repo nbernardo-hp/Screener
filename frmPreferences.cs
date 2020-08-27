@@ -16,6 +16,7 @@ namespace Screener
         bool[] saved; //Tells the program whether all the sectors are saved or not
         string currentSector = "";
         bool loadingSector;
+        bool dontShowAgain = false;
         public frmPreferences()
         {
             InitializeComponent();
@@ -24,24 +25,27 @@ namespace Screener
             saved = new bool[11];
         }//end default constructor
 
-        public frmPreferences(Dictionary<string, Dictionary<string, string>> pref)
+        public frmPreferences(Dictionary<string, Dictionary<string, string>> pref, bool dontShowAgain)
         {
             InitializeComponent();
             this.Icon = Properties.Resources.screenerIcon;
             preferences = pref;
             cmbSector.SelectedIndex = 0;
             saved = new bool[11];
+            this.dontShowAgain = dontShowAgain;
         }//end one argument constructor
 
-        public frmPreferences(Dictionary<string, Dictionary<string, string>> pref, string sector)
+        public frmPreferences(Dictionary<string, Dictionary<string, string>> pref, string sector, bool dontShowAgain)
         {
             InitializeComponent();
             this.Icon = Properties.Resources.screenerIcon;
             preferences = pref;
             cmbSector.SelectedItem = sector;
             saved = new bool[11] { true, true, true, true, true, true, true, true, true, true, true };
+            this.dontShowAgain = dontShowAgain;
         }//end two argument constructor
 
+        public bool GetDontShowAgain() { return dontShowAgain; }
         public Dictionary<string, Dictionary<string, string>> GetPreferences() { return preferences; }
 
         private void SetSectorFiltersSet(string sector)
@@ -49,7 +53,7 @@ namespace Screener
             try
             {
                 var sectorKeys = preferences.Keys.ToList();
-                if (sector == "Any" && chkReplaceAll.Checked)
+                if (sector == "Any")
                 {
                     for (int i = 1; i < sectorKeys.Count; i++)
                     {
@@ -145,14 +149,6 @@ namespace Screener
                 loadingSector = true;
                 currentSector = cmbSector.SelectedItem.ToString();
                 SetInitialSelection(currentSector);
-                if (currentSector == "Any")
-                {
-                    chkReplaceAll.Enabled = true;
-                }
-                else
-                {
-                    chkReplaceAll.Enabled = false;
-                }
             } catch (Exception ex)
             {
                 frmScreener.ErrorMessage(ex);
@@ -188,7 +184,7 @@ namespace Screener
         {
             try
             {
-                if (cmbSector.SelectedIndex == 0 && chkReplaceAll.Checked)
+                if (cmbSector.SelectedIndex == 0)
                 {
                     var keys = preferences.Keys;
                     for(int i = 1 ; i < keys.Count; i++)
@@ -266,7 +262,7 @@ namespace Screener
         /// <param name="name">The Dictionary key of the filter</param>
         private void SetFilterValue(ComboBox box, string name)
         {
-            if (currentSector == "Any" && chkReplaceAll.Checked)
+            if (currentSector == "Any")
             {
                 for (int i = 0; i < preferences.Count(); i++)
                 {
@@ -309,11 +305,51 @@ namespace Screener
             if (chk.Checked)
             {
                 pnl.Visible = true;
+                if(pnl.Name.Contains("PE"))
+                {
+                    nudPEMin.TabIndex = cmbPE.TabIndex;
+                    nudPEMax.TabIndex = cmbPE.TabIndex + 1;
+                    cmbPE.TabIndex = 15;
+                    chkCustomRSI.TabIndex += 2;
+                } else
+                {
+                    nudRSIMin.TabIndex = cmbRSI.TabIndex;
+                    nudRSIMax.TabIndex = cmbRSI.TabIndex + 1;
+                    cmbRSI.TabIndex = 15;
+                    chkCustomPE.TabIndex += 2;
+                }//end nested if-else
+
+                foreach(ComboBox box in this.Controls.OfType<ComboBox>().Where(c => !c.Name.Contains("PE") || !c.Name.Contains("RSI") || !c.Name.Contains("Sector")))
+                {
+                    box.TabIndex += 2;
+                }//end foreach
             }
             else
             {
                 pnl.Visible = false;
                 if (pref.Contains("/")) { cmb.SelectedIndex = 0; }
+
+                if (pnl.Name.Contains("PE"))
+                {
+                    cmbPE.TabIndex = nudPEMin.TabIndex;
+                    nudPEMax.TabIndex = 15;
+                    nudPEMin.TabIndex = 15;
+                    chkCustomRSI.TabIndex -= 2;
+                }
+                else
+                {
+                    cmbRSI.TabIndex = nudRSIMin.TabIndex;
+                    nudRSIMin.TabIndex = 15;
+                    nudRSIMax.TabIndex = 15;
+                    chkCustomPE.TabIndex -= 2;
+                }//end nested if-else
+
+                var boxes = Controls.OfType<ComboBox>().Select(c => c).Where(c => !c.Name.Contains("PE") && !c.Name.Contains("RSI") && !c.Name.Contains("Sector"));
+                foreach (ComboBox box in boxes)
+                {
+                    box.TabIndex -= 2;
+                }//end foreach
+
             }//end if-else
         }//end CheckChangePEOrRSI
 
@@ -321,7 +357,21 @@ namespace Screener
         {
             if (!loadingSector)
             {
-                SetFilterValue(nudPEMin, nudPEMax, "pe");
+                if (cmbSector.SelectedIndex == 0 && !dontShowAgain)
+                {
+                    frmDontShowAgain frm = new frmDontShowAgain();
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        dontShowAgain = frm.GetDontShowAgain();
+                        errPreferences.SetError(pnlCustomRSI, "");
+                        SetFilterValue(nudPEMin, nudPEMax, "pe");
+                    }//end 2x nested if
+                }
+                else
+                {
+                    errPreferences.SetError(pnlCustomRSI, "");
+                    SetFilterValue(nudPEMin, nudPEMax, "pe");
+                }//end nested if-else
             }
         }//end nudPEMin_ValueChanged
 
@@ -329,7 +379,21 @@ namespace Screener
         {
             if(!loadingSector)
             {
-                SetFilterValue(nudPEMin, nudPEMax, "pe");
+                if (cmbSector.SelectedIndex == 0 && !dontShowAgain)
+                {
+                    frmDontShowAgain frm = new frmDontShowAgain();
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        dontShowAgain = frm.GetDontShowAgain();
+                        errPreferences.SetError(pnlCustomRSI, "");
+                        SetFilterValue(nudPEMin, nudPEMax, "pe");
+                    }//end 2x nested if
+                }
+                else
+                {
+                    errPreferences.SetError(pnlCustomRSI, "");
+                    SetFilterValue(nudPEMin, nudPEMax, "pe");
+                }//end nested if-else
             }
         }//end nudPEMax_ValueChanged
 
@@ -337,7 +401,21 @@ namespace Screener
         {
             if (!loadingSector)
             {
-                SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+                if (cmbSector.SelectedIndex == 0 && !dontShowAgain)
+                {
+                    frmDontShowAgain frm = new frmDontShowAgain();
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        dontShowAgain = frm.GetDontShowAgain();
+                        errPreferences.SetError(pnlCustomRSI, "");
+                        SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+                    }//end 2x nested if
+                }
+                else
+                {
+                    errPreferences.SetError(pnlCustomRSI, "");
+                    SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+                }//end nested if-else
             }
         }//end nudRSIMin_ValueChanged
 
@@ -345,7 +423,21 @@ namespace Screener
         {
             if (!loadingSector)
             {
-                SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+                if (cmbSector.SelectedIndex == 0 && !dontShowAgain)
+                {
+                    frmDontShowAgain frm = new frmDontShowAgain();
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        dontShowAgain = frm.GetDontShowAgain();
+                        errPreferences.SetError(pnlCustomRSI, "");
+                        SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+                    }//end 2x nested if
+                }
+                else
+                {
+                    errPreferences.SetError(pnlCustomRSI, "");
+                    SetFilterValue(nudRSIMin, nudRSIMax, "rsi");
+                }//end nested if-else
             }
         }//end nudRSIMax_ValueChanged
 
@@ -361,9 +453,22 @@ namespace Screener
             if (cmb.SelectedIndex < 1) { errPreferences.SetError(cmb, String.Format("Select a value for {0} filter from the dropdown menu!", name)); }
             else if (!loadingSector)
             {
-                errPreferences.SetError(cmb, "");
-                SetFilterValue(cmb, filterIdentifier);
-                SetSectorFiltersSet(currentSector);
+                if(cmbSector.SelectedIndex == 0 && !dontShowAgain)
+                {
+                    frmDontShowAgain frm = new frmDontShowAgain();
+                    if(frm.ShowDialog() == DialogResult.OK)
+                    {
+                        dontShowAgain = frm.GetDontShowAgain();
+                        errPreferences.SetError(cmb, "");
+                        SetFilterValue(cmb, filterIdentifier);
+                        SetSectorFiltersSet(currentSector);
+                    }//end 2x nested if
+                } else
+                {
+                    errPreferences.SetError(cmb, "");
+                    SetFilterValue(cmb, filterIdentifier);
+                    SetSectorFiltersSet(currentSector);
+                }//end nested if-else
             }//end if-else
         }
 
@@ -379,7 +484,7 @@ namespace Screener
             else
             {
                 errPreferences.SetError((filter == "pe" ? pnlCustomPE : pnlCustomRSI), "");
-                if (currentSector == "Any" && chkReplaceAll.Checked)
+                if (currentSector == "Any")
                 {
                     for (int i = 0; i < preferences.Count(); i++)
                     {

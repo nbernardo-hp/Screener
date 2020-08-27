@@ -23,3 +23,4 @@ C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.exe.manifest
 C:\Users\N\Documents\Portfolio\Screener\Screener\bin\Debug\Screener.application
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.exe.manifest
 C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.application
+C:\Users\N\Documents\Portfolio\Screener\Screener\obj\Debug\Screener.frmDontShowAgain.resources

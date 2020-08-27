@@ -107,6 +107,12 @@
     <Compile Include="frmAttribution.Designer.cs">
       <DependentUpon>frmAttribution.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmDontShowAgain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDontShowAgain.Designer.cs">
+      <DependentUpon>frmDontShowAgain.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmOfficeDocumentProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     <Compile Include="XmlData.cs" />
     <EmbeddedResource Include="frmAttribution.resx">
       <DependentUpon>frmAttribution.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDontShowAgain.resx">
+      <DependentUpon>frmDontShowAgain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmOfficeDocumentProgress.resx">
       <DependentUpon>frmOfficeDocumentProgress.cs</DependentUpon>

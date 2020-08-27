@@ -90,8 +90,15 @@ namespace Screener
         {
             try
             {
-                PopulateListView();
-                LoadFinvizWithStocks();
+                
+                if(stocks.Count > 0)
+                {
+                    PopulateListView();
+                    LoadFinvizWithStocks();
+                } else
+                {
+                    pnlNoStocksToDisplay.Visible = true;
+                }
                 pdocStocks.DefaultPageSettings.Landscape = true;
                 pdocStocks.DefaultPageSettings.Margins.Left = 10;
                 pdocStocks.DefaultPageSettings.Margins.Right = 10;
@@ -263,10 +270,11 @@ namespace Screener
         {
             try
             {
-                frmPreferences frm = new frmPreferences(preferences.GetSectorMapCopy(), sector);
+                frmPreferences frm = new frmPreferences(preferences.GetSectorMapCopy(), sector, preferences.DontShowAgainValue);
                 if(frm.ShowDialog() == DialogResult.OK)
                 {
                     preferences.SetSectorMap(frm.GetPreferences());
+                    preferences.DontShowAgainValue = frm.GetDontShowAgain();
                 }//end if
             } catch (Exception ex)
             {

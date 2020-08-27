@@ -500,7 +500,7 @@ namespace Screener
             "90% or more below High",
             "0-3% below High",
             "0-5% below High",
-            "0-5% below High",
+            "0-10% below High",
             "5% or more above Low",
             "10% or more above Low",
             "15% or more above Low",

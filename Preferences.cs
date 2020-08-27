@@ -172,7 +172,7 @@ namespace Screener
                 ["90% or more below High"] = "ta_highlow52w_b90h",
                 ["0-3% below High"] = "ta_highlow52w_b0to3h",
                 ["0-5% below High"] = "ta_highlow52w_b0to5h",
-                ["0-5% below High"] = "ta_highlow52w_b0to5h",
+                ["0-10% below High"] = "ta_highlow52w_b0to10h",
                 ["5% or more above Low"] = "ta_highlow52w_a5h",
                 ["10% or more above Low"] = "ta_highlow52w_a10h",
                 ["15% or more above Low"] = "ta_highlow52w_a15h",

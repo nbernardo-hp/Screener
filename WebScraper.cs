@@ -39,14 +39,14 @@ namespace Screener
             {
                 options = new ChromeOptions();
                 options.AddArgument("--incognito");
-                options.AddArgument("--headless");
+                //options.AddArgument("--headless");
                 driver = new ChromeDriver(options);
             }
             else
             {
                 options = new FirefoxOptions();
                 options.AddArgument("-private");
-                options.AddArgument("-headless");
+                //options.AddArgument("-headless");
                 driver = new FirefoxDriver(options);
             }//end if-else
             this.pe = pe;

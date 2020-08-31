@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Screener.exe" size="409480">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Screener.exe" size="408968">
       <assemblyIdentity name="Screener" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>auJzqDeFCzWtptNRVB9j4vVVMjSeqPD1/MtqnC4dGJo=</dsig:DigestValue>
+        <dsig:DigestValue>tChxQu5JL5Z8FKf9FW0kLBZvsGwDFQUkG0lndkXVidI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

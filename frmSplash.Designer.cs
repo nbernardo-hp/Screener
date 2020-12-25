@@ -37,6 +37,7 @@
             this.lblProgress = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.bgwScrape = new System.ComponentModel.BackgroundWorker();
+            this.btnExit = new System.Windows.Forms.Button();
             this.pnlStart.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             this.SuspendLayout();
@@ -103,10 +104,11 @@
             // 
             this.pnlStart.BackColor = System.Drawing.Color.Transparent;
             this.pnlStart.Controls.Add(this.btnSettings);
+            this.pnlStart.Controls.Add(this.btnExit);
             this.pnlStart.Controls.Add(this.btnScrape);
-            this.pnlStart.Location = new System.Drawing.Point(160, 147);
+            this.pnlStart.Location = new System.Drawing.Point(160, 132);
             this.pnlStart.Name = "pnlStart";
-            this.pnlStart.Size = new System.Drawing.Size(305, 100);
+            this.pnlStart.Size = new System.Drawing.Size(305, 131);
             this.pnlStart.TabIndex = 4;
             // 
             // pnlProgress
@@ -151,6 +153,23 @@
             this.bgwScrape.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwScrape_DoWork);
             this.bgwScrape.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwScrape_RunWorkerCompleted);
             // 
+            // btnExit
+            // 
+            this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(15)))), ((int)(((byte)(53)))));
+            this.btnExit.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnExit.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnExit.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnExit.Location = new System.Drawing.Point(115, 88);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.TabIndex = 1;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // frmSplash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -158,13 +177,14 @@
             this.BackgroundImage = global::Screener.Properties.Resources.s_Bull_versus_Bear___Financial_Markets_Concept;
             this.ClientSize = new System.Drawing.Size(624, 395);
             this.ControlBox = false;
-            this.Controls.Add(this.pnlProgress);
             this.Controls.Add(this.pnlStart);
+            this.Controls.Add(this.pnlProgress);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmSplash";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmSplash";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmSplash_FormClosing);
             this.Load += new System.EventHandler(this.frmSplash_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseMove);
@@ -187,5 +207,6 @@
         private System.Windows.Forms.Label lblProgress;
         private System.Windows.Forms.Label lblStatus;
         private System.ComponentModel.BackgroundWorker bgwScrape;
+        private System.Windows.Forms.Button btnExit;
     }
 }

@@ -216,12 +216,11 @@ namespace Screener
                     ComboBoxIndexChanged(cmbHigh52W, "52 Week High", "high");
                     ComboBoxIndexChanged(cmbSMA20, "SMA 20", "sma20");
                     ComboBoxIndexChanged(cmbSMA50, "SMA 50", "sma50");
-
-                    if(CheckAllSaved())
-                    {
-                        this.Close();
-                    }
                 }//end if-else
+                if (CheckAllSaved())
+                {
+                    this.Close();
+                }
             } catch (Exception ex)
             {
                 frmScreener.ErrorMessage(ex);

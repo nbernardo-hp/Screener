@@ -310,5 +310,19 @@ namespace Screener
                 frmScreener.ErrorMessage(ex);
             }
         }//end SetMoustControlEvents
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            CancelledValue = true;
+            this.Close();
+        }
+
+        private void frmSplash_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(stocks == null)
+            {
+                CancelledValue = true;
+            }
+        }
     }//end frmSplash
 }//end namespace

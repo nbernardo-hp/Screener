@@ -15,9 +15,388 @@ namespace Screener
         private int valuation;
         private int totalScore;
         private int zacksRank;
+        private Dictionary<string, double> doubles = new Dictionary<string, double>()
+        {
+            ["high52W"] = 0,
+        };
         private double high52W;
         private double recom;
         private double currentRatio;
+        private double marketCap;
+        public double MarketCapValue
+        {
+            get { return marketCap; }
+            set { marketCap = value; }
+        }
+        private char marketCapChar;
+        public char MarketCapCharValue
+        {
+            get { return marketCapChar; }
+            set { marketCapChar = value; }
+        }
+        private double pe;
+        public double PEValue
+        {
+            get { return pe; }
+            set { pe = value; }
+        }
+        private double forwardPE;
+        public double ForwardPEValue
+        {
+            get { return forwardPE; }
+            set { forwardPE = value; }
+        }
+        private double peg;
+        public double PEGValue
+        {
+            get { return peg; }
+            set { peg = value; }
+        }
+        private double ps;
+        public double PSValue
+        {
+            get { return ps; }
+            set { ps = value; }
+        }
+        private double pb;
+        public double PBValue
+        {
+            get { return pb; }
+            set { pb = value; }
+        }
+        private double pc;
+        public double PCValue
+        {
+            get { return pc; }
+            set { pc = value; }
+        }
+        private double pfcf;
+        public double PFCFValue
+        {
+            get { return pfcf; }
+            set { pfcf = value; }
+        }
+        private double dividend;
+        public double DividendValue
+        {
+            get { return dividend; }
+            set { dividend = value; }
+        }
+        private double payoutRatio;
+        public double PayoutRatioValue
+        {
+            get { return payoutRatio; }
+            set { payoutRatio = value; }
+        }
+        private double eps;
+        public double EPSValue
+        {
+            get { return eps; }
+            set { eps = value; }
+        }
+        private double epsThisY;
+        public double EPSThisYValue
+        {
+            get { return epsThisY; }
+            set { epsThisY = value; }
+        }
+        private double epsNextY;
+        public double EPSNextYValue
+        {
+            get { return epsNextY; }
+            set { epsNextY = value; }
+        }
+        private double epsPast5Y;
+        public double EPSPast5YValue
+        {
+            get { return epsPast5Y; }
+            set { epsPast5Y = value; }
+        }
+        private double salesPast5Y;
+        public double SalesPast5YValue
+        {
+            get { return salesPast5Y; }
+            set { salesPast5Y = value; }
+        }
+        private double epsQQ;
+        public double EPSQQValue
+        {
+            get { return epsQQ; }
+            set { epsQQ = value; }
+        }
+        private double salesQQ;
+        public double SalesQQValue
+        {
+            get { return salesQQ; }
+            set { salesQQ = value; }
+        }
+        private double outstanding;
+        public double OutstandingValue
+        {
+            get { return outstanding; }
+            set { outstanding = value; }
+        }
+        private char outstandingChar;
+        public char OutstandingCharValue
+        {
+            get { return outstandingChar; }
+            set { outstandingChar = value; }
+        }
+        private double floatVal;
+        public double FloatValue
+        {
+            get { return floatVal; }
+            set { floatVal = value; }
+        }
+        private char floatChar;
+        public char FloatCharValue
+        {
+            get { return floatChar; }
+            set { floatChar = value; }
+        }
+        private double insiderOwn;
+        public double InsiderOwnValue
+        {
+            get { return insiderOwn; }
+            set { insiderOwn = value; }
+        }
+        private double insiderTrans;
+        public double InsiderTransValue
+        {
+            get { return insiderTrans; }
+            set { insiderTrans = value; }
+        }
+        private double instOwn;
+        public double InstOwnValue
+        {
+            get { return instOwn; }
+            set { instOwn = value; }
+        }
+        private double instTrans;
+        public double InstTransValue
+        {
+            get { return instTrans; }
+            set { instTrans = value; }
+        }
+        private double floatShort;
+        public double FloatShortValue
+        {
+            get { return floatShort; }
+            set { floatShort = value; }
+        }
+        private double shortRatio;
+        public double ShortRatioValue
+        {
+            get { return shortRatio; }
+            set { shortRatio = value; }
+        }
+        private double roa;
+        public double ROAValue
+        {
+            get { return roa; }
+            set { roa = value; }
+        }
+        private double roe;
+        public double ROEValue
+        {
+            get { return roe; }
+            set { roe = value; }
+        }
+        private double roi;
+        public double ROIValue
+        {
+            get { return roi; }
+            set { roi = value; }
+        }
+        private double quickRatio;
+        public double QuickRatioValue
+        {
+            get { return quickRatio; }
+            set { quickRatio = value; }
+        }
+        private double lTDebtEq;
+        public double LTDebtEqValue
+        {
+            get { return lTDebtEq; }
+            set { lTDebtEq = value; }
+        }
+        private double debtEq;
+        public double DebtEqValue
+        {
+            get { return debtEq; }
+            set { debtEq = value; }
+        }
+        private double grossM;
+        public double GrossMValue
+        {
+            get { return grossM; }
+            set { grossM = value; }
+        }
+        private double operM;
+        public double OperMValue
+        {
+            get { return operM; }
+            set { operM = value; }
+        }
+        private double profitM;
+        public double ProfitMValue
+        {
+            get { return profitM; }
+            set { profitM = value; }
+        }
+        private double perfWeek;
+        public double PerfWeekValue
+        {
+            get { return perfWeek; }
+            set { perfWeek = value; }
+        }
+        private double perfMonth;
+        public double PerfMonthValue
+        {
+            get { return perfMonth; }
+            set { perfMonth = value; }
+        }
+        private double perfQuarter;
+        public double PerfQuarterValue
+        {
+            get { return perfQuarter; }
+            set { perfQuarter = value; }
+        }
+        private double perfHalf;
+        public double PerfHalfValue
+        {
+            get { return perfHalf; }
+            set { perfHalf = value; }
+        }
+        private double perfYear;
+        public double PerfYearValue
+        {
+            get { return perfYear; }
+            set { perfYear = value; }
+        }
+        private double perfYTD;
+        public double PerfYTDValue
+        {
+            get { return perfYTD; }
+            set { perfYTD = value; }
+        }
+        private double beta;
+        public double BetaValue
+        {
+            get { return beta; }
+            set { beta = value; }
+        }
+        private double atr;
+        public double ATRValue
+        {
+            get { return atr; }
+            set { atr = value; }
+        }
+        private double volatilityW;
+        public double VolatilityWValue
+        {
+            get { return volatilityW; }
+            set { volatilityW = value; }
+        }
+        private double volatilityM;
+        public double VolatilityMValue
+        {
+            get { return volatilityM; }
+            set { volatilityM = value; }
+        }
+        private double[] sma = new double[3];
+        public double SMA20
+        {
+            get { return sma[0]; }
+            set { sma[0] = value; }
+        }
+        public double SMA50
+        {
+            get { return sma[1]; }
+            set { sma[1] = value; }
+        }
+        public double SMA200
+        {
+            get { return sma[2]; }
+            set { sma[2] = value; }
+        }
+        private double[] day50 = new double[2];
+        public double High50Day
+        {
+            get { return day50[0]; }
+            set { day50[0] = value; }
+        }
+        public double Low50Day
+        {
+            get { return day50[1]; }
+            set { day50[1] = value; }
+        }
+        private double low52W;
+        public double Low52WValue
+        {
+            get { return low52W; }
+            set { low52W = value; }
+        }
+        private double rsi;
+        public double RSIValue
+        {
+            get { return rsi; }
+            set { rsi = value; }
+        }
+        private double fromOpen;
+        public double FromOpenValue
+        {
+            get { return fromOpen; }
+            set { fromOpen = value; }
+        }
+        private double gap;
+        public double GAPValue
+        {
+            get { return gap; }
+            set { gap = value; }
+        }
+        private double avgVolume;
+        public double AvgVolumeValue
+        {
+            get { return avgVolume; }
+            set { avgVolume = value; }
+        }
+        private double relVolume;
+        public double RelVolumeValue
+        {
+            get { return relVolume; }
+            set { relVolume = value; }
+        }
+        private double price;
+        public double PriceValue
+        {
+            get { return price; }
+            set { price = value; }
+        }
+        private double change;
+        public double ChangeValue
+        {
+            get { return change; }
+            set { change = value; }
+        }
+        private double volume;
+        public double VolumeValue
+        {
+            get { return volume; }
+            set { volume = value; }
+        }
+        private double targetPrice;
+        public double TargetPriceValue
+        {
+            get { return targetPrice; }
+            set { targetPrice = value; }
+        }
+        private double ipoDate;
+        public double IPODateValue
+        {
+            get { return ipoDate; }
+            set { ipoDate = value; }
+        }
         private DateTime earningsDate;
         private string beforeAfterClose;
         private string zacksString;

@@ -29,18 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Basic Materials", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Communication Services", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Consumer Cyclical", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Consumer Defensive", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Energy", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Financial", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("Healthcare", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("Industrials", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Real Estate", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup10 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup11 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScreener));
             System.Windows.Forms.ListViewGroup listViewGroup12 = new System.Windows.Forms.ListViewGroup("Basic Materials", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup13 = new System.Windows.Forms.ListViewGroup("Communication Services", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup14 = new System.Windows.Forms.ListViewGroup("Consumer Cyclical", System.Windows.Forms.HorizontalAlignment.Left);
@@ -52,6 +40,7 @@
             System.Windows.Forms.ListViewGroup listViewGroup20 = new System.Windows.Forms.ListViewGroup("Real Estate", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup21 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup22 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScreener));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,26 +83,8 @@
             this.pprevStocks = new System.Windows.Forms.PrintPreviewDialog();
             this.pnlNoStocksToDisplay = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabScreeners = new System.Windows.Forms.TabControl();
-            this.tabScreener = new System.Windows.Forms.TabPage();
-            this.tabScreener2 = new System.Windows.Forms.TabPage();
-            this.lstvStocks2 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.pnlNoStocksToDisplay.SuspendLayout();
-            this.tabScreeners.SuspendLayout();
-            this.tabScreener.SuspendLayout();
-            this.tabScreener2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -124,7 +95,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(987, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(978, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -322,45 +293,45 @@
             this.TotalScore});
             this.lstvStocks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstvStocks.FullRowSelect = true;
-            listViewGroup1.Header = "Basic Materials";
-            listViewGroup1.Name = "Basic Materials";
-            listViewGroup2.Header = "Communication Services";
-            listViewGroup2.Name = "Communication Services";
-            listViewGroup3.Header = "Consumer Cyclical";
-            listViewGroup3.Name = "Consumer Cyclical";
-            listViewGroup4.Header = "Consumer Defensive";
-            listViewGroup4.Name = "Consumer Defensive";
-            listViewGroup5.Header = "Energy";
-            listViewGroup5.Name = "Energy";
-            listViewGroup6.Header = "Financial";
-            listViewGroup6.Name = "Financial";
-            listViewGroup7.Header = "Healthcare";
-            listViewGroup7.Name = "Healthcare";
-            listViewGroup8.Header = "Industrials";
-            listViewGroup8.Name = "Industrials";
-            listViewGroup9.Header = "Real Estate";
-            listViewGroup9.Name = "Real Estate";
-            listViewGroup10.Header = "Technology";
-            listViewGroup10.Name = "Technology";
-            listViewGroup11.Header = "Utilities";
-            listViewGroup11.Name = "Utilities";
+            listViewGroup12.Header = "Basic Materials";
+            listViewGroup12.Name = "Basic Materials";
+            listViewGroup13.Header = "Communication Services";
+            listViewGroup13.Name = "Communication Services";
+            listViewGroup14.Header = "Consumer Cyclical";
+            listViewGroup14.Name = "Consumer Cyclical";
+            listViewGroup15.Header = "Consumer Defensive";
+            listViewGroup15.Name = "Consumer Defensive";
+            listViewGroup16.Header = "Energy";
+            listViewGroup16.Name = "Energy";
+            listViewGroup17.Header = "Financial";
+            listViewGroup17.Name = "Financial";
+            listViewGroup18.Header = "Healthcare";
+            listViewGroup18.Name = "Healthcare";
+            listViewGroup19.Header = "Industrials";
+            listViewGroup19.Name = "Industrials";
+            listViewGroup20.Header = "Real Estate";
+            listViewGroup20.Name = "Real Estate";
+            listViewGroup21.Header = "Technology";
+            listViewGroup21.Name = "Technology";
+            listViewGroup22.Header = "Utilities";
+            listViewGroup22.Name = "Utilities";
             this.lstvStocks.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3,
-            listViewGroup4,
-            listViewGroup5,
-            listViewGroup6,
-            listViewGroup7,
-            listViewGroup8,
-            listViewGroup9,
-            listViewGroup10,
-            listViewGroup11});
+            listViewGroup12,
+            listViewGroup13,
+            listViewGroup14,
+            listViewGroup15,
+            listViewGroup16,
+            listViewGroup17,
+            listViewGroup18,
+            listViewGroup19,
+            listViewGroup20,
+            listViewGroup21,
+            listViewGroup22});
             this.lstvStocks.HideSelection = false;
-            this.lstvStocks.Location = new System.Drawing.Point(3, 3);
+            this.lstvStocks.Location = new System.Drawing.Point(0, 24);
             this.lstvStocks.Name = "lstvStocks";
             this.lstvStocks.ShowItemToolTips = true;
-            this.lstvStocks.Size = new System.Drawing.Size(973, 375);
+            this.lstvStocks.Size = new System.Drawing.Size(978, 373);
             this.lstvStocks.TabIndex = 1;
             this.lstvStocks.UseCompatibleStateImageBehavior = false;
             this.lstvStocks.View = System.Windows.Forms.View.Details;
@@ -455,7 +426,7 @@
             this.pnlNoStocksToDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlNoStocksToDisplay.Location = new System.Drawing.Point(0, 24);
             this.pnlNoStocksToDisplay.Name = "pnlNoStocksToDisplay";
-            this.pnlNoStocksToDisplay.Size = new System.Drawing.Size(987, 407);
+            this.pnlNoStocksToDisplay.Size = new System.Drawing.Size(978, 373);
             this.pnlNoStocksToDisplay.TabIndex = 2;
             this.pnlNoStocksToDisplay.Visible = false;
             // 
@@ -470,171 +441,13 @@
             this.label1.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tabScreeners
-            // 
-            this.tabScreeners.Controls.Add(this.tabScreener);
-            this.tabScreeners.Controls.Add(this.tabScreener2);
-            this.tabScreeners.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabScreeners.Location = new System.Drawing.Point(0, 24);
-            this.tabScreeners.Name = "tabScreeners";
-            this.tabScreeners.SelectedIndex = 0;
-            this.tabScreeners.Size = new System.Drawing.Size(987, 407);
-            this.tabScreeners.TabIndex = 3;
-            // 
-            // tabScreener
-            // 
-            this.tabScreener.Controls.Add(this.lstvStocks);
-            this.tabScreener.Location = new System.Drawing.Point(4, 22);
-            this.tabScreener.Name = "tabScreener";
-            this.tabScreener.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScreener.Size = new System.Drawing.Size(979, 381);
-            this.tabScreener.TabIndex = 0;
-            this.tabScreener.Text = "Screener";
-            this.tabScreener.UseVisualStyleBackColor = true;
-            // 
-            // tabScreener2
-            // 
-            this.tabScreener2.Controls.Add(this.lstvStocks2);
-            this.tabScreener2.Location = new System.Drawing.Point(4, 22);
-            this.tabScreener2.Name = "tabScreener2";
-            this.tabScreener2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabScreener2.Size = new System.Drawing.Size(979, 381);
-            this.tabScreener2.TabIndex = 1;
-            this.tabScreener2.Text = "Screener 2";
-            this.tabScreener2.UseVisualStyleBackColor = true;
-            // 
-            // lstvStocks2
-            // 
-            this.lstvStocks2.BackColor = System.Drawing.SystemColors.Window;
-            this.lstvStocks2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5,
-            this.columnHeader6,
-            this.columnHeader7,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader10,
-            this.columnHeader11});
-            this.lstvStocks2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstvStocks2.FullRowSelect = true;
-            listViewGroup12.Header = "Basic Materials";
-            listViewGroup12.Name = "Basic Materials";
-            listViewGroup13.Header = "Communication Services";
-            listViewGroup13.Name = "Communication Services";
-            listViewGroup14.Header = "Consumer Cyclical";
-            listViewGroup14.Name = "Consumer Cyclical";
-            listViewGroup15.Header = "Consumer Defensive";
-            listViewGroup15.Name = "Consumer Defensive";
-            listViewGroup16.Header = "Energy";
-            listViewGroup16.Name = "Energy";
-            listViewGroup17.Header = "Financial";
-            listViewGroup17.Name = "Financial";
-            listViewGroup18.Header = "Healthcare";
-            listViewGroup18.Name = "Healthcare";
-            listViewGroup19.Header = "Industrials";
-            listViewGroup19.Name = "Industrials";
-            listViewGroup20.Header = "Real Estate";
-            listViewGroup20.Name = "Real Estate";
-            listViewGroup21.Header = "Technology";
-            listViewGroup21.Name = "Technology";
-            listViewGroup22.Header = "Utilities";
-            listViewGroup22.Name = "Utilities";
-            this.lstvStocks2.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup12,
-            listViewGroup13,
-            listViewGroup14,
-            listViewGroup15,
-            listViewGroup16,
-            listViewGroup17,
-            listViewGroup18,
-            listViewGroup19,
-            listViewGroup20,
-            listViewGroup21,
-            listViewGroup22});
-            this.lstvStocks2.HideSelection = false;
-            this.lstvStocks2.Location = new System.Drawing.Point(3, 3);
-            this.lstvStocks2.Name = "lstvStocks2";
-            this.lstvStocks2.ShowItemToolTips = true;
-            this.lstvStocks2.Size = new System.Drawing.Size(973, 375);
-            this.lstvStocks2.TabIndex = 2;
-            this.lstvStocks2.UseCompatibleStateImageBehavior = false;
-            this.lstvStocks2.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Symbol";
-            this.columnHeader1.Width = 53;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Industry";
-            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader2.Width = 205;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "CM Fund";
-            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 66;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "CM Growth";
-            this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader4.Width = 71;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "CM Valuation";
-            this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader5.Width = 76;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "EPS Next Y";
-            this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader6.Width = 71;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Finviz Recom";
-            this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader7.Width = 79;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Target Price";
-            this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader8.Width = 82;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Earnings Date";
-            this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader9.Width = 82;
-            // 
-            // columnHeader10
-            // 
-            this.columnHeader10.Text = "Zacks Rank";
-            this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader10.Width = 92;
-            // 
-            // columnHeader11
-            // 
-            this.columnHeader11.Text = "Total Score";
-            this.columnHeader11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader11.Width = 83;
-            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(987, 431);
+            this.ClientSize = new System.Drawing.Size(978, 397);
             this.Controls.Add(this.pnlNoStocksToDisplay);
-            this.Controls.Add(this.tabScreeners);
+            this.Controls.Add(this.lstvStocks);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "frmScreener";
@@ -644,9 +457,6 @@
             this.menuStrip1.PerformLayout();
             this.pnlNoStocksToDisplay.ResumeLayout(false);
             this.pnlNoStocksToDisplay.PerformLayout();
-            this.tabScreeners.ResumeLayout(false);
-            this.tabScreener.ResumeLayout(false);
-            this.tabScreener2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -696,20 +506,5 @@
         private System.Windows.Forms.ColumnHeader ZacksRank;
         private System.Windows.Forms.Panel pnlNoStocksToDisplay;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabControl tabScreeners;
-        private System.Windows.Forms.TabPage tabScreener;
-        private System.Windows.Forms.TabPage tabScreener2;
-        private System.Windows.Forms.ListView lstvStocks2;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.ColumnHeader columnHeader10;
-        private System.Windows.Forms.ColumnHeader columnHeader11;
     }
 }

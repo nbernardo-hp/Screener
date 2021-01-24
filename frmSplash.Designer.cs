@@ -33,11 +33,13 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.pgbProgress = new System.Windows.Forms.ProgressBar();
             this.pnlStart = new System.Windows.Forms.Panel();
+            this.chkScreener2 = new System.Windows.Forms.CheckBox();
+            this.chkScreener = new System.Windows.Forms.CheckBox();
+            this.btnExit = new System.Windows.Forms.Button();
             this.pnlProgress = new System.Windows.Forms.Panel();
             this.lblProgress = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.bgwScrape = new System.ComponentModel.BackgroundWorker();
-            this.btnExit = new System.Windows.Forms.Button();
             this.pnlStart.SuspendLayout();
             this.pnlProgress.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +53,7 @@
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSettings.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnSettings.Location = new System.Drawing.Point(40, 31);
+            this.btnSettings.Location = new System.Drawing.Point(40, 72);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(112, 38);
             this.btnSettings.TabIndex = 0;
@@ -68,7 +70,7 @@
             this.btnScrape.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnScrape.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnScrape.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnScrape.Location = new System.Drawing.Point(189, 39);
+            this.btnScrape.Location = new System.Drawing.Point(189, 80);
             this.btnScrape.Name = "btnScrape";
             this.btnScrape.Size = new System.Drawing.Size(75, 23);
             this.btnScrape.TabIndex = 1;
@@ -103,13 +105,54 @@
             // pnlStart
             // 
             this.pnlStart.BackColor = System.Drawing.Color.Transparent;
+            this.pnlStart.Controls.Add(this.chkScreener2);
+            this.pnlStart.Controls.Add(this.chkScreener);
             this.pnlStart.Controls.Add(this.btnSettings);
             this.pnlStart.Controls.Add(this.btnExit);
             this.pnlStart.Controls.Add(this.btnScrape);
-            this.pnlStart.Location = new System.Drawing.Point(160, 132);
+            this.pnlStart.Location = new System.Drawing.Point(160, 114);
             this.pnlStart.Name = "pnlStart";
-            this.pnlStart.Size = new System.Drawing.Size(305, 131);
+            this.pnlStart.Size = new System.Drawing.Size(305, 167);
             this.pnlStart.TabIndex = 4;
+            // 
+            // chkScreener2
+            // 
+            this.chkScreener2.AutoSize = true;
+            this.chkScreener2.Location = new System.Drawing.Point(189, 20);
+            this.chkScreener2.Name = "chkScreener2";
+            this.chkScreener2.Size = new System.Drawing.Size(101, 17);
+            this.chkScreener2.TabIndex = 3;
+            this.chkScreener2.Text = "Run Screener 2";
+            this.chkScreener2.UseVisualStyleBackColor = true;
+            this.chkScreener2.CheckedChanged += new System.EventHandler(this.chkScreener2_CheckedChanged);
+            // 
+            // chkScreener
+            // 
+            this.chkScreener.AutoSize = true;
+            this.chkScreener.Location = new System.Drawing.Point(40, 23);
+            this.chkScreener.Name = "chkScreener";
+            this.chkScreener.Size = new System.Drawing.Size(98, 17);
+            this.chkScreener.TabIndex = 2;
+            this.chkScreener.Text = "Run Screener?";
+            this.chkScreener.UseVisualStyleBackColor = true;
+            this.chkScreener.CheckedChanged += new System.EventHandler(this.chkScreener_CheckedChanged);
+            // 
+            // btnExit
+            // 
+            this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(15)))), ((int)(((byte)(53)))));
+            this.btnExit.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnExit.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.btnExit.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnExit.Location = new System.Drawing.Point(115, 129);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(75, 23);
+            this.btnExit.TabIndex = 1;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // pnlProgress
             // 
@@ -153,23 +196,6 @@
             this.bgwScrape.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwScrape_DoWork);
             this.bgwScrape.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwScrape_RunWorkerCompleted);
             // 
-            // btnExit
-            // 
-            this.btnExit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(15)))), ((int)(((byte)(53)))));
-            this.btnExit.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnExit.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.btnExit.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.ControlDark;
-            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnExit.Location = new System.Drawing.Point(115, 88);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(75, 23);
-            this.btnExit.TabIndex = 1;
-            this.btnExit.Text = "Exit";
-            this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
             // frmSplash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,6 +216,7 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.frmSplash_MouseUp);
             this.pnlStart.ResumeLayout(false);
+            this.pnlStart.PerformLayout();
             this.pnlProgress.ResumeLayout(false);
             this.pnlProgress.PerformLayout();
             this.ResumeLayout(false);
@@ -208,5 +235,7 @@
         private System.Windows.Forms.Label lblStatus;
         private System.ComponentModel.BackgroundWorker bgwScrape;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.CheckBox chkScreener2;
+        private System.Windows.Forms.CheckBox chkScreener;
     }
 }

@@ -18,7 +18,6 @@ namespace Screener
         public delegate void ProgressUpdate(int i, string update, int change);
         public event ProgressUpdate OnProgressUpdate;
         private Dictionary<string, Dictionary<string, Stock>> stocks;
-        private Dictionary<string, string> stocksAndSector;
         private dynamic driver;
         private dynamic options;
         private int timeOuts = 0;
@@ -62,6 +61,10 @@ namespace Screener
                 this.urls = urls;
                 GetProxies();
                 ScrapeFinviz();
+                /*foreach (var f in finvizRows)
+                {
+                    Console.WriteLine(String.Format("{0} {1} {2} {3} {4} {5} {6} {7} {8}", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8]));
+                }*/
 
                 if (symbols != null && symbols.Count > 0 && !frmSplash.GetCancelled())
                 {

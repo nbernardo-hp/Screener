@@ -125,6 +125,12 @@
     <Compile Include="frmPreferences.Designer.cs">
       <DependentUpon>frmPreferences.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSaveStocks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSaveStocks.Designer.cs">
+      <DependentUpon>frmSaveStocks.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSelectBrowser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmPreferences.resx">
       <DependentUpon>frmPreferences.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSaveStocks.resx">
+      <DependentUpon>frmSaveStocks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSelectBrowser.resx">
       <DependentUpon>frmSelectBrowser.cs</DependentUpon>

@@ -475,6 +475,18 @@ namespace Screener
             return url.Append("," + finvizMap["sector"][sector] + finvizEndUrl).ToString();
         }//end CreateFinvizUrl
 
+        public string CreateFinvizUrlForScreener2(List<string> symbols)
+        {
+            StringBuilder url = new StringBuilder().Append(finvizStartUrl);
+            int symbolsLen = symbols.Count;
+            for(int i = 0; i < symbolsLen; i++)
+            {
+                url.Append(symbols[i]);
+                if(i < symbolsLen - 1) { url.Append(","); }
+            }//end for
+            return url.Append(finvizEndUrl).ToString();
+        }//end CreateFinvizUrlFroScreener2
+
         /// <summary>
         /// Returns a bool to tell the program if preferences were loaded or no
         /// </summary>

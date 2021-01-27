@@ -17,8 +17,9 @@ namespace Screener
     {
         public delegate void ProgressUpdate(int i, string update, int change);
         public event ProgressUpdate OnProgressUpdate;
+        private bool onlyScreenerTwoRun = false;
         private Dictionary<string, Dictionary<string, Stock>> stocks;
-        private Dictionary<string, string> stocksAndSector;
+        private Dictionary<string, Dictionary<string, string>> stocksAdditionalInfo;
         private dynamic driver;
         private dynamic options;
         private int timeOuts = 0;
@@ -52,6 +53,7 @@ namespace Screener
             }//end if-else
             this.pe = pe;
             this.rsi = rsi;
+            stocksAdditionalInfo = frmSplash.GetStocksAdditionalInfo();
         }//end one argument constructor
 
         public void Start(Stack<string> urls)
@@ -61,6 +63,8 @@ namespace Screener
             {
                 this.urls = urls;
                 GetProxies();
+
+
                 ScrapeFinviz();
 
                 if (symbols != null && symbols.Count > 0 && !frmSplash.GetCancelled())
@@ -110,7 +114,7 @@ namespace Screener
                 string symbol = chartMillRows[i][0].ToString();
                 ChangeProgress(1, String.Format("Parsing Stock information - {0}  {1}/{2}", symbol, i + 1, finvizRows.Count));
                 int fundValue = (int)(double.Parse(chartMillRows[i][1].ToString()) * 2);
-                if (fundValue >= 5)
+                if (fundValue >= 5 || stocksAdditionalInfo.ContainsKey(symbol))
                 {
                     var finvizRow = finvizRows.Select(x => x).Where(x => x[0].Equals(symbol)).First();
                     Stock temp = new Stock();
@@ -135,7 +139,21 @@ namespace Screener
                         temp.ZacksStringValue = "Hold";
                     }
                     
-
+                    //Determines and marks the stock according to which table it needs to show in.  If in screener 2 add the sector
+                    //information to the symbol
+                    if(fundValue >= 5 && stocksAdditionalInfo.ContainsKey(symbol))
+                    {
+                        temp.SetInScreener(0, true);
+                        temp.SetInScreener(1, true);
+                        stocksAdditionalInfo[symbol]["sector"] = finvizRow[1];
+                    } else if (stocksAdditionalInfo.ContainsKey(symbol))
+                    {
+                        temp.SetInScreener(1, true);
+                        stocksAdditionalInfo[symbol]["sector"] = finvizRow[1];
+                    } else
+                    {
+                        temp.SetInScreener(0, true);
+                    }//end if-else if-else
                     stocks[finvizRow[1]].Add(temp.SymbolValue, temp);
                 }//end if
             }//end for
@@ -304,6 +322,16 @@ namespace Screener
                             driver.Navigate();
                         }
                         i++;
+                        if(urls.Count == 0 && i == pages && !frmSplash.GetOnlyScreenerTwoRun())
+                        {
+                            if (stocksAdditionalInfo != null)
+                            {
+                                var query = from s in stocksAdditionalInfo.Keys
+                                            where finvizRows.Select(x => x[0]).First() != s
+                                            select s;
+                                urls.Push(new Preferences().CreateFinvizUrlForScreener2(query.ToList()));
+                            }
+                        }
                     } catch (TimeoutException)
                     {
                         timeOuts++;

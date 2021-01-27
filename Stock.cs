@@ -26,7 +26,6 @@ namespace Screener
         private string zacksString;
         private string symbol;
         private string industry;
-        private string screener2Category;
         public string SymbolValue
         {
             get { return symbol; }
@@ -37,12 +36,6 @@ namespace Screener
         {
             get { return industry; }
             set { industry = value; }
-        }
-
-        public string Screener2CategoryValue
-        {
-            get { return screener2Category; }
-            set { screener2Category = value; }
         }
 
         public int FundValue

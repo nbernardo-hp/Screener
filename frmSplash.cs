@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Screener
 {
@@ -20,7 +21,7 @@ namespace Screener
         private Point formLocation;
         private Stack<string> urls = new Stack<string>();
         private static Dictionary<string, Dictionary<string, Stock>> stocks;
-        private static Dictionary<string, string[]> stocksAdditionalInfo;
+        private static Dictionary<string, Dictionary<string, string>> stocksAdditionalInfo;
         public frmSplash()
         {
             try
@@ -53,7 +54,7 @@ namespace Screener
         }
         public static bool GetCancelled() { return cancelled; }
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
-        public Dictionary<string, string[]> GetStocksAdditionalInfo() { return stocksAdditionalInfo; }
+        public static Dictionary<string, Dictionary<string, string>> GetStocksAdditionalInfo() { return stocksAdditionalInfo; }
         private void frmSplash_Load(object sender, EventArgs e)
         {
             try
@@ -62,7 +63,6 @@ namespace Screener
                 formLocation = this.Location;
                 btnSettings.Enabled = false;
                 btnScrape.Enabled = false;
-                btnCancel.Enabled = false;
                 if (!splashPref.GetLoaded())
                 {
                     StartWork();
@@ -286,10 +286,75 @@ namespace Screener
         {
             try
             {
+                if ((chkScreener2.Checked && chkScreener.Checked) || chkScreener2.Checked)
+                {
+                    OpenFileDialog open = new OpenFileDialog();
+                    open.Filter = "Word files (*.docx)|*docx";
+                    open.FilterIndex = 1;
+                    open.Multiselect = false;
+                    if (open.ShowDialog() == DialogResult.OK)
+                    {
+                        stocksAdditionalInfo = new Dictionary<string, Dictionary<string, string>>();
+                        Microsoft.Office.Interop.Word.Application doc = new Microsoft.Office.Interop.Word.Application();
+                        object miss = System.Reflection.Missing.Value;
+                        object path = open.FileName;
+                        object readOnly = true;
+                        var docs = doc.Documents.Open(ref path, ref miss, ref readOnly,
+                                       ref miss, ref miss, ref miss, ref miss,
+                                       ref miss, ref miss, ref miss, ref miss,
+                                       ref miss, ref miss, ref miss, ref miss,
+                                       ref miss);
+                        string source = "";
+                        foreach (Microsoft.Office.Interop.Word.Table table in docs.Tables)
+                        {
+                            for (int i = 1; i < table.Rows.Count; i++)
+                            {
+                                string symbol = FormatText(table.Cell(i, 1));
+                                string include = FormatText(table.Cell(i, 2));
+                                if (symbol != "")
+                                {
+                                    if (symbol != "#" && include != "")
+                                    {
+                                        if (!stocksAdditionalInfo.ContainsKey(symbol))
+                                        {
+                                            stocksAdditionalInfo.Add(symbol, new Dictionary<string, string>()
+                                            {
+                                                ["sector"] = "",
+                                                ["source"] = source
+                                            });
+                                        }
+                                    }
+                                    else if (symbol == "#")
+                                    {
+                                        source = FormatText(table.Cell(i, 3));
+                                    }//end if-else
+                                }//end if
+                            }//end for
+                        }//end foreach
+                        ((Microsoft.Office.Interop.Word._Document)docs).Close();
+                        ((Microsoft.Office.Interop.Word._Application)doc).Quit();
+                    }
+                    else
+                    {
+                        chkScreener2.Checked = false;
+                        return;
+                    }//end nested if-else
+                }//end if
                 pnlProgress.Visible = true;
                 pnlStart.Visible = false;
                 lblStatus.Text = "Initializing...";
-                urls = splashPref.GetFinvizUrls();
+                if(!GetOnlyScreenerTwoRun())
+                {
+                    urls = splashPref.GetFinvizUrls();
+                } else
+                {
+                    urls.Push(
+                        splashPref.CreateFinvizUrlForScreener2(
+                            (from s in stocksAdditionalInfo.Keys
+                             select s).ToList()
+                            )
+                        );
+                }
                 bgwScrape.RunWorkerAsync();
             } catch (Exception ex)
             {
@@ -333,61 +398,20 @@ namespace Screener
 
         private void chkScreener_CheckedChanged(object sender, EventArgs e)
         {
-            ToggleButtons(chkScreener, chkScreener2);
+            try
+            {
+                ToggleButtons(chkScreener, chkScreener2);
+            } catch
+            {
+
+            }
         }//end
 
         private void chkScreener2_CheckedChanged(object sender, EventArgs e)
         {
-            ToggleButtons(chkScreener2, chkScreener);
             try
             {
-                if (chkScreener2.Checked)
-                {
-                    OpenFileDialog open = new OpenFileDialog();
-                    open.Filter = "Word files (*.docx)|*docx";
-                    open.FilterIndex = 1;
-                    open.Multiselect = false;
-                    if (open.ShowDialog() == DialogResult.OK)
-                    {
-                        stocksAdditionalInfo = new Dictionary<string, string[]>();
-                        Microsoft.Office.Interop.Word.Application doc = new Microsoft.Office.Interop.Word.Application();
-                        object miss = System.Reflection.Missing.Value;
-                        object path = open.FileName;
-                        object readOnly = true;
-                        var docs = doc.Documents.Open(ref path, ref miss, ref readOnly,
-                                       ref miss, ref miss, ref miss, ref miss,
-                                       ref miss, ref miss, ref miss, ref miss,
-                                       ref miss, ref miss, ref miss, ref miss,
-                                       ref miss);
-                        string source = "";
-                        foreach(Microsoft.Office.Interop.Word.Table table in docs.Tables)
-                        {
-                            for(int i = 1; i < table.Rows.Count; i++)
-                            {
-                                string symbol = FormatText(table.Cell(i, 1));
-                                string include = FormatText(table.Cell(i, 2));
-                                if(symbol != "")
-                                {
-                                    if(symbol != "#" && include != "")
-                                    {
-                                        if(!stocksAdditionalInfo.ContainsKey(symbol))
-                                        {
-                                            stocksAdditionalInfo.Add(symbol, new string[] { "", source });
-                                        }
-                                    } else if(symbol == "#")
-                                    {
-                                        source = FormatText(table.Cell(i, 3));
-                                    }//end if-else
-                                }//end if
-                            }//end for
-                        }//end foreach
-                        ((Microsoft.Office.Interop.Word._Document)docs).Close();
-                        ((Microsoft.Office.Interop.Word._Application)doc).Quit();
-                    } else
-                    {
-                        chkScreener2.Checked = false;
-                    }//end nested if-else
-                }//end if
+                ToggleButtons(chkScreener2, chkScreener);
             } catch
             {
 
@@ -426,5 +450,11 @@ namespace Screener
         {
             return box.Name == "chkScreener";
         }//end
+
+        public bool GetOnlyScreenerTwoRun()
+        {
+            var temp = chkScreener2.Checked && !chkScreener.Checked;
+            return temp;
+        }
     }//end frmSplash
 }//end namespace

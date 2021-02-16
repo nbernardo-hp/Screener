@@ -29,7 +29,7 @@ namespace Screener
             fileName = name;
         }//two argument constructor
 
-        public void SaveExcelDocument(Dictionary<string, Dictionary<string, Stock>> map)
+        public void SaveExcelDocument(Dictionary<string, Dictionary<string, Stock>> map, bool secondScreener)
         {
             ChangeProgress(0, "Initializing...", (map.Count + map.Values.Count));
             Excel.Application app = new Excel.Application();
@@ -56,23 +56,23 @@ namespace Screener
             SetColumnWidth(ref worksheet, 1, 1, 1, 1, 6.14);
             SetColumnWidth(ref worksheet, 1, 2, 1, 2, 36.71);
             MergeCells(ref worksheet, 1, 1, 1, 2);
-            worksheet.Cells[1, 3] = GetHeaderText(3);
+            worksheet.Cells[1, 3] = GetHeaderText(3, secondScreener);
             SetColumnWidth(ref worksheet, 1, 3, 1, 3, 11.29);
-            worksheet.Cells[1, 4] = GetHeaderText(4);
+            worksheet.Cells[1, 4] = GetHeaderText(4, secondScreener);
             SetColumnWidth(ref worksheet, 1, 4, 1, 4, 11.29);
-            worksheet.Cells[1, 5] = GetHeaderText(5);
+            worksheet.Cells[1, 5] = GetHeaderText(5, secondScreener);
             SetColumnWidth(ref worksheet, 1, 5, 1, 5, 12.14);
-            worksheet.Cells[1, 6] = GetHeaderText(6);
+            worksheet.Cells[1, 6] = GetHeaderText(6, secondScreener);
             SetColumnWidth(ref worksheet, 1, 6, 1, 6, 16.57);
-            worksheet.Cells[1, 7] = GetHeaderText(7);
+            worksheet.Cells[1, 7] = GetHeaderText(7, secondScreener);
             SetColumnWidth(ref worksheet, 1, 7, 1, 7, 14.14);
-            worksheet.Cells[1, 8] = GetHeaderText(8);
+            worksheet.Cells[1, 8] = GetHeaderText(8, secondScreener);
             SetColumnWidth(ref worksheet, 1, 8, 1, 8, 11.14);
-            worksheet.Cells[1, 9] = GetHeaderText(9);
+            worksheet.Cells[1, 9] = GetHeaderText(9, secondScreener);
             SetColumnWidth(ref worksheet, 1, 9, 1, 9, 12.71);
-            worksheet.Cells[1, 10] = GetHeaderText(10);
+            worksheet.Cells[1, 10] = GetHeaderText(10, secondScreener);
             SetColumnWidth(ref worksheet, 1, 10, 1, 10, 11.71);
-            worksheet.Cells[1, 11] = GetHeaderText(11);
+            worksheet.Cells[1, 11] = GetHeaderText(11, secondScreener);
             SetColumnWidth(ref worksheet, 1, 11, 1, 11, 12.86);
 
             //formatRange = GetRange(worksheet, 2, 7, 2, 8);
@@ -136,10 +136,10 @@ namespace Screener
 
             ChangeProgress(1, "Adding Earnings Date, Zacks score explaination...");
             //Merge rows at the botom of the document and add the scoring explanation
-            for(int j = 1; j < 6; j++)
+            for(int j = 1; j < (!secondScreener ? 6 : 5); j++)
             {
                 MergeCells(ref worksheet, i, 1, i, 11);
-                worksheet.Cells[i, 1] = GetScoreExplanation(j);
+                worksheet.Cells[i, 1] = GetScoreExplanation(j, secondScreener);
                 i++;
             }
 
@@ -151,7 +151,7 @@ namespace Screener
             app.Quit();
         }//end
 
-        public void SaveHtmlDocument(Dictionary<string, Dictionary<string, Stock>> map)
+        public void SaveHtmlDocument(Dictionary<string, Dictionary<string, Stock>> map, bool secondScreener)
         {
             string file = Path.Combine(filePath, fileName);
             if(Directory.Exists(filePath) && File.Exists(file)) { File.Delete(file); }
@@ -189,28 +189,35 @@ namespace Screener
                         IOrderedEnumerable<Stock> stocks = frmScreener.SortSectorDictionary(map[sector]);
                         foreach(var s in stocks)
                         {
-                            sw.WriteLine(String.Format("<tr{0}>", (i % 2 != 0 ? " style=\"background-color:gainsboro\"" : "")));
-
-                            var attributes = s.GetAttributesEnumerable();
-                            var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
-                            for (int j = 0; j < attributes.Count(); j++)
+                            if((secondScreener && s.GetInScreener(1) == true) || (!secondScreener && s.TotalScoreValue >= 16))
                             {
-                                string val = attributes.ElementAt(j).ToString();
-                                if (5 <= j && j <= 7 && val == Double.MinValue.ToString()) { val = "NA"; }
-                                sw.WriteLine(String.Format("<td{0}>{1}</td>",
-                                    (colors != null && 2 <= j && j <= 9 ? 
-                                        String.Format(" style=\"background-color:{0}\"",colors[j-2].Name.ToLower()) :
-                                        ""),
-                                    val));
-                            }//end for
+                                sw.WriteLine(String.Format("<tr{0}>", (i % 2 != 0 ? " style=\"background-color:gainsboro\"" : "")));
 
-                            sw.WriteLine("</tr>");
-                            i++;
+                                var attributes = s.GetAttributesEnumerable();
+                                var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
+                                for (int j = 0; j < attributes.Count(); j++)
+                                {
+                                    string val = attributes.ElementAt(j).ToString();
+                                    if (5 <= j && j <= 7 && val == Double.MinValue.ToString()) { val = "NA"; }
+                                    sw.WriteLine(String.Format("<td{0}>{1}</td>",
+                                        (colors != null && 2 <= j && j <= 9 ?
+                                            String.Format(" style=\"background-color:{0}\"", colors[j - 2].Name.ToLower()) :
+                                            ""),
+                                        val));
+                                }//end for
+
+                                sw.WriteLine("</tr>");
+                                i++;
+                            }
                         }//end nested foreach
                     }//end foreach
 
                     sw.WriteLine("</table>");
-                    sw.WriteLine(String.Format("<p>{0}</p><p>{1}</p><p>{2}</p><p>{3}</p><p>{4}</p>", GetScoreExplanation(1), GetScoreExplanation(2), GetScoreExplanation(3), GetScoreExplanation(4), GetScoreExplanation(5)));
+                    sw.WriteLine(String.Format("<p>{0}</p><p>{1}</p><p>{2}</p><p>{3}</p>", GetScoreExplanation(1, secondScreener), GetScoreExplanation(2, secondScreener), GetScoreExplanation(3, secondScreener), GetScoreExplanation(4, secondScreener)));
+                    if(!secondScreener)
+                    {
+                        sw.WriteLine(String.Format("<p>{0}</p>", GetScoreExplanation(5, secondScreener)));
+                    }
                     sw.WriteLine("</body>");
                     sw.WriteLine("</html>");
                 }//end nested using
@@ -221,7 +228,7 @@ namespace Screener
         /// Saves a .docx file of the table to the Directory returned from the SaveFileDialog
         /// </summary>
         /// <param name="stocks">The Stock objects to be used</param>
-        public void SaveWordDocument(Dictionary<string, Dictionary<string, Stock>> map, int numRows)
+        public void SaveWordDocument(Dictionary<string, Dictionary<string, Stock>> map, int numRows, bool secondScreener)
         {
             /*starts a new instance of Word and checks to verify that the instance is created.  Sets the visibility and animation to false.
              *Creates a new Word document, adjusts the orientation, and creates a new paragraph*/
@@ -250,7 +257,7 @@ namespace Screener
              *paragraph text and merges the first 2 cells of the table*/
             for (int i = 3; i < 12; i++)
             {
-                table.Cell(1, i).Range.Text = GetHeaderText(i);
+                table.Cell(1, i).Range.Text = GetHeaderText(i, secondScreener);
             }//end for
             table.Rows[1].Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
             MergeCells(ref table, 1, 1, 1, 2);
@@ -305,7 +312,11 @@ namespace Screener
             ChangeProgress(1, "Adding Earnings Date score explaination...");
             /*Adds a new paragraph containing the explanation for the earningsDate scoring*/
             Word.Paragraph scoreExplanation = document.Content.Paragraphs.Add();
-            scoreExplanation.Range.Text = String.Format("{0}\n{1}\n{2}\n{3}\n{4}", GetScoreExplanation(1), GetScoreExplanation(2), GetScoreExplanation(3), GetScoreExplanation(4), GetScoreExplanation(5));
+            scoreExplanation.Range.Text = String.Format("{0}\n{1}\n{2}\n{3}", GetScoreExplanation(1,secondScreener), GetScoreExplanation(2, secondScreener), GetScoreExplanation(3, secondScreener), GetScoreExplanation(4, secondScreener));
+            if(!secondScreener)
+            {
+                scoreExplanation.Range.Text = String.Format("\n{0}", GetScoreExplanation(5, secondScreener));
+            }
             scoreExplanation.Range.InsertParagraphAfter();
 
             ChangeProgress(1, "Finializing...");
@@ -342,7 +353,7 @@ namespace Screener
         /// </summary>
         /// <param name="col">The column from 3 to 10</param>
         /// <returns></returns>
-        private string GetHeaderText(int col)
+        private string GetHeaderText(int col, bool secondScreener)
         {
             switch(col)
             {
@@ -353,11 +364,11 @@ namespace Screener
                 case 5:
                     return "CM Valuation\n5-10 = Green\n3-4 = Yellow\n0-2 = Red";
                 case 6:
-                    return "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red";
+                    return (!secondScreener ? "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red" : "EPS Next Y\nx >= 25% = Green\n25% > x >= 0% = Yellow\nx < 0% = Red");
                 case 7:
                     return "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red";
                 case 8:
-                    return "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red";
+                    return (!secondScreener ? "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red" : "Target Price\nx > Actual price = Green\nx < Actual price = Red");
                 case 9:
                     return "Earnings Date\n*See end of\ndocument";
                 case 10:
@@ -374,18 +385,18 @@ namespace Screener
         /// </summary>
         /// <param name="line">The line requested.  1 for the first, 2 for the second</param>
         /// <returns>The requested line</returns>
-        private string GetScoreExplanation(int line)
+        private string GetScoreExplanation(int line, bool secondScreener)
         {
             switch(line)
             {
                 case 1:
-                    return "*Earnings Date: 1 <= x <= 70 days = Green, 71 days <= x < 4 months = Yellow, After 4mo = Red.";
+                    return (!secondScreener ? "*Earnings Date: 1 <= x <= 70 days = Green, 71 days <= x < 4 months = Yellow, After 4mo = Red." : "*Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.");
                 case 2:
-                    return "*Earnings Date Same Day: Before close - before 9:30am = Red, after 9:30am = Green; After close - before 4:00pm = Red, after = Green.";
+                    return (!secondScreener ? "*Earnings Date Same Day: Before close - before 9:30am = Red, after 9:30am = Green; After close - before 4:00pm = Red, after = Green." : "**Total score is calculated using a weight for each color and multiplying the original score by the new weight.");
                 case 3:
-                    return "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.";
+                    return (!secondScreener ? "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4." : "**CM Fund = *5, CM Growth = *3, CM Valuation = *2, EPS Next Y = *5, Recom = *3, Target Price = *2, Zacks = *10");
                 case 4:
-                    return "***Total score is calculated using a weight for each color.";
+                    return (!secondScreener ? "***Total score is calculated using a weight for each color." : "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2.");
                 case 5:
                     return "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2.";
                 default:

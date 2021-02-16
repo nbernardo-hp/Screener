@@ -17,7 +17,7 @@ namespace Screener
     {
         public delegate void ProgressUpdate(int i, string update, int change);
         public event ProgressUpdate OnProgressUpdate;
-        private bool onlyScreenerTwoRun = false;
+        private int scraperRun;
         private Dictionary<string, Dictionary<string, Stock>> stocks;
         private Dictionary<string, Dictionary<string, string>> stocksAdditionalInfo;
         private dynamic driver;
@@ -35,7 +35,7 @@ namespace Screener
         private string[] zacksUrl = new String[2] { "https://www.zacks.com/stock/quote/", "?q=" };
         private string[] pe;
         private string[] rsi;
-        public WebScraper(string browser, string[] pe, string[] rsi)
+        public WebScraper(string browser, string[] pe, string[] rsi, int scraperRun)
         {
             if (browser == "c")
             {
@@ -53,23 +53,27 @@ namespace Screener
             }//end if-else
             this.pe = pe;
             this.rsi = rsi;
-            stocksAdditionalInfo = frmSplash.GetStocksAdditionalInfo();
+            this.scraperRun = scraperRun;
         }//end one argument constructor
 
-        public void Start(Stack<string> urls)
+        public void Start(Stack<string> urls, Dictionary<string, Dictionary<string, string>> stocksAdditionalInfo)
         {
+            this.stocksAdditionalInfo = stocksAdditionalInfo;
             bool stop = false;
             while(!stop)
             {
                 this.urls = urls;
                 GetProxies();
 
+                if(stocksAdditionalInfo.Count > 0)
+                {
+                            sectorHeaders = new string[] { "Finviz Screener", "Basic Materials", "Communication Services", "Consumer Cyclical", "Consumer Defensive", "Energy", "Financial", "Healthcare", "Industrials", "Real Estate", "Technology", "Utilities" };
+                }//end if
 
                 ScrapeFinviz();
 
                 if (symbols != null && symbols.Count > 0 && !frmSplash.GetCancelled())
                 {
-
                     ScrapeChartMill();
                 }//end if
 
@@ -114,7 +118,7 @@ namespace Screener
                 string symbol = chartMillRows[i][0].ToString();
                 ChangeProgress(1, String.Format("Parsing Stock information - {0}  {1}/{2}", symbol, i + 1, finvizRows.Count));
                 int fundValue = (int)(double.Parse(chartMillRows[i][1].ToString()) * 2);
-                if (fundValue >= 5 || stocksAdditionalInfo.ContainsKey(symbol))
+                if (fundValue >= 5 || (stocksAdditionalInfo != null && stocksAdditionalInfo.ContainsKey(symbol)))
                 {
                     var finvizRow = finvizRows.Select(x => x).Where(x => x[0].Equals(symbol)).First();
                     Stock temp = new Stock();
@@ -123,13 +127,18 @@ namespace Screener
                     temp.GrowthValue = (int)(double.Parse(chartMillRows[i][2].ToString()) * 2);
                     temp.ValuationValue = (int)(double.Parse(chartMillRows[i][3].ToString()) * 2);
                     temp.IndustryValue = finvizRow[2];
-                    temp.CurrentRatioValue = (finvizRow[4] != "-" ? double.Parse(finvizRow[4]) : Double.MinValue);
 
-                    var high = finvizRow[5].Remove(finvizRow[5].IndexOf("%"));
+                    var eps = (finvizRow[4].Contains("%") ? finvizRow[4].Remove(finvizRow[4].IndexOf("%")) : "-");
+                    temp.EPSNextYValue = (eps != "-" ? double.Parse(eps) : Double.MinValue);
+                    temp.CurrentRatioValue = (finvizRow[5] != "-" ? double.Parse(finvizRow[5]) : Double.MinValue);
+
+                    var high = (finvizRow[6].Contains("%") ? finvizRow[6].Remove(finvizRow[6].IndexOf("%")) : "-");
                     temp.High52WValue = (high != "-" ? double.Parse(high) : Double.MinValue);
-                    temp.RecomValue = (finvizRow[7] != "-" ? double.Parse(finvizRow[7]) : Double.MinValue);
-                    temp.SetEarningsDate(finvizRow[8]);
-                    if(zacksText[i] != null && zacksText[i][0] != "")
+                    temp.RecomValue = (finvizRow[8] != "-" ? double.Parse(finvizRow[8]) : Double.MinValue);
+                    temp.PriceValue = (finvizRow[9] != "-" ? double.Parse(finvizRow[9]) : Double.MinValue);
+                    temp.SetEarningsDate(finvizRow[10]);
+                    temp.TargetPriceValue = (finvizRow[11] != "-" ? double.Parse(finvizRow[11]) : Double.MinValue);
+                    if (zacksText[i] != null && zacksText[i][0] != "")
                     {
                         temp.ZacksRankValue = int.Parse(zacksText[i][0]);
                         temp.ZacksStringValue = zacksText[i][1];
@@ -141,7 +150,18 @@ namespace Screener
                     
                     //Determines and marks the stock according to which table it needs to show in.  If in screener 2 add the sector
                     //information to the symbol
-                    if(fundValue >= 5 && stocksAdditionalInfo.ContainsKey(symbol))
+                    if(fundValue >= 5 && (scraperRun == 1 || scraperRun == 2))
+                    {
+                        temp.SetInScreener(0, true);
+                    }//end if
+
+                    if(stocksAdditionalInfo != null && stocksAdditionalInfo.ContainsKey(symbol))
+                    {
+                        temp.SetInScreener(1, true);
+                        stocksAdditionalInfo[symbol]["sector"] = finvizRow[1];
+                    }//end if
+
+                    /*if(fundValue >= 5 && stocksAdditionalInfo.ContainsKey(symbol))
                     {
                         temp.SetInScreener(0, true);
                         temp.SetInScreener(1, true);
@@ -154,6 +174,7 @@ namespace Screener
                     {
                         temp.SetInScreener(0, true);
                     }//end if-else if-else
+                    */
                     stocks[finvizRow[1]].Add(temp.SymbolValue, temp);
                 }//end if
             }//end for
@@ -170,6 +191,7 @@ namespace Screener
         /// </summary>
         /// <returns></returns>
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
+        public Dictionary<string, Dictionary<string, string>> GetStocksAdditionalInfo() { return stocksAdditionalInfo; }
 
         /// <summary>
         /// Filters the stocks scraped from ChartMill to determine if they should be scraped on Zacks as well
@@ -182,7 +204,7 @@ namespace Screener
             int i = 0;
             while(i < chartMillRows.Count && !frmSplash.GetCancelled())
             {
-                if(double.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5)
+                if(double.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5 && !stocksAdditionalInfo.ContainsKey(chartMillRows[i].ElementAt(0).ToString()))
                 {
                     chartMillRows.RemoveAt(i);
                 } else
@@ -322,7 +344,7 @@ namespace Screener
                             driver.Navigate();
                         }
                         i++;
-                        if(urls.Count == 0 && i == pages && !frmSplash.GetOnlyScreenerTwoRun())
+                        /*if(urls.Count == 0 && i == pages && !frmSplash.GetOnlyScreenerTwoRun())
                         {
                             if (stocksAdditionalInfo != null)
                             {
@@ -331,7 +353,7 @@ namespace Screener
                                             select s;
                                 urls.Push(new Preferences().CreateFinvizUrlForScreener2(query.ToList()));
                             }
-                        }
+                        }*/
                     } catch (TimeoutException)
                     {
                         timeOuts++;
@@ -346,9 +368,14 @@ namespace Screener
                 sect++;
             }//end while
             //FilterFinvizStocks();
-            symbols = (from f in finvizRows select f.ElementAt(0)).ToList();
+            symbols = (from f in finvizRows select f.ElementAt(0)).Distinct().ToList();
             symbols.Sort();
         }//end ScrapeFinviz
+
+        private void test()
+        {
+            
+        }//end
 
         /// <summary>
         /// Determines if the element is present on the page or not to prevent freezing when shown
@@ -416,8 +443,12 @@ namespace Screener
                          //Console.WriteLine(String.Format("{0}   fund={1}   growth={2}   val={3}", chartMillRows[currentStock][0], chartMillRows[currentStock][1], chartMillRows[currentStock][2], chartMillRows[currentStock][3]));
                         currentStock++;
                     }
-                    if (rows != null && rows.Count == 3)
+                    if (rows != null && rows.Count == 3 && numSymbols > 3)
                     {
+                        var extraSymbols = url.Split(new char[] { '=', '&'});
+                        var es = extraSymbols[1].Split(' ').ToList();
+                        es.RemoveRange(0, 3);
+                        symbols.AddRange(es);
                         numSymbols = 3;
                     }//end if
                     SetProxy();

@@ -13,6 +13,8 @@ namespace Screener
 {
     public partial class frmSplash : Form
     {
+        private static bool onlyScreenerTwo;
+        private int screenerType;
         private Preferences splashPref;
         private WebScraper scraper;
         public static bool cancelled = false;
@@ -54,7 +56,8 @@ namespace Screener
         }
         public static bool GetCancelled() { return cancelled; }
         public Dictionary<string, Dictionary<string, Stock>> GetStocks() { return stocks; }
-        public static Dictionary<string, Dictionary<string, string>> GetStocksAdditionalInfo() { return stocksAdditionalInfo; }
+        public Dictionary<string, Dictionary<string, string>> GetStocksAdditionalInfo() { return stocksAdditionalInfo; }
+        public int GetScreenerType() { return screenerType; }
         private void frmSplash_Load(object sender, EventArgs e)
         {
             try
@@ -146,11 +149,11 @@ namespace Screener
 
                     if (scraper == null)
                     {
-                        scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray());
+                        scraper = new WebScraper(splashPref.BrowserValue, splashPref.GetPEArray(), splashPref.GetRSIArray(), screenerType);
                         scraper.OnProgressUpdate += scraper_OnProgressUpdate;
                     }
 
-                    scraper.Start(urls);
+                    scraper.Start(urls, stocksAdditionalInfo);
                     scraper.ParseInformation();
                 }//end if-else
             } catch (Exception ex)
@@ -169,6 +172,7 @@ namespace Screener
                 } else
                 {
                     stocks = scraper.GetStocks();
+                    stocksAdditionalInfo = scraper.GetStocksAdditionalInfo();
                     foreach (var sector in stocks.Values)
                     {
                         foreach (var stock in sector.Values)
@@ -286,6 +290,9 @@ namespace Screener
         {
             try
             {
+                screenerType = ((chkScreener2.Checked && !chkScreener.Checked ? 0 :
+                            (chkScreener2.Checked && chkScreener.Checked ? 1 : 2))
+                            );
                 if ((chkScreener2.Checked && chkScreener.Checked) || chkScreener2.Checked)
                 {
                     OpenFileDialog open = new OpenFileDialog();
@@ -343,18 +350,20 @@ namespace Screener
                 pnlProgress.Visible = true;
                 pnlStart.Visible = false;
                 lblStatus.Text = "Initializing...";
-                if(!GetOnlyScreenerTwoRun())
+
+                if (!onlyScreenerTwo)
                 {
                     urls = splashPref.GetFinvizUrls();
-                } else
-                {
-                    urls.Push(
-                        splashPref.CreateFinvizUrlForScreener2(
-                            (from s in stocksAdditionalInfo.Keys
-                             select s).ToList()
-                            )
-                        );
                 }
+
+                if (onlyScreenerTwo || chkScreener2.Checked)
+                {
+                    urls.Push(splashPref.CreateFinvizUrlForScreener2(
+                            (from s in stocksAdditionalInfo.Keys
+                             select s).ToList())
+                            );
+                }//end if
+
                 bgwScrape.RunWorkerAsync();
             } catch (Exception ex)
             {
@@ -444,6 +453,14 @@ namespace Screener
                     btnSettings.Enabled = false;
                 }//end nested if-else
             }//end if-else
+
+            if(chkScreener2.Checked && !chkScreener.Checked)
+            {
+                onlyScreenerTwo = true;
+            } else
+            {
+                onlyScreenerTwo = false;
+            }//end if-else
         }//end
 
         private bool CheckCheckBoxName(CheckBox box)
@@ -451,10 +468,9 @@ namespace Screener
             return box.Name == "chkScreener";
         }//end
 
-        public bool GetOnlyScreenerTwoRun()
+        public static bool GetOnlyScreenerTwoRun()
         {
-            var temp = chkScreener2.Checked && !chkScreener.Checked;
-            return temp;
+            return onlyScreenerTwo;
         }
     }//end frmSplash
 }//end namespace

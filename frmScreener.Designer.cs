@@ -41,17 +41,33 @@
             System.Windows.Forms.ListViewGroup listViewGroup10 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup11 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScreener));
-            System.Windows.Forms.ListViewGroup listViewGroup12 = new System.Windows.Forms.ListViewGroup("Basic Materials", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup13 = new System.Windows.Forms.ListViewGroup("Communication Services", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup14 = new System.Windows.Forms.ListViewGroup("Consumer Cyclical", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup15 = new System.Windows.Forms.ListViewGroup("Consumer Defensive", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup16 = new System.Windows.Forms.ListViewGroup("Energy", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup17 = new System.Windows.Forms.ListViewGroup("Financial", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup18 = new System.Windows.Forms.ListViewGroup("Healthcare", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup19 = new System.Windows.Forms.ListViewGroup("Industrials", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup20 = new System.Windows.Forms.ListViewGroup("Real Estate", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup21 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup22 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup12 = new System.Windows.Forms.ListViewGroup("Nick’s “Stock Screener”", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup13 = new System.Windows.Forms.ListViewGroup("*1.  Finviz Today Long Lower Wick and High Vol", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup14 = new System.Windows.Forms.ListViewGroup("*2.  Finviz Ascending Triangle", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup15 = new System.Windows.Forms.ListViewGroup("*3.  Finviz Spike in Vol & Price but still a value –  A Finviz Scan", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup16 = new System.Windows.Forms.ListViewGroup("*4.  Finviz Long Shadow, Good Volume, Profitable –  A Finviz Scan", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup17 = new System.Windows.Forms.ListViewGroup("ChartMill DB Technical Breakout Setups CMFund > 4", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup18 = new System.Windows.Forms.ListViewGroup("ChartMill  DB Trading Asc Triangles CMFund>", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup19 = new System.Windows.Forms.ListViewGroup("ChartMill DB MACD Crossover and SMAs cor", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup20 = new System.Windows.Forms.ListViewGroup("High Growth You Tube", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup21 = new System.Windows.Forms.ListViewGroup("Kiplinger Value Stocks", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup22 = new System.Windows.Forms.ListViewGroup("Investor Place", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup23 = new System.Windows.Forms.ListViewGroup("Stock News", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup24 = new System.Windows.Forms.ListViewGroup("Motley Fool", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup25 = new System.Windows.Forms.ListViewGroup("Motley Fool Top 10 Recent Picks", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup26 = new System.Windows.Forms.ListViewGroup("US News", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup27 = new System.Windows.Forms.ListViewGroup("StockMarket.com", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup28 = new System.Windows.Forms.ListViewGroup("Barron’s", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup29 = new System.Windows.Forms.ListViewGroup("IBD Top 50", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup30 = new System.Windows.Forms.ListViewGroup("Investor Place", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup31 = new System.Windows.Forms.ListViewGroup("RG IQuant.pro", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup32 = new System.Windows.Forms.ListViewGroup("Election Stocks Biden Wins Finviz", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup33 = new System.Windows.Forms.ListViewGroup("CNN Virus Prevention Stocks Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup34 = new System.Windows.Forms.ListViewGroup("CNN Airlines Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup35 = new System.Windows.Forms.ListViewGroup("CNN Stay at Home Stocks Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup36 = new System.Windows.Forms.ListViewGroup("PBW ETF Holdings Clean Energy Stocks Finviz", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup37 = new System.Windows.Forms.ListViewGroup("WFH ETF Holdings Work From Home Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup38 = new System.Windows.Forms.ListViewGroup("Wind and Solar Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,17 +114,17 @@
             this.tabScreener = new System.Windows.Forms.TabPage();
             this.tabScreener2 = new System.Windows.Forms.TabPage();
             this.lstvStocks2 = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2Symbol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2Industry = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2Fund = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2Growth = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2Valuation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.EPS_Next_Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2Recom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Target_Price = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2EarningsDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2ZacksRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.s2TotalScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.pnlNoStocksToDisplay.SuspendLayout();
             this.tabScreeners.SuspendLayout();
@@ -507,41 +523,73 @@
             // 
             this.lstvStocks2.BackColor = System.Drawing.SystemColors.Window;
             this.lstvStocks2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5,
-            this.columnHeader6,
-            this.columnHeader7,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader10,
-            this.columnHeader11});
+            this.s2Symbol,
+            this.s2Industry,
+            this.s2Fund,
+            this.s2Growth,
+            this.s2Valuation,
+            this.EPS_Next_Y,
+            this.s2Recom,
+            this.Target_Price,
+            this.s2EarningsDate,
+            this.s2ZacksRank,
+            this.s2TotalScore});
             this.lstvStocks2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstvStocks2.FullRowSelect = true;
-            listViewGroup12.Header = "Basic Materials";
-            listViewGroup12.Name = "Basic Materials";
-            listViewGroup13.Header = "Communication Services";
-            listViewGroup13.Name = "Communication Services";
-            listViewGroup14.Header = "Consumer Cyclical";
-            listViewGroup14.Name = "Consumer Cyclical";
-            listViewGroup15.Header = "Consumer Defensive";
-            listViewGroup15.Name = "Consumer Defensive";
-            listViewGroup16.Header = "Energy";
-            listViewGroup16.Name = "Energy";
-            listViewGroup17.Header = "Financial";
-            listViewGroup17.Name = "Financial";
-            listViewGroup18.Header = "Healthcare";
-            listViewGroup18.Name = "Healthcare";
-            listViewGroup19.Header = "Industrials";
-            listViewGroup19.Name = "Industrials";
-            listViewGroup20.Header = "Real Estate";
-            listViewGroup20.Name = "Real Estate";
-            listViewGroup21.Header = "Technology";
-            listViewGroup21.Name = "Technology";
-            listViewGroup22.Header = "Utilities";
-            listViewGroup22.Name = "Utilities";
+            listViewGroup12.Header = "Nick’s “Stock Screener”";
+            listViewGroup12.Name = "Nick’s “Stock Screener”";
+            listViewGroup13.Header = "*1.  Finviz Today Long Lower Wick and High Vol";
+            listViewGroup13.Name = "*1.  Finviz Today Long Lower Wick and High Vol";
+            listViewGroup14.Header = "*2.  Finviz Ascending Triangle";
+            listViewGroup14.Name = "*2.  Finviz Ascending Triangle";
+            listViewGroup15.Header = "*3.  Finviz Spike in Vol & Price but still a value –  A Finviz Scan";
+            listViewGroup15.Name = "*3.  Finviz Spike in Vol & Price but still a value –  A Finviz Scan";
+            listViewGroup16.Header = "*4.  Finviz Long Shadow, Good Volume, Profitable –  A Finviz Scan";
+            listViewGroup16.Name = "*4.  Finviz Long Shadow, Good Volume, Profitable –  A Finviz Scan";
+            listViewGroup17.Header = "ChartMill DB Technical Breakout Setups CMFund > 4";
+            listViewGroup17.Name = "ChartMill DB Technical Breakout Setups CMFund > 4";
+            listViewGroup18.Header = "ChartMill  DB Trading Asc Triangles CMFund>";
+            listViewGroup18.Name = "ChartMill  DB Trading Asc Triangles CMFund>";
+            listViewGroup19.Header = "ChartMill DB MACD Crossover and SMAs cor";
+            listViewGroup19.Name = "ChartMill DB MACD Crossover and SMAs cor";
+            listViewGroup20.Header = "High Growth You Tube";
+            listViewGroup20.Name = "High Growth You Tube";
+            listViewGroup21.Header = "Kiplinger Value Stocks";
+            listViewGroup21.Name = "Kiplinger Value Stocks";
+            listViewGroup22.Header = "Investor Place";
+            listViewGroup22.Name = "Investor Place";
+            listViewGroup23.Header = "Stock News";
+            listViewGroup23.Name = "Stock News";
+            listViewGroup24.Header = "Motley Fool";
+            listViewGroup24.Name = "Motley Fool";
+            listViewGroup25.Header = "Motley Fool Top 10 Recent Picks";
+            listViewGroup25.Name = "Motley Fool Top 10 Recent Picks";
+            listViewGroup26.Header = "US News";
+            listViewGroup26.Name = "US News";
+            listViewGroup27.Header = "StockMarket.com";
+            listViewGroup27.Name = "StockMarket.com";
+            listViewGroup28.Header = "Barron’s";
+            listViewGroup28.Name = "Barron’s";
+            listViewGroup29.Header = "IBD Top 50";
+            listViewGroup29.Name = "IBD Top 50";
+            listViewGroup30.Header = "Investor Place";
+            listViewGroup30.Name = "Investor Place";
+            listViewGroup31.Header = "RG IQuant.pro";
+            listViewGroup31.Name = "RG IQuant.pro";
+            listViewGroup32.Header = "Election Stocks Biden Wins Finviz";
+            listViewGroup32.Name = "Election Stocks Biden Wins Finviz";
+            listViewGroup33.Header = "CNN Virus Prevention Stocks Finviz Screener";
+            listViewGroup33.Name = "CNN Virus Prevention Stocks Finviz Screener";
+            listViewGroup34.Header = "CNN Airlines Finviz Screener";
+            listViewGroup34.Name = "CNN Airlines Finviz Screener";
+            listViewGroup35.Header = "CNN Stay at Home Stocks Finviz Screener";
+            listViewGroup35.Name = "CNN Stay at Home Stocks Finviz Screener";
+            listViewGroup36.Header = "PBW ETF Holdings Clean Energy Stocks Finviz";
+            listViewGroup36.Name = "PBW ETF Holdings Clean Energy Stocks Finviz";
+            listViewGroup37.Header = "WFH ETF Holdings Work From Home Finviz Screener";
+            listViewGroup37.Name = "WFH ETF Holdings Work From Home Finviz Screener";
+            listViewGroup38.Header = "Wind and Solar Finviz Screener";
+            listViewGroup38.Name = "Wind and Solar Finviz Screener";
             this.lstvStocks2.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup12,
             listViewGroup13,
@@ -553,7 +601,23 @@
             listViewGroup19,
             listViewGroup20,
             listViewGroup21,
-            listViewGroup22});
+            listViewGroup22,
+            listViewGroup23,
+            listViewGroup24,
+            listViewGroup25,
+            listViewGroup26,
+            listViewGroup27,
+            listViewGroup28,
+            listViewGroup29,
+            listViewGroup30,
+            listViewGroup31,
+            listViewGroup32,
+            listViewGroup33,
+            listViewGroup34,
+            listViewGroup35,
+            listViewGroup36,
+            listViewGroup37,
+            listViewGroup38});
             this.lstvStocks2.HideSelection = false;
             this.lstvStocks2.Location = new System.Drawing.Point(3, 3);
             this.lstvStocks2.Name = "lstvStocks2";
@@ -563,70 +627,70 @@
             this.lstvStocks2.UseCompatibleStateImageBehavior = false;
             this.lstvStocks2.View = System.Windows.Forms.View.Details;
             // 
-            // columnHeader1
+            // s2Symbol
             // 
-            this.columnHeader1.Text = "Symbol";
-            this.columnHeader1.Width = 53;
+            this.s2Symbol.Text = "Symbol";
+            this.s2Symbol.Width = 53;
             // 
-            // columnHeader2
+            // s2Industry
             // 
-            this.columnHeader2.Text = "Industry";
-            this.columnHeader2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader2.Width = 205;
+            this.s2Industry.Text = "Industry";
+            this.s2Industry.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2Industry.Width = 205;
             // 
-            // columnHeader3
+            // s2Fund
             // 
-            this.columnHeader3.Text = "CM Fund";
-            this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader3.Width = 66;
+            this.s2Fund.Text = "CM Fund";
+            this.s2Fund.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2Fund.Width = 66;
             // 
-            // columnHeader4
+            // s2Growth
             // 
-            this.columnHeader4.Text = "CM Growth";
-            this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader4.Width = 71;
+            this.s2Growth.Text = "CM Growth";
+            this.s2Growth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2Growth.Width = 71;
             // 
-            // columnHeader5
+            // s2Valuation
             // 
-            this.columnHeader5.Text = "CM Valuation";
-            this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader5.Width = 76;
+            this.s2Valuation.Text = "CM Valuation";
+            this.s2Valuation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2Valuation.Width = 76;
             // 
-            // columnHeader6
+            // EPS_Next_Y
             // 
-            this.columnHeader6.Text = "EPS Next Y";
-            this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader6.Width = 71;
+            this.EPS_Next_Y.Text = "EPS Next Y";
+            this.EPS_Next_Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.EPS_Next_Y.Width = 71;
             // 
-            // columnHeader7
+            // s2Recom
             // 
-            this.columnHeader7.Text = "Finviz Recom";
-            this.columnHeader7.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader7.Width = 79;
+            this.s2Recom.Text = "Finviz Recom";
+            this.s2Recom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2Recom.Width = 79;
             // 
-            // columnHeader8
+            // Target_Price
             // 
-            this.columnHeader8.Text = "Target Price";
-            this.columnHeader8.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader8.Width = 82;
+            this.Target_Price.Text = "Target Price";
+            this.Target_Price.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Target_Price.Width = 82;
             // 
-            // columnHeader9
+            // s2EarningsDate
             // 
-            this.columnHeader9.Text = "Earnings Date";
-            this.columnHeader9.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader9.Width = 82;
+            this.s2EarningsDate.Text = "Earnings Date";
+            this.s2EarningsDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2EarningsDate.Width = 82;
             // 
-            // columnHeader10
+            // s2ZacksRank
             // 
-            this.columnHeader10.Text = "Zacks Rank";
-            this.columnHeader10.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader10.Width = 92;
+            this.s2ZacksRank.Text = "Zacks Rank";
+            this.s2ZacksRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2ZacksRank.Width = 92;
             // 
-            // columnHeader11
+            // s2TotalScore
             // 
-            this.columnHeader11.Text = "Total Score";
-            this.columnHeader11.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.columnHeader11.Width = 83;
+            this.s2TotalScore.Text = "Total Score";
+            this.s2TotalScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.s2TotalScore.Width = 83;
             // 
             // frmScreener
             // 
@@ -700,16 +764,16 @@
         private System.Windows.Forms.TabPage tabScreener;
         private System.Windows.Forms.TabPage tabScreener2;
         private System.Windows.Forms.ListView lstvStocks2;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
-        private System.Windows.Forms.ColumnHeader columnHeader6;
-        private System.Windows.Forms.ColumnHeader columnHeader7;
-        private System.Windows.Forms.ColumnHeader columnHeader8;
-        private System.Windows.Forms.ColumnHeader columnHeader9;
-        private System.Windows.Forms.ColumnHeader columnHeader10;
-        private System.Windows.Forms.ColumnHeader columnHeader11;
+        private System.Windows.Forms.ColumnHeader s2Symbol;
+        private System.Windows.Forms.ColumnHeader s2Industry;
+        private System.Windows.Forms.ColumnHeader s2Fund;
+        private System.Windows.Forms.ColumnHeader s2Growth;
+        private System.Windows.Forms.ColumnHeader s2Valuation;
+        private System.Windows.Forms.ColumnHeader EPS_Next_Y;
+        private System.Windows.Forms.ColumnHeader s2Recom;
+        private System.Windows.Forms.ColumnHeader Target_Price;
+        private System.Windows.Forms.ColumnHeader s2EarningsDate;
+        private System.Windows.Forms.ColumnHeader s2ZacksRank;
+        private System.Windows.Forms.ColumnHeader s2TotalScore;
     }
 }

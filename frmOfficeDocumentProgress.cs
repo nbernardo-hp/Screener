@@ -12,6 +12,7 @@ namespace Screener
 {
     public partial class frmOfficeDocumentProgress : Form
     {
+        private bool secondScreener;
         public frmOfficeDocumentProgress()
         {
             InitializeComponent();
@@ -22,11 +23,12 @@ namespace Screener
         /// </summary>
         /// <param name="doc">The SaveDocument object being used</param>
         /// <param name="map">The Stock object dictionary to use</param>
-        public frmOfficeDocumentProgress(SaveDocument doc, Dictionary<string, Dictionary<string, Stock>> map)
+        public frmOfficeDocumentProgress(SaveDocument doc, Dictionary<string, Dictionary<string, Stock>> map, bool secondScreener)
         {
             try
             {
                 InitializeComponent();
+                this.secondScreener = secondScreener;
                 Run(doc, map);
             } catch
             {
@@ -40,11 +42,12 @@ namespace Screener
         /// <param name="doc">The SaveDocument object being used</param>
         /// <param name="map">The Stock object dictionary to use</param>
         /// <param name="rows">The number of rows for the table</param>
-        public frmOfficeDocumentProgress(SaveDocument doc, Dictionary<string, Dictionary<string, Stock>> map, int rows)
+        public frmOfficeDocumentProgress(SaveDocument doc, Dictionary<string, Dictionary<string, Stock>> map, int rows, bool secondScreener)
         {
             try
             {
                 InitializeComponent();
+                this.secondScreener = secondScreener;
                 Run(doc, map, rows);
             } catch
             {
@@ -87,10 +90,10 @@ namespace Screener
             doc.OnProgressUpdate += doc_OnProgressUpdate;
             if (rows == -1)
             {
-                doc.SaveExcelDocument(map);
+                doc.SaveExcelDocument(map, secondScreener);
             } else
             {
-                doc.SaveWordDocument(map, rows);
+                doc.SaveWordDocument(map, rows, secondScreener);
             }//end if-else
         }//end StartSave
 

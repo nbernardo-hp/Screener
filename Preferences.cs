@@ -13,7 +13,7 @@ namespace Screener
         private bool loaded = false;
         private string browser;
         private string finvizStartUrl = "https://www.finviz.com/screener.ashx?v=151&f=an_recom_buybetter,geo_usa";
-        private string finvizEndUrl = "&ft=4&c=1,3,4,7,35,57,59,62,68";
+        private string finvizEndUrl = "&ft=4&c=1,3,4,7,18,35,57,59,62,65,68,69";
         private string finvizURLAfterScraping = "https://www.finviz.com/screener.ashx?v=111&t=";
         private string preferencesPath = AppDomain.CurrentDomain.BaseDirectory + @"\preferences";
         private string preferencesFile = "preferences.xml";
@@ -477,14 +477,14 @@ namespace Screener
 
         public string CreateFinvizUrlForScreener2(List<string> symbols)
         {
-            StringBuilder url = new StringBuilder().Append(finvizStartUrl);
+            StringBuilder url = new StringBuilder().Append(finvizStartUrl.Remove(finvizStartUrl.LastIndexOf('&'))+"&t=");
             int symbolsLen = symbols.Count;
             for(int i = 0; i < symbolsLen; i++)
             {
                 url.Append(symbols[i]);
                 if(i < symbolsLen - 1) { url.Append(","); }
             }//end for
-            return url.Append(finvizEndUrl).ToString();
+            return url.Append(finvizEndUrl.Remove(0, finvizEndUrl.LastIndexOf('&'))).ToString();
         }//end CreateFinvizUrlFroScreener2
 
         /// <summary>

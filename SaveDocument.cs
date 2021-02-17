@@ -173,12 +173,12 @@ namespace Screener
                     sw.WriteLine("<th>CM Fund<br>7-10 = +4<br>4-6 = +2<br>0-3 = -2</th>");
                     sw.WriteLine("<th>CM Growth<br>7-10 = +4<br>4-6 = +2<br>0-3 = -2</th>");
                     sw.WriteLine("<th>CM Valuation<br>5-10 = +4<br>3-4 = +2<br>0-2 = -2</th>");
-                    sw.WriteLine("<th>52 Week High<br>-90 to -30 = +4<br>-29 to -10 = +2<br>-9 to + = -2</th>");
+                    sw.WriteLine((secondScreener ? "<th>EPS Next Y<br>x >= 25% = G<br>25% > x >= 0% = Y<br>x < 0% = R</th>" : "<th>52 Week High<br>-90 to -30 = +4<br>-29 to -10 = +2<br>-9 to + = -2</th>"));
                     sw.WriteLine("<th>Finviz Recom<br>1-2 = +4<br>2.1-3.0 = +2<br>3.1-5 = -2</th>");
-                    sw.WriteLine("<th>Current Ratio<br>> 3.0 = +4<br>1-3 = +2<br>0-.9 = -2</th>");
-                    sw.WriteLine("<th>Earnings Date<br>*See scoring below</th>");
-                    sw.WriteLine("<th>Zacks Rank<br>**See scoring below</th>");
-                    sw.WriteLine("<th>Total Score<br>***See scoring below</th>");
+                    sw.WriteLine((secondScreener ? "<th>Target Price<br>x > Actual price = G<br>x < Actual price = R</th>" : "<th>Current Ratio<br>> 3.0 = +4<br>1-3 = +2<br>0-.9 = -2</th>"));
+                    sw.WriteLine("<th>Earnings Date<br>" + (secondScreener ? "*No score for this screener" : "*See scoring below </ th >"));
+                    sw.WriteLine("<th>Zacks Rank<br>" + (secondScreener ? "" : "*") + "*See scoring below</th>");
+                    sw.WriteLine("<th>Total Score<br>" + (secondScreener ? "" : "*") + "**See scoring below</th>");
                     sw.WriteLine("</tr>");
 
                     foreach(var sector in frmScreener.SortSectorKeys(map.Keys))
@@ -328,10 +328,10 @@ namespace Screener
             app.Quit();
         }//end SaveWordDocument
 
-        public void SaveXmlDocument(Dictionary<string, Dictionary<string, Stock>> stocks)
+        public void SaveXmlDocument(Dictionary<string, Dictionary<string, Stock>> stocks, bool secondScreener)
         {
             XmlData xml = new XmlData();
-            xml.SaveStocks(stocks, filePath, fileName);
+            xml.SaveStocks(stocks, filePath, fileName, secondScreener);
         }//end SaveXmlDocument
 
         private int ChangeProgress(int val, string update, int max = 0)
@@ -370,11 +370,11 @@ namespace Screener
                 case 8:
                     return (!secondScreener ? "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red" : "Target Price\nx > Actual price = Green\nx < Actual price = Red");
                 case 9:
-                    return "Earnings Date\n*See end of\ndocument";
+                    return "Earnings Date\n" + (secondScreener ? "No scoring for\nthis screener" : "*See end of\ndocument");
                 case 10:
-                    return "Zacks Rank\n**See end of\ndocument";
+                    return "Zacks Rank\n" + (secondScreener ? "" : "*") + "*See end of\ndocument";
                 case 11:
-                    return "Total\n***See end of\ndocument";
+                    return "Total\n" + (secondScreener ? "" : "*") + "**See end of\ndocument";
                 default:
                     return "";
             }//end switch

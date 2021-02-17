@@ -82,7 +82,7 @@ namespace Screener
         /// <param name="stocks">Dictionary containing the Stock objects</param>
         /// <param name="filePath">The folder path to save the file</param>
         /// <param name="fileName">The file name containing the extension to use</param>
-        public void SaveStocks(Dictionary<string, Dictionary<string, Stock>> map, string filePath, string fileName)
+        public void SaveStocks(Dictionary<string, Dictionary<string, Stock>> map, string filePath, string fileName, bool secondScreener)
         {
             string combinedPath = Path.Combine(filePath, fileName);
             if (File.Exists(combinedPath)) { File.Delete(combinedPath); }
@@ -103,9 +103,22 @@ namespace Screener
                         writer.WriteElementString("FUND", s.FundValue.ToString());
                         writer.WriteElementString("GROWTH", s.GrowthValue.ToString());
                         writer.WriteElementString("VALUATION", s.ValuationValue.ToString());
-                        writer.WriteElementString("HIGH_52W", s.High52WValue.ToString());
+                        if(secondScreener)
+                        {
+                            writer.WriteElementString("EPS_NEXT_Y", s.EPSNextYValue.ToString());
+                        } else
+                        {
+                            writer.WriteElementString("HIGH_52W", s.High52WValue.ToString());
+                        }
+                        
                         writer.WriteElementString("RECOM", s.RecomValue.ToString());
-                        writer.WriteElementString("CURRENT_RATIO", s.CurrentRatioValue.ToString());
+                        if(secondScreener)
+                        {
+                            writer.WriteElementString("TARGET_PRICE", s.TargetPriceValue.ToString());
+                        } else
+                        {
+                            writer.WriteElementString("CURRENT_RATIO", s.CurrentRatioValue.ToString());
+                        }
                         writer.WriteElementString("EARNINGS_DATE", s.GetEarningsDateString());
                         writer.WriteElementString("ZACKS_RANK", s.ZacksStringValue);
                         writer.WriteElementString("TOTAL_SCORE", s.TotalScoreValue.ToString());

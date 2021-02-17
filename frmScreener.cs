@@ -222,11 +222,11 @@ namespace Screener
                     }
                     else if (extension == "xml")
                     {
-                        document.SaveXmlDocument(stocks);
+                        document.SaveXmlDocument((tabScreeners.SelectedTab == tabScreener2 ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), (tabScreeners.SelectedTab == tabScreener2 ? true : false));
                     }
                     else
                     {
-                        document.SaveHtmlDocument(stocks, (screenerType == 0 ? true : false));
+                        document.SaveHtmlDocument((tabScreeners.SelectedTab == tabScreener2 ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), (tabScreeners.SelectedTab == tabScreener2 ? true : false));
                     }
                 }//end if
             }
@@ -241,10 +241,6 @@ namespace Screener
             try
             {
                 var secondScreener = (tabScreeners.SelectedTab == tabScreener2 ? true : false);
-                if(secondScreener)
-                {
-
-                }
                 frmOfficeDocumentProgress frm;
                 if (extension == "xlsx")
                 {
@@ -379,11 +375,11 @@ namespace Screener
                     res.Add(t, new Dictionary<string, Stock>());
                 }
                 var query = from s in stocksAdditionalInfo.Keys
-                            where stocksAdditionalInfo[s]["source"] == t
+                            where stocksAdditionalInfo[s]["source"] == t && stocksAdditionalInfo[s]["sector"] != ""
                             select stocks[stocksAdditionalInfo[s]["sector"]][s];
                 foreach(var q in query)
                 {
-                    if(!res[t].ContainsKey(q.SymbolValue))
+                    if(!res[t].ContainsKey(q.SymbolValue) && stocks[stocksAdditionalInfo[q.SymbolValue]["sector"]].ContainsKey(q.SymbolValue))
                     {
                         res[t].Add(q.SymbolValue, q);
                     }//end nested if

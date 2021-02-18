@@ -107,7 +107,7 @@ namespace Screener
                         formatRange = GetRange(worksheet, i, 1, i, 11);
                         formatRange.EntireRow.Interior.Color = System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Gainsboro);
                     }
-                    var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
+                    var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors(secondScreener) : null);
                     var attributes = s.GetAttributesEnumerable();
                     for (int j = 1; j <= attributes.Count(); j++)
                     {
@@ -194,7 +194,7 @@ namespace Screener
                                 sw.WriteLine(String.Format("<tr{0}>", (i % 2 != 0 ? " style=\"background-color:gainsboro\"" : "")));
 
                                 var attributes = s.GetAttributesEnumerable();
-                                var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
+                                var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors(secondScreener) : null);
                                 for (int j = 0; j < attributes.Count(); j++)
                                 {
                                     string val = attributes.ElementAt(j).ToString();
@@ -290,7 +290,7 @@ namespace Screener
                         table.Rows[row].Range.Shading.BackgroundPatternColor = WdColor.wdColorGray05;
                     }
                     var attributes = s.GetAttributesEnumerable();
-                    var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors() : null);
+                    var colors = (s.TotalScoreValue >= 18 ? s.GetFormattingColors(secondScreener) : null);
                     for(int i = 0; i < attributes.Count(); i++)
                     {
                         string val = attributes.ElementAt(i).ToString();

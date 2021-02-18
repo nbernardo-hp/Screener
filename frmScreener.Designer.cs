@@ -125,11 +125,17 @@
             this.s2EarningsDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2ZacksRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2TotalScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pnlScreener1NoStocks = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.pnlScreener2NoStocks = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.pnlNoStocksToDisplay.SuspendLayout();
             this.tabScreeners.SuspendLayout();
             this.tabScreener.SuspendLayout();
             this.tabScreener2.SuspendLayout();
+            this.pnlScreener1NoStocks.SuspendLayout();
+            this.pnlScreener2NoStocks.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -499,6 +505,7 @@
             // 
             // tabScreener
             // 
+            this.tabScreener.Controls.Add(this.pnlScreener1NoStocks);
             this.tabScreener.Controls.Add(this.lstvStocks);
             this.tabScreener.Location = new System.Drawing.Point(4, 22);
             this.tabScreener.Name = "tabScreener";
@@ -510,6 +517,7 @@
             // 
             // tabScreener2
             // 
+            this.tabScreener2.Controls.Add(this.pnlScreener2NoStocks);
             this.tabScreener2.Controls.Add(this.lstvStocks2);
             this.tabScreener2.Location = new System.Drawing.Point(4, 22);
             this.tabScreener2.Name = "tabScreener2";
@@ -692,6 +700,46 @@
             this.s2TotalScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.s2TotalScore.Width = 83;
             // 
+            // pnlScreener1NoStocks
+            // 
+            this.pnlScreener1NoStocks.Controls.Add(this.label2);
+            this.pnlScreener1NoStocks.Location = new System.Drawing.Point(0, 4);
+            this.pnlScreener1NoStocks.Name = "pnlScreener1NoStocks";
+            this.pnlScreener1NoStocks.Size = new System.Drawing.Size(979, 373);
+            this.pnlScreener1NoStocks.TabIndex = 5;
+            this.pnlScreener1NoStocks.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(278, 161);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(423, 50);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlScreener2NoStocks
+            // 
+            this.pnlScreener2NoStocks.Controls.Add(this.label3);
+            this.pnlScreener2NoStocks.Location = new System.Drawing.Point(0, 4);
+            this.pnlScreener2NoStocks.Name = "pnlScreener2NoStocks";
+            this.pnlScreener2NoStocks.Size = new System.Drawing.Size(979, 373);
+            this.pnlScreener2NoStocks.TabIndex = 5;
+            this.pnlScreener2NoStocks.Visible = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(278, 161);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(423, 50);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -711,6 +759,10 @@
             this.tabScreeners.ResumeLayout(false);
             this.tabScreener.ResumeLayout(false);
             this.tabScreener2.ResumeLayout(false);
+            this.pnlScreener1NoStocks.ResumeLayout(false);
+            this.pnlScreener1NoStocks.PerformLayout();
+            this.pnlScreener2NoStocks.ResumeLayout(false);
+            this.pnlScreener2NoStocks.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -775,5 +827,9 @@
         private System.Windows.Forms.ColumnHeader s2EarningsDate;
         private System.Windows.Forms.ColumnHeader s2ZacksRank;
         private System.Windows.Forms.ColumnHeader s2TotalScore;
+        private System.Windows.Forms.Panel pnlScreener1NoStocks;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel pnlScreener2NoStocks;
+        private System.Windows.Forms.Label label3;
     }
 }

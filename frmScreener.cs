@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -20,6 +21,7 @@ namespace Screener
         int currentSector = 0;
         int currentStock = 0;
         int screenerType;
+        private string pdfPath;
         public frmScreener()
         {
             InitializeComponent();
@@ -108,18 +110,15 @@ namespace Screener
         {
             try
             {
-                tabScreener.Hide();
-                tabScreener2.Hide();
                 if(stocks.Count > 0)
                 {
                     PopulateListView();
-                    if (screenerType >= 1)
+                    if(screenerType == 0)
                     {
-                        tabScreener.Show();
-                    }
-                    if (screenerType == 0)
+                        pnlScreener1NoStocks.Visible = true;
+                    } else if (screenerType == 2)
                     {
-                        tabScreener2.Show();
+                        pnlScreener2NoStocks.Visible = true;
                     }
                     LoadFinvizWithStocks();
                 } else
@@ -201,34 +200,46 @@ namespace Screener
         {
             try
             {
-                SaveDocument document;
-                SaveFileDialog save = new SaveFileDialog();
-                save.AddExtension = true;
-                save.Filter = "Excel files (*xlsx)|*.xlsx|Word files (*.docx)|*docx|Xml files (*.xml)|*.xml|Html files (*.html)|*.html";
-                if (save.ShowDialog() == DialogResult.OK)
+                if((tabScreeners.SelectedTab == tabScreener2 && !pnlScreener2NoStocks.Visible) || (tabScreeners.SelectedTab == tabScreener && !pnlScreener1NoStocks.Visible))
                 {
-                    string path = save.FileName;
-                    string extension = path.Remove(0, path.LastIndexOf('.') + 1);
-                    save.DefaultExt = extension;
+                    SaveDocument document;
+                    SaveFileDialog save = new SaveFileDialog();
+                    save.AddExtension = true;
+                    save.Filter = "Excel files (*xlsx)|*.xlsx|Word files (*.docx)|*docx|Xml files (*.xml)|*.xml|Html files (*.html)|*.html";
+                    if (save.ShowDialog() == DialogResult.OK)
+                    {
+                        string path = save.FileName;
+                        string extension = path.Remove(0, path.LastIndexOf('.') + 1);
+                        save.DefaultExt = extension;
 
-                    document = new SaveDocument(path.Remove(path.LastIndexOf('\\')), path.Remove(0, path.LastIndexOf('\\') + 1));
-                    if (extension == "xlsx")
-                    {
-                        OfficeDocumentProgressForm(document, extension);
-                    }
-                    else if (extension == "docx")
-                    {
-                        OfficeDocumentProgressForm(document, extension);
-                    }
-                    else if (extension == "xml")
-                    {
-                        document.SaveXmlDocument((tabScreeners.SelectedTab == tabScreener2 ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), (tabScreeners.SelectedTab == tabScreener2 ? true : false));
-                    }
-                    else
-                    {
-                        document.SaveHtmlDocument((tabScreeners.SelectedTab == tabScreener2 ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), (tabScreeners.SelectedTab == tabScreener2 ? true : false));
-                    }
-                }//end if
+                        document = new SaveDocument(path.Remove(path.LastIndexOf('\\')), path.Remove(0, path.LastIndexOf('\\') + 1));
+                        if (extension == "xlsx")
+                        {
+                            OfficeDocumentProgressForm(document, extension);
+                        }
+                        else if (extension == "docx")
+                        {
+                            OfficeDocumentProgressForm(document, extension);
+                        }
+                        else if (extension == "xml")
+                        {
+                            document.SaveXmlDocument((tabScreeners.SelectedTab == tabScreener2 ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), (tabScreeners.SelectedTab == tabScreener2 ? true : false));
+                        }
+                        else if (extension == "pdf")
+                        {
+                            pdfPath = Path.Combine(path.Remove(path.LastIndexOf('\\')), path.Remove(0, path.LastIndexOf('\\') + 1));
+                            tsmPrint.PerformClick();
+                        }
+                        else
+                        {
+                            document.SaveHtmlDocument((tabScreeners.SelectedTab == tabScreener2 ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), (tabScreeners.SelectedTab == tabScreener2 ? true : false));
+                        }
+                    }//end nested if
+                } else
+                {
+                    MessageBox.Show("There are no stocks to save on this screener", "Unable to Save", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }//end if-else
+                
             }
             catch (Exception ex)
             {
@@ -248,10 +259,16 @@ namespace Screener
                 }
                 else
                 {
-                    int rows = stocks.Keys.Count() + 1;
-                    foreach (var kvp in stocks.Values)
+                    int rows = (secondScreener ? stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct().Count() : stocks.Keys.Count()) + 1;
+                    if(secondScreener)
                     {
-                        rows += kvp.Values.Count();
+                        rows += stocksAdditionalInfo.Keys.Count;
+                    } else
+                    {
+                        foreach (var kvp in stocks.Values)
+                        {
+                            rows += kvp.Values.Count();
+                        }
                     }
                     frm = new frmOfficeDocumentProgress(doc, (secondScreener ? CreateTempDictionary(stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct()) : stocks), rows, secondScreener);
                 }//end if-else
@@ -265,21 +282,40 @@ namespace Screener
         {
             try
             {
-                pdlogStocks.Document = pdocStocks;
-                pdlogStocks.AllowSelection = false;
-                if (pdlogStocks.ShowDialog() == DialogResult.OK)
+                if((tabScreeners.SelectedTab == tabScreener2 && !pnlScreener2NoStocks.Visible) || (tabScreeners.SelectedTab == tabScreener && !pnlScreener1NoStocks.Visible))
                 {
-                    if(!pdlogStocks.PrinterSettings.DefaultPageSettings.Landscape)
+                    pdlogStocks.Document = pdocStocks;
+                    pdlogStocks.AllowSelection = false;
+                    if (pdfPath != "")
                     {
-                        MessageBox.Show("Portrait layout printing not supported.");
-                    } else
-                    {
+                        pdocStocks.PrinterSettings.PrinterName = "Microsoft Print to PDF";
+                        pdocStocks.PrinterSettings.PrintToFile = true;
+                        pdocStocks.PrinterSettings.PrintFileName = pdfPath;
                         pdocStocks.Print();
+                        pdfPath = "";
                     }
-                }//end if
+                    else
+                    {
+                        if (pdlogStocks.ShowDialog() == DialogResult.OK)
+                        {
+                            if (!pdlogStocks.PrinterSettings.DefaultPageSettings.Landscape)
+                            {
+                                MessageBox.Show("Portrait layout printing not supported.");
+                            }
+                            else
+                            {
+                                pdocStocks.Print();
+                            }//end 3x nested if-else
+                        }//end 2x nested if
+                    }//end nested if-else
+                } else
+                {
+                    MessageBox.Show("There are no stocks to print on this screener", "Unable to Print", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }//end if-else
             }
             catch (Exception ex)
             {
+                pdfPath = "";
                 ErrorMessage(ex);
             }//end try-catch
         }//end tsmPrint_Click
@@ -461,6 +497,7 @@ namespace Screener
         {
             try
             {
+                var secondScreener = (tabScreeners.SelectedTab == tabScreener2 ? true : false);
                 Font font = new Font("Arial", 11, FontStyle.Regular, GraphicsUnit.Pixel);
                 StringFormat format = new StringFormat();
                 format.Alignment = StringAlignment.Center;
@@ -478,12 +515,12 @@ namespace Screener
                 string[] headerText = new string[] { "CM Fund\n7-10 = Green\n4-6 = Yellow\n0-3 = Red",
                     "CM Growth\n7-10 = Green\n4-6 = Yellow\n0-3 = Red",
                     "CM Valuation\n5-10 = Green\n3-4 = Yellow\n0-2 = Red",
-                    "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red",
+                    (!secondScreener ? "52W High\n-90 to -10 = Green\n-29 to -10 = Yellow\n-9 to + = Red" : "EPS Next Y\nx >= 25% = G\n25% > x >= 0% = Y\nx < 0% = R"),
                     "Finviz Recom\n1-2 = Green\n2.1-3.0 = Yellow\n3.1-5 = Red",
-                    "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red",
-                    "Earnings Date\n*See end of\ndocument",
-                    "Zacks Rank\n**See end of\ndocument",
-                    "Total\n**See end of\ndocument" };
+                    (!secondScreener ? "Curr_Ratio\n>3.0 = Green\n1-3 = Yellow\n0-.9 = Red" : "Target Price\nx > Actual price = Green\nx < Actual price = Red"),
+                    "Earnings Date\n" + (secondScreener ? "No scoring for\nthis screener" : "*See end of\ndocument"),
+                    "Zacks Rank\n" + (secondScreener ? "" : "*") + "*See end of\ndocument",
+                    "Total\n" + (secondScreener ? "" : "*") + "**See end of\ndocument" };
                 
                 for (int j = 0; j < 11; j++)
                 {
@@ -601,7 +638,13 @@ namespace Screener
 
                 int i = 0;
                 x = e.MarginBounds.Left;
-                string[] scoreExplanations = new string[] { "*Earnings Date: 1 <= x <= 70 days = Green, 71 days <= x < 4 months = Yellow, After 4mo = Red.", "*Earnings Date Same Day: Before close - before 9:30am = Red, after 9:30am = Green; After close - before 4:00pm = Red, after = Green.", "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4.", "***Total score is calculated using a weight for each color.", "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2." };
+                string[] scoreExplanations = new string[] {
+                    (!secondScreener ? "*Earnings Date: 1 <= x <= 70 days = Green, 71 days <= x < 4 months = Yellow, After 4mo = Red." : "*Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4."),
+                    (!secondScreener ? "*Earnings Date Same Day: Before close - before 9:30am = Red, after 9:30am = Green; After close - before 4:00pm = Red, after = Green." : "**Total score is calculated using a weight for each color and multiplying the original score by the new weight."),
+                    (!secondScreener ? "**Zacks Rank: Green = +6, Blue = +4, Yellow = +2, Orange = -2, Red = -4." : "**CM Fund = *5, CM Growth = *3, CM Valuation = *2, EPS Next Y = *5, Recom = *3, Target Price = *2, Zacks = *10"),
+                    (!secondScreener ? "***Total score is calculated using a weight for each color." : "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2."),
+                    "***Excluding Zacks Rank: Green = +4, Yellow = +2, Red = -2."
+                };
                 while(i < scoreExplanations.Length)
                 {
                     if(y + (int)getStringDimension('h', scoreExplanations[i],  font, e) < e.MarginBounds.Bottom)

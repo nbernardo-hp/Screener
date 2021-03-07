@@ -86,15 +86,17 @@ namespace Screener
         /// <returns>The ordered Stock objects from the Sector</returns>
         public static IOrderedEnumerable<Stock> SortSectorDictionary(Dictionary<string, Stock> sector, bool secondScreener = false)
         {
-            var temp = from s in sector
-                       where s.Value.GetInScreener((!secondScreener ? 0 : 1)) == true
-                       select s.Value;
-            var t = temp.OrderByDescending(s => (!secondScreener ? s.TotalScoreValue : s.TotalScore2Value)).ThenByDescending(s => s.FundValue)
-                .ThenByDescending(s => s.GrowthValue).ThenByDescending(s => s.ValuationValue).ThenBy(s => (!secondScreener ? s.High52WValue : s.EPSNextYValue))
-                .ThenBy(s => s.RecomValue).ThenByDescending(s => (!secondScreener ? s.CurrentRatioValue : s.TargetPriceValue)).ThenByDescending(s => (!secondScreener ? s.GetEarningsDate() : new DateTime()));
-            return sector.Values.OrderByDescending(s => (!secondScreener ? s.TotalScoreValue : s.TotalScore2Value)).ThenByDescending(s => s.FundValue)
-                .ThenByDescending(s => s.GrowthValue).ThenByDescending(s => s.ValuationValue).ThenBy(s => (!secondScreener ? s.High52WValue : s.EPSNextYValue))
-                .ThenBy(s => s.RecomValue).ThenByDescending(s => (!secondScreener ? s.CurrentRatioValue : s.TargetPriceValue)).ThenByDescending(s => (!secondScreener ? s.GetEarningsDate() : new DateTime()));
+            if(secondScreener)
+            {
+                return sector.Values.OrderByDescending(s => s.TotalScore2Value).ThenByDescending(s => s.FundValue)
+                .ThenByDescending(s => s.GrowthValue).ThenByDescending(s => s.ValuationValue).ThenBy(s => s.EPSThisYValue)
+                .ThenBy(s => s.EPSNextYValue).ThenByDescending(s => s.RecomValue).ThenByDescending(s => s.TargetPriceValue);
+            } else
+            {
+                return sector.Values.OrderByDescending(s => s.TotalScoreValue).ThenByDescending(s => s.FundValue)
+                .ThenByDescending(s => s.GrowthValue).ThenByDescending(s => s.ValuationValue).ThenBy(s => s.High52WValue)
+                .ThenBy(s => s.RecomValue).ThenByDescending(s => s.CurrentRatioValue).ThenByDescending(s => s.GetEarningsDate());
+            }//end if-else
         }//end SortStockDictionary
 
         /// <summary>
@@ -286,28 +288,17 @@ namespace Screener
                 {
                     pdlogStocks.Document = pdocStocks;
                     pdlogStocks.AllowSelection = false;
-                    if (pdfPath != "")
+                    if (pdlogStocks.ShowDialog() == DialogResult.OK)
                     {
-                        pdocStocks.PrinterSettings.PrinterName = "Microsoft Print to PDF";
-                        pdocStocks.PrinterSettings.PrintToFile = true;
-                        pdocStocks.PrinterSettings.PrintFileName = pdfPath;
-                        pdocStocks.Print();
-                        pdfPath = "";
-                    }
-                    else
-                    {
-                        if (pdlogStocks.ShowDialog() == DialogResult.OK)
+                        if (!pdlogStocks.PrinterSettings.DefaultPageSettings.Landscape)
                         {
-                            if (!pdlogStocks.PrinterSettings.DefaultPageSettings.Landscape)
-                            {
-                                MessageBox.Show("Portrait layout printing not supported.");
-                            }
-                            else
-                            {
-                                pdocStocks.Print();
-                            }//end 3x nested if-else
-                        }//end 2x nested if
-                    }//end nested if-else
+                            MessageBox.Show("Portrait layout printing not supported.");
+                        }
+                        else
+                        {
+                            pdocStocks.Print();
+                        }//end 3x nested if-else
+                    }//end 2x nested if
                 } else
                 {
                     MessageBox.Show("There are no stocks to print on this screener", "Unable to Print", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -372,16 +363,18 @@ namespace Screener
                 if(stocksAdditionalInfo != null)
                 {
                     //Gets all the distinct source names so that they can be added to the listview
-                    var temp = stocksAdditionalInfo.Values.Select(s => s["source"]).Distinct();
+                    var temp = stocksAdditionalInfo.Values.Select(s => s["source"]).Where(s => s != "").Distinct();
                     foreach(var t in temp)
                     {
+                        var group = new ListViewGroup(t.Trim(), t.Trim());
+                        lstvStocks2.Groups.Add(group);
                         var tempDictionary = new Dictionary<string, Stock>();
                         //TODO FIX CODE SO IT ACTUALLY PULLS THE STOCKS THAT HAVE THE SPECIFIC SOURCE
                         foreach(var key in stocksAdditionalInfo.Keys)
                         {
                             if(!tempDictionary.ContainsKey(key) && stocksAdditionalInfo[key]["source"] == t)
                             {
-                                var sec = stocksAdditionalInfo[key]["sector"];
+                                var sec = stocksAdditionalInfo[key]["sector"].Trim();
                                 if(sec != "" && stocks.ContainsKey(sec) && stocks[sec].ContainsKey(key))
                                 {
                                     tempDictionary.Add(key, stocks[sec][key]);
@@ -391,7 +384,7 @@ namespace Screener
                         /*var stocksInT = from s in stocksAdditionalInfo
                                         where s.Value["source"] == t
                                         select stocks[s.Value["sector"]][s.Key];*/
-                        AddListViewItem(SortSectorDictionary(tempDictionary, true), t.Trim(), lstvStocks2);
+                        AddListViewItem(SortSectorDictionary(tempDictionary, true), t.Trim(), lstvStocks2, true);
                     }//end nested for
                 }//end if
             } catch (Exception ex)
@@ -435,13 +428,28 @@ namespace Screener
                 int i = 0;
                 foreach (var stock in stocks)
                 {
-                    ListViewItem row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue,
+                    ListViewItem row;
+                    if (isScreener2)
+                    {
+                        row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue,
                         stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(),
-                        (!isScreener2 ? (stock.High52WValue != Double.MinValue ? stock.High52WValue.ToString() + "%" : "NA") : (stock.EPSNextYValue != Double.MinValue ? stock.EPSNextYValue.ToString() : "NA")),
+                        (stock.EPSThisYValue != Double.MinValue ? stock.EPSThisYValue.ToString() : "NA"),
+                        (stock.EPSNextYValue != Double.MinValue ? stock.EPSNextYValue.ToString() : "NA"),
                         (stock.RecomValue != Double.MinValue ? stock.RecomValue.ToString() : "NA"),
-                        (!isScreener2 ? (stock.CurrentRatioValue != Double.MinValue ? stock.CurrentRatioValue.ToString() : "NA") : (stock.TargetPriceValue != Double.MinValue ? stock.TargetPriceValue.ToString() : "NA")),
+                        (stock.TargetPriceValue != Double.MinValue ? stock.TargetPriceValue.ToString() : "NA"),
                         (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue,
-                        (!isScreener2 ? stock.TotalScoreValue.ToString() : stock.TotalScore2Value.ToString()) });
+                        stock.TotalScore2Value.ToString() });
+                    } else
+                    {
+                        row = new ListViewItem(new string[] { stock.SymbolValue, stock.IndustryValue,
+                        stock.FundValue.ToString(), stock.GrowthValue.ToString(), stock.ValuationValue.ToString(),
+                        (stock.High52WValue != Double.MinValue ? stock.High52WValue.ToString() + "%" : "NA"),
+                        (stock.RecomValue != Double.MinValue ? stock.RecomValue.ToString() : "NA"),
+                        (stock.CurrentRatioValue != Double.MinValue ? stock.CurrentRatioValue.ToString() : "NA"),
+                        (stock.GetEarningsDate() == new DateTime(0) ? "NA" : stock.GetEarningsDateString()), stock.ZacksStringValue,
+                        stock.TotalScoreValue.ToString() });
+                    }//end nested if-else
+                    
                     if (i % 2 != 0)
                     {
                         row.BackColor = SystemColors.Control;
@@ -455,7 +463,7 @@ namespace Screener
                             row.SubItems[1].BackColor = SystemColors.Control;
                             row.SubItems[10].BackColor = SystemColors.Control;
                         }
-                        var colors = stock.GetFormattingColors();
+                        var colors = stock.GetFormattingColors(isScreener2);
                         int j = 2;
                         foreach (var c in colors)
                         {
@@ -592,8 +600,8 @@ namespace Screener
                                 e.Graphics.FillRectangle(Brushes.Gainsboro, e.MarginBounds.Left, y, fullRowWidth, bodyCellHeight);
                             }
 
-                            var attributes = sorted.ElementAt(currentStock).GetAttributesEnumerable();
-                            var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormattingColors() : null);
+                            var attributes = sorted.ElementAt(currentStock).GetAttributesEnumerable(secondScreener);
+                            var colors = (18 <= sorted.ElementAt(currentStock).TotalScoreValue ? sorted.ElementAt(currentStock).GetFormattingColors(secondScreener) : null);
 
                             foreach (var a in attributes)
                             {

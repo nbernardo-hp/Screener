@@ -66,10 +66,10 @@ namespace Screener
                 formLocation = this.Location;
                 btnSettings.Enabled = false;
                 btnScrape.Enabled = false;
-                if (!splashPref.GetLoaded())
+                /*if (!splashPref.GetLoaded())
                 {
                     StartWork();
-                }//end if
+                }//end if*/
             } catch (Exception ex)
             {
                 frmScreener.ErrorMessage(ex);
@@ -317,10 +317,11 @@ namespace Screener
                             for (int i = 1; i < table.Rows.Count; i++)
                             {
                                 string symbol = FormatText(table.Cell(i, 1));
+                                symbol = symbol.Trim();
                                 string include = FormatText(table.Cell(i, 2));
                                 if (symbol != "")
                                 {
-                                    if (symbol != "#" && include != "")
+                                    if (symbol != "#" && include != "" && include.ToUpper() == "Y")
                                     {
                                         if (!stocksAdditionalInfo.ContainsKey(symbol))
                                         {

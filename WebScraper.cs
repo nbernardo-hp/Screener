@@ -48,7 +48,7 @@ namespace Screener
             {
                 options = new FirefoxOptions();
                 options.AddArgument("-private");
-                //options.AddArgument("-headless");
+                options.AddArgument("-headless");
                 driver = new FirefoxDriver(options);
             }//end if-else
             this.pe = pe;
@@ -65,7 +65,7 @@ namespace Screener
                 this.urls = urls;
                 GetProxies();
 
-                if(stocksAdditionalInfo.Count > 0)
+                if (stocksAdditionalInfo != null &&  stocksAdditionalInfo.Count > 0)
                 {
                             sectorHeaders = new string[] { "Finviz Screener", "Basic Materials", "Communication Services", "Consumer Cyclical", "Consumer Defensive", "Energy", "Financial", "Healthcare", "Industrials", "Real Estate", "Technology", "Utilities" };
                 }//end if
@@ -129,15 +129,17 @@ namespace Screener
                     temp.IndustryValue = finvizRow[2];
 
                     var eps = (finvizRow[4].Contains("%") ? finvizRow[4].Remove(finvizRow[4].IndexOf("%")) : "-");
+                    temp.EPSThisYValue = (eps != "-" ? double.Parse(eps) : Double.MinValue);
+                    eps = (finvizRow[5].Contains("%") ? finvizRow[5].Remove(finvizRow[5].IndexOf("%")) : "-");
                     temp.EPSNextYValue = (eps != "-" ? double.Parse(eps) : Double.MinValue);
-                    temp.CurrentRatioValue = (finvizRow[5] != "-" ? double.Parse(finvizRow[5]) : Double.MinValue);
+                    temp.CurrentRatioValue = (finvizRow[6] != "-" ? double.Parse(finvizRow[6]) : Double.MinValue);
 
-                    var high = (finvizRow[6].Contains("%") ? finvizRow[6].Remove(finvizRow[6].IndexOf("%")) : "-");
+                    var high = (finvizRow[7].Contains("%") ? finvizRow[7].Remove(finvizRow[7].IndexOf("%")) : "-");
                     temp.High52WValue = (high != "-" ? double.Parse(high) : Double.MinValue);
-                    temp.RecomValue = (finvizRow[8] != "-" ? double.Parse(finvizRow[8]) : Double.MinValue);
-                    temp.PriceValue = (finvizRow[9] != "-" ? double.Parse(finvizRow[9]) : Double.MinValue);
-                    temp.SetEarningsDate(finvizRow[10]);
-                    temp.TargetPriceValue = (finvizRow[11] != "-" ? double.Parse(finvizRow[11]) : Double.MinValue);
+                    temp.RecomValue = (finvizRow[9] != "-" ? double.Parse(finvizRow[9]) : Double.MinValue);
+                    temp.PriceValue = (finvizRow[10] != "-" ? double.Parse(finvizRow[10]) : Double.MinValue);
+                    temp.SetEarningsDate(finvizRow[11]);
+                    temp.TargetPriceValue = (finvizRow[12] != "-" ? double.Parse(finvizRow[12]) : Double.MinValue);
                     if (zacksText[i] != null && zacksText[i][0] != "")
                     {
                         temp.ZacksRankValue = int.Parse(zacksText[i][0]);
@@ -204,7 +206,7 @@ namespace Screener
             int i = 0;
             while(i < chartMillRows.Count && !frmSplash.GetCancelled())
             {
-                if(double.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5 && !stocksAdditionalInfo.ContainsKey(chartMillRows[i].ElementAt(0).ToString()))
+                if(double.Parse(chartMillRows[i].ElementAt(1).ToString()) < 2.5 && (stocksAdditionalInfo != null && !stocksAdditionalInfo.ContainsKey(chartMillRows[i].ElementAt(0).ToString())))
                 {
                     chartMillRows.RemoveAt(i);
                 } else
@@ -493,7 +495,19 @@ namespace Screener
                     ChangeProgress(1, String.Format("Scraping Zacks - {0}", symbols[i]));
                     driver.Url = url;
                     driver.Navigate();
-                    zacksText.Add(driver.FindElement(By.ClassName("rank_view")).Text.Split(new char[] { '-', '\r', '\n' }));
+                    try
+                    {
+                        var etf = driver.FindElements(By.ClassName("rankrect_NA"));
+                        if (etf != null)
+                        {
+                            throw new NoSuchElementException();
+                        }
+                        var element = driver.FindElement(By.ClassName("rank_view"));
+                        zacksText.Add(element.Text.Split(new char[] { '-', '\r', '\n' }));
+                    } catch(NoSuchElementException e)
+                    {
+                        zacksText.Add(new string[] { "", "" });
+                    }
                 } catch (TimeoutException)
                 {
                     i--;

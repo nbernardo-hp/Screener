@@ -12,6 +12,7 @@ namespace Screener
         private DateTime earningsDate;
         private double high52W;
         private double epsNextY;
+        private double epsThisY;
         private double recom;
         private double currentRatio;
         private double targetPrice;
@@ -80,6 +81,12 @@ namespace Screener
             set { epsNextY = value; }
         }
 
+        public double EPSThisYValue
+        {
+            get { return epsThisY; }
+            set { epsThisY = value; }
+        }
+
         public double TargetPriceValue
         {
             get { return targetPrice; }
@@ -136,7 +143,13 @@ namespace Screener
             var dateStrings = value.Split(new char[] { ' ', '/' });
             var tempDate = DateTime.Now;
             earningsDate = new DateTime(tempDate.Year, GetMonthDigit(dateStrings[0]), int.Parse(dateStrings[1]), tempDate.Hour, tempDate.Minute, tempDate.Second);
-            beforeAfterClose = dateStrings[2];
+            if(dateStrings.Length > 2)
+            {
+                beforeAfterClose = dateStrings[2];
+            } else
+            {
+                beforeAfterClose = "b";
+            }
         }//end SetEarningsDate
 
         public void SetInScreener(int index, bool isIn)
@@ -154,32 +167,29 @@ namespace Screener
         /// <summary>
         /// Calculates the total score of the Stock object
         /// </summary>
-        public void CalculateTotalScore(bool secondScreener = false)
+        public void CalculateTotalScore()
         {
-            int temp = 0;
-            temp += (!secondScreener ? GetFundOrGrowthScore(FundValue) : GetFundOrGrowthScore(FundValue) * 5);
-            temp += (!secondScreener ? GetFundOrGrowthScore(GrowthValue) : GetFundOrGrowthScore(GrowthValue) * 3);
-            temp += (!secondScreener ? GetValuationScore() : GetValuationScore() * 2);
-            temp += (!secondScreener ? GetRecomScore() : GetRecomScore() * 3);
-            temp += (!secondScreener ? GetZacksRankScore() : GetZacksRankScore() * 10);
-
-            if(!secondScreener)
-            {
-                totalScore = temp + GetHigh52WScore() + GetCurrentRatioScore() + GetEarningsDateScore();
-            } else
-            {
-                totalScore2 = temp + GetEPSNextYScore() + GetTargetPriceScore();
-            }//end if-else
-        }
+            totalScore = GetFundOrGrowthScore(FundValue) + GetFundOrGrowthScore(GrowthValue)+ GetValuationScore() +
+                GetRecomScore() + GetZacksRankScore() + GetHigh52WScore() + GetCurrentRatioScore() + GetEarningsDateScore();
+            totalScore2 = (GetFundOrGrowthScore(FundValue) * 5) + (GetFundOrGrowthScore(GrowthValue) * 3)+
+                (GetValuationScore() * 2) + (GetRecomScore() * 3) + (GetZacksRankScore() * 10) + GetEPSNextYScore(true) +
+                GetEPSThisYScore(true) + GetTargetPriceScore(true);
+        }//end CalculateTotalScore
 
         /// <summary>
         /// Gets the attributes of the Stock object in an enumerable object
         /// </summary>
         /// <returns>The attributes of the Stock object</returns>
-        public IEnumerable<object> GetAttributesEnumerable()
+        public IEnumerable<object> GetAttributesEnumerable(bool secondScreener)
         {
-            return new List<object>() { symbol, industry, fund, growth, valuation, high52W, recom, currentRatio, GetEarningsDateString(), zacksString, totalScore };
-        }
+            if(secondScreener)
+            {
+                return new List<object>() { symbol, industry, fund, growth, valuation, epsThisY, epsNextY, recom, targetPrice, GetEarningsDateString(), zacksString, totalScore2 };
+            } else
+            {
+                return new List<object>() { symbol, industry, fund, growth, valuation, high52W, recom, currentRatio, GetEarningsDateString(), zacksString, totalScore };
+            }//end if-else
+        }//end GetAttributesEnum
 
         /// <summary>
         /// Returns the score of the Fund or Value attribute depending on which value is sent to the function
@@ -218,17 +228,54 @@ namespace Screener
         /// <returns></returns>
         public int GetZacksRankScore() { return (ZacksRankValue == 1 ? 6 : ZacksRankValue == 2 ? 4 : ZacksRankValue == 3 ? 2 : ZacksRankValue == 4 ? -4 : -6); }
 
-        public int GetEPSNextYScore() { return (EPSNextYValue >= 0.25 ? 4 : 0.25 >= EPSNextYValue && EPSNextYValue >= 0 ? 2 : -2) * 5; }
-        public int GetTargetPriceScore() { return (TargetPriceValue > PriceValue ? 4 : -2) * 2; }
+        public int GetEPSNextYScore(bool multiply = false)
+        {
+            var res = (EPSNextYValue >= 25 ? 4 : 25 > EPSNextYValue && EPSNextYValue >= 0 ? 2 : -2);
+            if(multiply)
+            {
+                return res * 5;
+            }
+            return res;
+        }
+        public int GetEPSThisYScore(bool multiply = false)
+        {
+            var res = (EPSThisYValue >= 25 ? 4 : 25 > EPSThisYValue && EPSThisYValue >= 0 ? 2 : -2);
+            if(multiply)
+            {
+                return res * 5;
+            }
+            return res;
+        }
+        public int GetTargetPriceScore(bool multiply = false)
+        {
+            var res = (TargetPriceValue > PriceValue ? 4 : -2);
+            if(multiply)
+            {
+                return res * 2;
+            }
+            return res;
+        }
 
         /// <summary>
         /// Determines the color of the attribute to be used in document saving and printing
         /// </summary>
         /// <returns></returns>
-        public System.Drawing.Color[] GetFormattingColors()
+        public System.Drawing.Color[] GetFormattingColors(bool secondScreener)
         {
-            return new System.Drawing.Color[] { GetAttributeColor(GetFundOrGrowthScore(FundValue)), GetAttributeColor(GetFundOrGrowthScore(GrowthValue)), GetAttributeColor(GetValuationScore()), GetAttributeColor(GetHigh52WScore()), GetAttributeColor(GetRecomScore()), GetAttributeColor(GetCurrentRatioScore()), GetAttributeColor(GetEarningsDateScore()), GetAttributeColor(GetZacksRankScore(), true) };
-        }
+            if(secondScreener)
+            {
+                return new System.Drawing.Color[] { GetAttributeColor(GetFundOrGrowthScore(FundValue)), GetAttributeColor(GetFundOrGrowthScore(GrowthValue)),
+                GetAttributeColor(GetValuationScore()),GetAttributeColor(GetEPSThisYScore()), GetAttributeColor(GetEPSNextYScore()),
+                GetAttributeColor(GetRecomScore()), GetAttributeColor(GetTargetPriceScore()),
+                GetAttributeColor(GetEarningsDateScore()), GetAttributeColor(GetZacksRankScore(), true) };
+            } else
+            {
+                return new System.Drawing.Color[] { GetAttributeColor(GetFundOrGrowthScore(FundValue)), GetAttributeColor(GetFundOrGrowthScore(GrowthValue)),
+                GetAttributeColor(GetValuationScore()),GetAttributeColor(GetHigh52WScore()),
+                GetAttributeColor(GetRecomScore()), GetAttributeColor(GetCurrentRatioScore()),
+                GetAttributeColor(GetEarningsDateScore()), GetAttributeColor(GetZacksRankScore(), true) };
+            }//end if-else
+        }//end if
 
         private System.Drawing.Color GetAttributeColor(int val, bool isZacks = false)
         {

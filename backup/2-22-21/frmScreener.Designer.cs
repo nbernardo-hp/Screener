@@ -41,6 +41,33 @@
             System.Windows.Forms.ListViewGroup listViewGroup10 = new System.Windows.Forms.ListViewGroup("Technology", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup11 = new System.Windows.Forms.ListViewGroup("Utilities", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmScreener));
+            System.Windows.Forms.ListViewGroup listViewGroup12 = new System.Windows.Forms.ListViewGroup("Nick’s “Stock Screener”", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup13 = new System.Windows.Forms.ListViewGroup("*1.  Finviz Today Long Lower Wick and High Vol", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup14 = new System.Windows.Forms.ListViewGroup("*2.  Finviz Ascending Triangle", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup15 = new System.Windows.Forms.ListViewGroup("*3.  Finviz Spike in Vol & Price but still a value –  A Finviz Scan", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup16 = new System.Windows.Forms.ListViewGroup("*4.  Finviz Long Shadow, Good Volume, Profitable –  A Finviz Scan", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup17 = new System.Windows.Forms.ListViewGroup("ChartMill DB Technical Breakout Setups CMFund > 4", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup18 = new System.Windows.Forms.ListViewGroup("ChartMill  DB Trading Asc Triangles CMFund>", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup19 = new System.Windows.Forms.ListViewGroup("ChartMill DB MACD Crossover and SMAs cor", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup20 = new System.Windows.Forms.ListViewGroup("High Growth You Tube", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup21 = new System.Windows.Forms.ListViewGroup("Kiplinger Value Stocks", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup22 = new System.Windows.Forms.ListViewGroup("Investor Place", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup23 = new System.Windows.Forms.ListViewGroup("Stock News", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup24 = new System.Windows.Forms.ListViewGroup("Motley Fool", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup25 = new System.Windows.Forms.ListViewGroup("Motley Fool Top 10 Recent Picks", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup26 = new System.Windows.Forms.ListViewGroup("US News", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup27 = new System.Windows.Forms.ListViewGroup("StockMarket.com", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup28 = new System.Windows.Forms.ListViewGroup("Barron’s", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup29 = new System.Windows.Forms.ListViewGroup("IBD Top 50", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup30 = new System.Windows.Forms.ListViewGroup("Investor Place", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup31 = new System.Windows.Forms.ListViewGroup("RG IQuant.pro", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup32 = new System.Windows.Forms.ListViewGroup("Election Stocks Biden Wins Finviz", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup33 = new System.Windows.Forms.ListViewGroup("CNN Virus Prevention Stocks Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup34 = new System.Windows.Forms.ListViewGroup("CNN Airlines Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup35 = new System.Windows.Forms.ListViewGroup("CNN Stay at Home Stocks Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup36 = new System.Windows.Forms.ListViewGroup("PBW ETF Holdings Clean Energy Stocks Finviz", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup37 = new System.Windows.Forms.ListViewGroup("WFH ETF Holdings Work From Home Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup38 = new System.Windows.Forms.ListViewGroup("Wind and Solar Finviz Screener", System.Windows.Forms.HorizontalAlignment.Left);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,30 +112,29 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabScreeners = new System.Windows.Forms.TabControl();
             this.tabScreener = new System.Windows.Forms.TabPage();
-            this.pnlScreener1NoStocks = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.tabScreener2 = new System.Windows.Forms.TabPage();
-            this.pnlScreener2NoStocks = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
             this.lstvStocks2 = new System.Windows.Forms.ListView();
             this.s2Symbol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2Industry = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2Fund = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2Growth = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2Valuation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.EPS_This_Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.EPS_Next_Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2Recom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Target_Price = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2EarningsDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2ZacksRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.s2TotalScore = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pnlScreener1NoStocks = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.pnlScreener2NoStocks = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.pnlNoStocksToDisplay.SuspendLayout();
             this.tabScreeners.SuspendLayout();
             this.tabScreener.SuspendLayout();
-            this.pnlScreener1NoStocks.SuspendLayout();
             this.tabScreener2.SuspendLayout();
+            this.pnlScreener1NoStocks.SuspendLayout();
             this.pnlScreener2NoStocks.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,40 +166,38 @@
             // tsmSave
             // 
             this.tsmSave.Name = "tsmSave";
-            this.tsmSave.Size = new System.Drawing.Size(180, 22);
+            this.tsmSave.Size = new System.Drawing.Size(143, 22);
             this.tsmSave.Text = "Save";
             this.tsmSave.Click += new System.EventHandler(this.tsmSave_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(140, 6);
             // 
             // tsmPrintPreview
             // 
-            this.tsmPrintPreview.Enabled = false;
             this.tsmPrintPreview.Name = "tsmPrintPreview";
-            this.tsmPrintPreview.Size = new System.Drawing.Size(180, 22);
+            this.tsmPrintPreview.Size = new System.Drawing.Size(143, 22);
             this.tsmPrintPreview.Text = "Print Preview";
             this.tsmPrintPreview.Click += new System.EventHandler(this.tsmPrintPreview_Click);
             // 
             // tsmPrint
             // 
-            this.tsmPrint.Enabled = false;
             this.tsmPrint.Name = "tsmPrint";
-            this.tsmPrint.Size = new System.Drawing.Size(180, 22);
+            this.tsmPrint.Size = new System.Drawing.Size(143, 22);
             this.tsmPrint.Text = "Print";
             this.tsmPrint.Click += new System.EventHandler(this.tsmPrint_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(140, 6);
             // 
             // tsmExit
             // 
             this.tsmExit.Name = "tsmExit";
-            this.tsmExit.Size = new System.Drawing.Size(180, 22);
+            this.tsmExit.Size = new System.Drawing.Size(143, 22);
             this.tsmExit.Text = "Exit";
             this.tsmExit.Click += new System.EventHandler(this.tsmExit_Click);
             // 
@@ -491,26 +515,6 @@
             this.tabScreener.Text = "Screener";
             this.tabScreener.UseVisualStyleBackColor = true;
             // 
-            // pnlScreener1NoStocks
-            // 
-            this.pnlScreener1NoStocks.Controls.Add(this.label2);
-            this.pnlScreener1NoStocks.Location = new System.Drawing.Point(0, 4);
-            this.pnlScreener1NoStocks.Name = "pnlScreener1NoStocks";
-            this.pnlScreener1NoStocks.Size = new System.Drawing.Size(979, 373);
-            this.pnlScreener1NoStocks.TabIndex = 5;
-            this.pnlScreener1NoStocks.Visible = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(278, 161);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(423, 50);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // tabScreener2
             // 
             this.tabScreener2.Controls.Add(this.pnlScreener2NoStocks);
@@ -523,26 +527,6 @@
             this.tabScreener2.Text = "Screener 2";
             this.tabScreener2.UseVisualStyleBackColor = true;
             // 
-            // pnlScreener2NoStocks
-            // 
-            this.pnlScreener2NoStocks.Controls.Add(this.label3);
-            this.pnlScreener2NoStocks.Location = new System.Drawing.Point(0, 4);
-            this.pnlScreener2NoStocks.Name = "pnlScreener2NoStocks";
-            this.pnlScreener2NoStocks.Size = new System.Drawing.Size(979, 373);
-            this.pnlScreener2NoStocks.TabIndex = 5;
-            this.pnlScreener2NoStocks.Visible = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(278, 161);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(423, 50);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // lstvStocks2
             // 
             this.lstvStocks2.BackColor = System.Drawing.SystemColors.Window;
@@ -552,7 +536,6 @@
             this.s2Fund,
             this.s2Growth,
             this.s2Valuation,
-            this.EPS_This_Y,
             this.EPS_Next_Y,
             this.s2Recom,
             this.Target_Price,
@@ -561,6 +544,88 @@
             this.s2TotalScore});
             this.lstvStocks2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstvStocks2.FullRowSelect = true;
+            listViewGroup12.Header = "Nick’s “Stock Screener”";
+            listViewGroup12.Name = "Nick’s “Stock Screener”";
+            listViewGroup13.Header = "*1.  Finviz Today Long Lower Wick and High Vol";
+            listViewGroup13.Name = "*1.  Finviz Today Long Lower Wick and High Vol";
+            listViewGroup14.Header = "*2.  Finviz Ascending Triangle";
+            listViewGroup14.Name = "*2.  Finviz Ascending Triangle";
+            listViewGroup15.Header = "*3.  Finviz Spike in Vol & Price but still a value –  A Finviz Scan";
+            listViewGroup15.Name = "*3.  Finviz Spike in Vol & Price but still a value –  A Finviz Scan";
+            listViewGroup16.Header = "*4.  Finviz Long Shadow, Good Volume, Profitable –  A Finviz Scan";
+            listViewGroup16.Name = "*4.  Finviz Long Shadow, Good Volume, Profitable –  A Finviz Scan";
+            listViewGroup17.Header = "ChartMill DB Technical Breakout Setups CMFund > 4";
+            listViewGroup17.Name = "ChartMill DB Technical Breakout Setups CMFund > 4";
+            listViewGroup18.Header = "ChartMill  DB Trading Asc Triangles CMFund>";
+            listViewGroup18.Name = "ChartMill  DB Trading Asc Triangles CMFund>";
+            listViewGroup19.Header = "ChartMill DB MACD Crossover and SMAs cor";
+            listViewGroup19.Name = "ChartMill DB MACD Crossover and SMAs cor";
+            listViewGroup20.Header = "High Growth You Tube";
+            listViewGroup20.Name = "High Growth You Tube";
+            listViewGroup21.Header = "Kiplinger Value Stocks";
+            listViewGroup21.Name = "Kiplinger Value Stocks";
+            listViewGroup22.Header = "Investor Place";
+            listViewGroup22.Name = "Investor Place";
+            listViewGroup23.Header = "Stock News";
+            listViewGroup23.Name = "Stock News";
+            listViewGroup24.Header = "Motley Fool";
+            listViewGroup24.Name = "Motley Fool";
+            listViewGroup25.Header = "Motley Fool Top 10 Recent Picks";
+            listViewGroup25.Name = "Motley Fool Top 10 Recent Picks";
+            listViewGroup26.Header = "US News";
+            listViewGroup26.Name = "US News";
+            listViewGroup27.Header = "StockMarket.com";
+            listViewGroup27.Name = "StockMarket.com";
+            listViewGroup28.Header = "Barron’s";
+            listViewGroup28.Name = "Barron’s";
+            listViewGroup29.Header = "IBD Top 50";
+            listViewGroup29.Name = "IBD Top 50";
+            listViewGroup30.Header = "Investor Place";
+            listViewGroup30.Name = "Investor Place";
+            listViewGroup31.Header = "RG IQuant.pro";
+            listViewGroup31.Name = "RG IQuant.pro";
+            listViewGroup32.Header = "Election Stocks Biden Wins Finviz";
+            listViewGroup32.Name = "Election Stocks Biden Wins Finviz";
+            listViewGroup33.Header = "CNN Virus Prevention Stocks Finviz Screener";
+            listViewGroup33.Name = "CNN Virus Prevention Stocks Finviz Screener";
+            listViewGroup34.Header = "CNN Airlines Finviz Screener";
+            listViewGroup34.Name = "CNN Airlines Finviz Screener";
+            listViewGroup35.Header = "CNN Stay at Home Stocks Finviz Screener";
+            listViewGroup35.Name = "CNN Stay at Home Stocks Finviz Screener";
+            listViewGroup36.Header = "PBW ETF Holdings Clean Energy Stocks Finviz";
+            listViewGroup36.Name = "PBW ETF Holdings Clean Energy Stocks Finviz";
+            listViewGroup37.Header = "WFH ETF Holdings Work From Home Finviz Screener";
+            listViewGroup37.Name = "WFH ETF Holdings Work From Home Finviz Screener";
+            listViewGroup38.Header = "Wind and Solar Finviz Screener";
+            listViewGroup38.Name = "Wind and Solar Finviz Screener";
+            this.lstvStocks2.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup12,
+            listViewGroup13,
+            listViewGroup14,
+            listViewGroup15,
+            listViewGroup16,
+            listViewGroup17,
+            listViewGroup18,
+            listViewGroup19,
+            listViewGroup20,
+            listViewGroup21,
+            listViewGroup22,
+            listViewGroup23,
+            listViewGroup24,
+            listViewGroup25,
+            listViewGroup26,
+            listViewGroup27,
+            listViewGroup28,
+            listViewGroup29,
+            listViewGroup30,
+            listViewGroup31,
+            listViewGroup32,
+            listViewGroup33,
+            listViewGroup34,
+            listViewGroup35,
+            listViewGroup36,
+            listViewGroup37,
+            listViewGroup38});
             this.lstvStocks2.HideSelection = false;
             this.lstvStocks2.Location = new System.Drawing.Point(3, 3);
             this.lstvStocks2.Name = "lstvStocks2";
@@ -599,11 +664,6 @@
             this.s2Valuation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.s2Valuation.Width = 76;
             // 
-            // EPS_This_Y
-            // 
-            this.EPS_This_Y.Text = "EPS This Y";
-            this.EPS_This_Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // EPS_Next_Y
             // 
             this.EPS_Next_Y.Text = "EPS Next Y";
@@ -640,6 +700,46 @@
             this.s2TotalScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.s2TotalScore.Width = 83;
             // 
+            // pnlScreener1NoStocks
+            // 
+            this.pnlScreener1NoStocks.Controls.Add(this.label2);
+            this.pnlScreener1NoStocks.Location = new System.Drawing.Point(0, 4);
+            this.pnlScreener1NoStocks.Name = "pnlScreener1NoStocks";
+            this.pnlScreener1NoStocks.Size = new System.Drawing.Size(979, 373);
+            this.pnlScreener1NoStocks.TabIndex = 5;
+            this.pnlScreener1NoStocks.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(278, 161);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(423, 50);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlScreener2NoStocks
+            // 
+            this.pnlScreener2NoStocks.Controls.Add(this.label3);
+            this.pnlScreener2NoStocks.Location = new System.Drawing.Point(0, 4);
+            this.pnlScreener2NoStocks.Name = "pnlScreener2NoStocks";
+            this.pnlScreener2NoStocks.Size = new System.Drawing.Size(979, 373);
+            this.pnlScreener2NoStocks.TabIndex = 5;
+            this.pnlScreener2NoStocks.Visible = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(278, 161);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(423, 50);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "No Stocks to Display\r\n***Adjust the settings and re-run the program***";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // frmScreener
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -658,9 +758,9 @@
             this.pnlNoStocksToDisplay.PerformLayout();
             this.tabScreeners.ResumeLayout(false);
             this.tabScreener.ResumeLayout(false);
+            this.tabScreener2.ResumeLayout(false);
             this.pnlScreener1NoStocks.ResumeLayout(false);
             this.pnlScreener1NoStocks.PerformLayout();
-            this.tabScreener2.ResumeLayout(false);
             this.pnlScreener2NoStocks.ResumeLayout(false);
             this.pnlScreener2NoStocks.PerformLayout();
             this.ResumeLayout(false);
@@ -721,7 +821,6 @@
         private System.Windows.Forms.ColumnHeader s2Fund;
         private System.Windows.Forms.ColumnHeader s2Growth;
         private System.Windows.Forms.ColumnHeader s2Valuation;
-        private System.Windows.Forms.ColumnHeader EPS_This_Y;
         private System.Windows.Forms.ColumnHeader EPS_Next_Y;
         private System.Windows.Forms.ColumnHeader s2Recom;
         private System.Windows.Forms.ColumnHeader Target_Price;

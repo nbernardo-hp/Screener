@@ -35,17 +35,8 @@ namespace Screener
                 if(!splash.CancelledValue)
                 {
                     var stocksAdditionalInfo = splash.GetStocksAdditionalInfo();
-                    if(stocksAdditionalInfo == null)
-                    {
-
-                        frmScreener screener = new frmScreener(splash.GetStocks(), preferences);
-                        Application.Run(screener);
-                    } else
-                    {
-
-                        frmScreener screener = new frmScreener(splash.GetStocks(), preferences, stocksAdditionalInfo, splash.GetScreenerType());
-                        Application.Run(screener);
-                    }
+                    frmScreener screener = new frmScreener(splash.GetStocks(), preferences, stocksAdditionalInfo, splash.GetScreenerType());
+                    Application.Run(screener);
                 }
             }
             catch (Exception ex)

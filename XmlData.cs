@@ -105,6 +105,7 @@ namespace Screener
                         writer.WriteElementString("VALUATION", s.ValuationValue.ToString());
                         if(secondScreener)
                         {
+                            writer.WriteElementString("EPS_THIS_Y", s.EPSThisYValue.ToString());
                             writer.WriteElementString("EPS_NEXT_Y", s.EPSNextYValue.ToString());
                         } else
                         {

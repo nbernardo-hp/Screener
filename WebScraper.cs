@@ -497,13 +497,17 @@ namespace Screener
                     driver.Navigate();
                     try
                     {
-                        var etf = driver.FindElements(By.ClassName("rankrect_NA"));
+                        /*var etf = driver.FindElements(By.ClassName("rankrect_NA"));
                         if (etf != null)
                         {
                             throw new NoSuchElementException();
+                        }*/
+                        System.Collections.ObjectModel.ReadOnlyCollection<IWebElement> element = driver.FindElements(By.ClassName("rank_view"));
+                        if(element == null || element.Count <= 0)
+                        {
+                            throw new NoSuchElementException();
                         }
-                        var element = driver.FindElement(By.ClassName("rank_view"));
-                        zacksText.Add(element.Text.Split(new char[] { '-', '\r', '\n' }));
+                        zacksText.Add(element.ElementAt(0).Text.Split(new char[] { '-', '\r', '\n' }));
                     } catch(NoSuchElementException e)
                     {
                         zacksText.Add(new string[] { "", "" });
